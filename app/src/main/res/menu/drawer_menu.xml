@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/drawer_newsfeed"
+        android:checkable="true"
+        android:title="@string/news_feed"
+        android:icon="@drawable/outline_feed_24"
+        />
+
+    <item android:id="@+id/drawer_post"
+        android:checkable="true"
+        android:title="@string/post"
+        android:icon="@drawable/outline_inbox_24"
+        />
+
+    <item android:id="@+id/drawer_collect"
+        android:checkable="true"
+        android:title="@string/collect"
+        android:icon="@drawable/outline_bookmark_24"
+        />
+
+    <item android:id="@+id/drawer_logout"
+        android:checkable="true"
+        android:title="@string/logout"
+        android:icon="@drawable/outline_logout_24"
+        />
+</menu>

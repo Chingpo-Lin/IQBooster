@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">IQ Booster</string>
+
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
+    <!-- drawer -->
+    <string name="news_feed">News Feed</string>
+    <string name="post">Post</string>
+    <string name="collect">Collect</string>
+    <string name="logout">Log out</string>
+    <string name="username">Username</string>
+    <string name="email">Email</string>
+
 </resources>

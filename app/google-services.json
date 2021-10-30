@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "442488679631",
+    "firebase_url": "https://iqbooster-75093-default-rtdb.firebaseio.com",
+    "project_id": "iqbooster-75093",
+    "storage_bucket": "iqbooster-75093.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:442488679631:android:1d5b2e42a2e9573648dbba",
+        "android_client_info": {
+          "package_name": "com.example.iqbooster"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "442488679631-jsjbtdmhmsjh475ok4f9undlhv82dd51.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKgaQVwxMAE7vpUdMO9Oh7HkznhCke1zs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "442488679631-jsjbtdmhmsjh475ok4f9undlhv82dd51.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
