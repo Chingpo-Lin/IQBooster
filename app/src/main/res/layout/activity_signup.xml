@@ -16,13 +16,13 @@
 
     <ImageView
         android:id="@+id/signup_logo"
-        android:layout_width="60sp"
-        android:layout_height="60sp"
+        android:src="@drawable/logo"
+        android:layout_width="120sp"
+        android:layout_height="120sp"
         android:layout_marginTop="60sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <EditText
         android:id="@+id/signup_email_editText"
