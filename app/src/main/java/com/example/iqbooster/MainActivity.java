@@ -30,6 +30,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView mNavigationView;
     private ActionBarDrawerToggle mDrawerToggle;
 
+    //jdflkajlkdsjflkasjflkdsjalfk
+    
+    
     // drawer stuff
     private View mheaderView;
     private ImageView mProfilePic;
