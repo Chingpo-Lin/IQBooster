@@ -16,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Objects;
 
@@ -38,10 +40,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private MenuItem mCollectItem;
     private MenuItem mLogoutItem;
 
+    // firebase
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer_layout);
+
+        mAuth = FirebaseAuth.getInstance();
 
         mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(mToolbar);
@@ -64,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mheaderView = mNavigationView.getHeaderView(0);
         mProfilePic = (ImageView) mheaderView.findViewById(R.id.drawer_avatar);
-        // TODO: add profile listener here...
+        // TODO: add profile on click listener here...
         mUsername = (TextView) mheaderView.findViewById(R.id.drawer_username);
         mEmailAddress = (TextView) mheaderView.findViewById(R.id.drawer_email);
         mNewsFeedItem = (MenuItem) mNavigationView.getMenu().getItem(0);
@@ -79,7 +86,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onStart() {
-        // TODO: add firebase ref here
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user == null) {
+            mPostItem.setVisible(false);
+            mCollectItem.setVisible(false);
+            mLogoutItem.setVisible(false);
+        } else {
+            mUsername.setText(user.getDisplayName());
+            mEmailAddress.setText(user.getEmail());
+            mPostItem.setVisible(true);
+            mCollectItem.setVisible(true);
+            mLogoutItem.setVisible(true);
+        }
         super.onStart();
     }
 
@@ -98,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == mNewsFeedItem.getItemId()) {
             getSupportActionBar().setTitle("News Feed");
         } else if (id == mPostItem.getItemId()) {
+            // TODO:
         } else if (id == mCollectItem.getItemId()) {
         } else if (id == mLogoutItem.getItemId()) {
         }

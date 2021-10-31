@@ -9,7 +9,7 @@
     <string name="post">Post</string>
     <string name="collect">Collect</string>
     <string name="logout">Log out</string>
-    <string name="username">Username</string>
-    <string name="email">Email</string>
+    <string name="username">Welcome </string>
+    <string name="email"></string>
 
 </resources>
