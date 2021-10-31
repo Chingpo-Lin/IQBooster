@@ -7,9 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -31,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActionBarDrawerToggle mDrawerToggle;
 
     // drawer stuff
-    private View mheaderView;
+    private View mDrawerHeaderView;
     private ImageView mProfilePic;
     private TextView mUsername;
     private TextView mEmailAddress;
@@ -69,11 +67,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDrawerToggle.syncState();;
         mNavigationView.setNavigationItemSelectedListener(this);
 
-        mheaderView = mNavigationView.getHeaderView(0);
-        mProfilePic = (ImageView) mheaderView.findViewById(R.id.drawer_avatar);
+        mDrawerHeaderView = mNavigationView.getHeaderView(0);
+        mProfilePic = (ImageView) mDrawerHeaderView.findViewById(R.id.drawer_avatar);
         // TODO: add profile on click listener here...
-        mUsername = (TextView) mheaderView.findViewById(R.id.drawer_username);
-        mEmailAddress = (TextView) mheaderView.findViewById(R.id.drawer_email);
+        mUsername = (TextView) mDrawerHeaderView.findViewById(R.id.drawer_username);
+        mEmailAddress = (TextView) mDrawerHeaderView.findViewById(R.id.drawer_email);
         mNewsFeedItem = (MenuItem) mNavigationView.getMenu().getItem(0);
         mPostItem = (MenuItem) mNavigationView.getMenu().getItem(1);
         mCollectItem = (MenuItem) (MenuItem) mNavigationView.getMenu().getItem(2);
