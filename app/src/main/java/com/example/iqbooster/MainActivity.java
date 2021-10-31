@@ -7,12 +7,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.iqbooster.login.LoginActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,9 +29,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
     private ActionBarDrawerToggle mDrawerToggle;
-
+    
     // drawer stuff
-    private View mDrawerHeaderView;
+    private View mheaderView;
     private ImageView mProfilePic;
     private TextView mUsername;
     private TextView mEmailAddress;
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // firebase
     private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.drawer_layout);
 
         mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
 
         mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(mToolbar);
@@ -67,11 +71,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDrawerToggle.syncState();;
         mNavigationView.setNavigationItemSelectedListener(this);
 
-        mDrawerHeaderView = mNavigationView.getHeaderView(0);
-        mProfilePic = (ImageView) mDrawerHeaderView.findViewById(R.id.drawer_avatar);
+        mheaderView = mNavigationView.getHeaderView(0);
+        mProfilePic = (ImageView) mheaderView.findViewById(R.id.drawer_avatar);
         // TODO: add profile on click listener here...
-        mUsername = (TextView) mDrawerHeaderView.findViewById(R.id.drawer_username);
-        mEmailAddress = (TextView) mDrawerHeaderView.findViewById(R.id.drawer_email);
+        mProfilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mUser == null) {
+                    goToLoginActivityHelper();
+                    closeDrawer();
+                } else {
+                    // GO TO PROFILE PAGE
+                    goToProfilePageActivityHelper();
+                    closeDrawer();
+                }
+            }
+        });
+
+        mUsername = (TextView) mheaderView.findViewById(R.id.drawer_username);
+        mEmailAddress = (TextView) mheaderView.findViewById(R.id.drawer_email);
         mNewsFeedItem = (MenuItem) mNavigationView.getMenu().getItem(0);
         mPostItem = (MenuItem) mNavigationView.getMenu().getItem(1);
         mCollectItem = (MenuItem) (MenuItem) mNavigationView.getMenu().getItem(2);
@@ -137,5 +155,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Helper method which uses Intent to go to the Login Page
+     */
+    private void goToLoginActivityHelper() {
+        Intent loginPageIntent = new Intent(getApplicationContext(), LoginActivity.class);
+        startActivity(loginPageIntent);
+    }
+
+    /**
+     * Helper method which uses Intent to go to the Profile Page
+     */
+    private void goToProfilePageActivityHelper() {
+//        Intent loginPageIntent = new Intent(getApplicationContext(), LoginActivity.class);
+//        startActivity(loginPageIntent);
     }
 }
