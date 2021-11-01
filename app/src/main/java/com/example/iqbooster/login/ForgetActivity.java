@@ -66,7 +66,7 @@ public class ForgetActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                 // goToLoginInActivityHelper();
+                                 goToLoginInActivityHelper();
                                 Toast.makeText(ForgetActivity.this, "Reset Password Email Sent", Toast.LENGTH_LONG).show();
                             } else {
                                 String ErrorMsg = task.getException().getMessage();
@@ -103,10 +103,10 @@ public class ForgetActivity extends AppCompatActivity {
         });
     }
 
-//    private void goToLoginInActivityHelper() {
-//        Intent goToLoginInActivity = new Intent(getApplicationContext(), LoginActivity.class);
-//        goToLoginInActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-//        startActivity(goToLoginInActivity);
-//        finish();
-//    }
+    private void goToLoginInActivityHelper() {
+        Intent goToLoginInActivity = new Intent(getApplicationContext(), LoginActivity.class);
+        goToLoginInActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(goToLoginInActivity);
+        finish();
+    }
 }
