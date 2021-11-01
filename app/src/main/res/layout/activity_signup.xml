@@ -65,7 +65,7 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/signup_signup_button"
         android:layout_width="130sp"
-        android:layout_height="wrap_content"
+        android:layout_height="50sp"
         android:layout_marginStart="8sp"
         android:layout_marginEnd="8sp"
         android:layout_marginBottom="60sp"
