@@ -117,7 +117,7 @@ public class SignupActivity extends AppCompatActivity {
 
                     } else {
 
-                        if (!TextUtils.isEmpty(user_input_email) && (!user_input_email.endsWith("@.com") || !user_input_email.endsWith("@.edu"))) {
+                        if (!TextUtils.isEmpty(user_input_email) && !user_input_email.endsWith(".com") && !user_input_email.endsWith(".edu")) {
                             //Toast.makeText(RegistrationActivity.this, "Please enter a valid email address", Toast.LENGTH_LONG).show();
                             Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Please enter a valid email address", Snackbar.LENGTH_LONG);
                             View view = sn.getView();
@@ -150,7 +150,7 @@ public class SignupActivity extends AppCompatActivity {
                     }
                 } else {
 
-                    if (!TextUtils.isEmpty(user_input_email)&& (!user_input_email.endsWith("@.com") || !user_input_email.endsWith("@.edu"))) {
+                    if (!TextUtils.isEmpty(user_input_email)&& !user_input_email.endsWith(".com") && !user_input_email.endsWith(".edu")) {
                         //Toast.makeText(RegistrationActivity.this, "Please enter a valid email address", Toast.LENGTH_LONG).show();
                         Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Please enter a valid email address", Snackbar.LENGTH_LONG);
                         View view = sn.getView();
