@@ -4,6 +4,8 @@
     <string name="open">Open</string>
     <string name="close">Close</string>
 
+    <string name="follow">Follow</string>
+
     <!-- drawer -->
     <string name="news_feed">News Feed</string>
     <string name="post">Post</string>
