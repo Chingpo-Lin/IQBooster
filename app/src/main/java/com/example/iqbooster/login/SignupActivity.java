@@ -66,8 +66,6 @@ public class SignupActivity extends AppCompatActivity {
         mSignupBtn = findViewById(R.id.signup_signup_button);
 
         mProgressBar.setVisibility(View.INVISIBLE);
-        mVisibleImageBtn = (ImageButton) findViewById(R.id.login_visible_imageButton);
-        mInvisibleImageBtn = (ImageButton) findViewById(R.id.login_invisible_imageButton);
         mInvisibleImageBtn.setVisibility(View.INVISIBLE);
 
         // when the sign up btn is clicked, sign it up
@@ -183,7 +181,7 @@ public class SignupActivity extends AppCompatActivity {
                     mHaveAccountAlready.setVisibility(View.VISIBLE);
                     mLoginTextView.setVisibility(View.VISIBLE);
                 }
-            }
+           }
         });
 
         // when the login text is clicked, go back to login in
@@ -244,21 +242,21 @@ public class SignupActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    /**
-     * onStart() will automatically call after onCreate()
-     */
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null) {
-
-        } else {
-
-        }
-
-    }
+//    /**
+//     * onStart() will automatically call after onCreate()
+//     */
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//
+//        FirebaseUser user = mAuth.getCurrentUser();
+//        if (user != null) {
+//
+//        } else {
+//
+//        }
+//
+//    }
 
     /**
      * Helper method which use Intent to go back to the Main Page (Timeline)
