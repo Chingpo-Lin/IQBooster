@@ -25,5 +25,6 @@
     <string name="guest">Continue as a Guest</string>
     <string name="have_an_account">Already have an account? </string>
     <string name="login">Log In</string>
+    <string name="forget_password_next">Next</string>
 
 </resources>

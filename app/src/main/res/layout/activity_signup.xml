@@ -16,13 +16,13 @@
 
     <ImageView
         android:id="@+id/signup_logo"
-        android:layout_width="60sp"
-        android:layout_height="60sp"
+        android:src="@drawable/logo"
+        android:layout_width="120sp"
+        android:layout_height="120sp"
         android:layout_marginTop="60sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <EditText
         android:id="@+id/signup_email_editText"
@@ -65,7 +65,7 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/signup_signup_button"
         android:layout_width="130sp"
-        android:layout_height="wrap_content"
+        android:layout_height="50sp"
         android:layout_marginStart="8sp"
         android:layout_marginEnd="8sp"
         android:layout_marginBottom="60sp"
@@ -96,6 +96,7 @@
         android:layout_marginEnd="8sp"
         android:layout_marginBottom="8sp"
         android:text="@string/login"
+        android:clickable="true"
         android:textColor="#112FD8"
         app:layout_constraintBottom_toTopOf="@+id/signup_progressBar"
         app:layout_constraintEnd_toEndOf="parent"
