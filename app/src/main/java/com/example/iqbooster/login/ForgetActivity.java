@@ -28,7 +28,7 @@ public class ForgetActivity extends AppCompatActivity {
     private Button mNextBtr;
     private ProgressBar mProgressBar;
     private TextView mLoginTextView;
-
+    private TextView mHaveAccount;
     private FirebaseAuth mAuth;
 
     @Override
@@ -40,6 +40,7 @@ public class ForgetActivity extends AppCompatActivity {
         mProgressBar = findViewById(R.id.forget_password_progressBar);
         mNextBtr = findViewById(R.id.forget_password_button);
         mLoginTextView = findViewById(R.id.forget_password_login_textView);
+        mHaveAccount = findViewById(R.id.forget_password_already_have_account_textView);
 
         mProgressBar.setVisibility(View.INVISIBLE);
         mAuth = FirebaseAuth.getInstance();
@@ -59,6 +60,7 @@ public class ForgetActivity extends AppCompatActivity {
                     mProgressBar.setVisibility(View.VISIBLE);
                     mLoginTextView.setVisibility(View.INVISIBLE);
                     mNextBtr.setVisibility(View.INVISIBLE);
+                    mHaveAccount.setVisibility(View.INVISIBLE);
 
                     mAuth.sendPasswordResetEmail(user_email).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -82,6 +84,7 @@ public class ForgetActivity extends AppCompatActivity {
                             mProgressBar.setVisibility(View.INVISIBLE);
                             mLoginTextView.setVisibility(View.VISIBLE);
                             mNextBtr.setVisibility(View.VISIBLE);
+                            mHaveAccount.setVisibility(View.VISIBLE);
                         }
                     });
                 } else {
