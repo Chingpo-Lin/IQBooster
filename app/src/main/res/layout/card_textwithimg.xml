@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView android:id="@+id/card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8sp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="72sp"
+            android:orientation="horizontal">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/card_textwithimg_profile"
+                android:layout_width="40sp"
+                android:layout_height="40sp"
+                android:src="@drawable/avatar"
+                android:layout_marginStart="16sp"
+                android:layout_marginTop="16sp"
+                />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="12sp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/card_textwithimg_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="title"
+                    android:layout_marginTop="16sp"
+                    android:layout_gravity="center_vertical"
+                    android:textAppearance="?attr/textAppearanceHeadline6"
+                    />
+                <TextView
+                    android:id="@+id/card_textwithimg_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="info"
+                    android:textAppearance="?attr/textAppearanceBody2"
+                    android:textColor="?android:attr/textColorSecondary"
+                    />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Media -->
+        <ImageView
+            android:id="@+id/card_textwithimg_thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="194sp"
+            tools:ignore="UnusedAttribute"
+            android:scaleType="centerCrop"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16sp">
+
+            <TextView
+                android:id="@+id/card_textwithimg_secondary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16sp"
+                android:text="secondary"
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:textColor="?android:attr/textColorSecondary"
+                />
+
+        </LinearLayout>
+
+        <!-- Buttons -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_margin="8sp"
+            android:orientation="horizontal">
+
+            <com.like.LikeButton
+                android:id="@+id/card_textwithimg_likebtn"
+                android:layout_width="24sp"
+                android:layout_height="24sp"
+                app:icon_size="24sp"
+                android:layout_gravity="center"
+                app:icon_type="heart" />
+
+            <TextView
+                android:id="@+id/card_textwithimg_likecount"
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4sp"
+                android:text="like count"
+                android:layout_gravity="center"
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:textColor="?android:attr/textColorSecondary"
+                />
+
+            <com.like.LikeButton
+                android:gravity="center_vertical"
+                android:id="@+id/card_textwithimg_collect"
+                android:layout_width="24sp"
+                android:layout_height="24sp"
+                app:icon_size="24sp"
+                android:layout_marginStart="4sp"
+                android:layout_gravity="center"
+                app:icon_type="star" />
+
+            <ImageButton
+                android:gravity="center_vertical"
+                android:id="@+id/card_textwithimg_share"
+                android:layout_width="24sp"
+                android:layout_height="24sp"
+                android:layout_marginStart="4sp"
+                android:src="@drawable/outline_share_24"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
