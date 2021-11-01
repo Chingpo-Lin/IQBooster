@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.IQBooster">
         <activity
+            android:name=".login.ForgetActivity"
+            android:exported="true" />
+        <activity
             android:name=".login.LoginActivity"
             android:exported="false" />
         <activity
