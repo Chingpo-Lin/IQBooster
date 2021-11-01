@@ -26,5 +26,7 @@
     <string name="have_an_account">Already have an account? </string>
     <string name="login">Log In</string>
     <string name="forget_password_next">Next</string>
+    <string name="setup_instruction">Create your account to continue!</string>
+    <string name="start">Getting Started</string>
 
 </resources>
