@@ -63,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
         mInvisiblePasswordImageBtn = findViewById(R.id.login_invisible_imageButton);
         mProgressBar = findViewById(R.id.login_progressBar);
         mSignupTextView = findViewById(R.id.login_signup_textView);
-        mAsGuestTextView = findViewById(R.id.guest_textView);
+        mAsGuestTextView = findViewById(R.id.login_return_guest_textView);
         mNoAccountTextView = findViewById(R.id.noAccount_textView);
         mLoginText = findViewById(R.id.login_text);
 

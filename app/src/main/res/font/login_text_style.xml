@@ -4,9 +4,9 @@
     <font
         android:fontStyle="normal"
         android:fontWeight="400"
-        android:font="@font/ceviche_one"
+        android:font="@font/dance_script"
         app:fontStyle="normal"
         app:fontWeight="400"
-        app:font="@font/ceviche_one"
+        app:font="@font/dance_script"
         />
 </font-family>
