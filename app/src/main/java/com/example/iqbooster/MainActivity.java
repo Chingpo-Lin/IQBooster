@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.iqbooster.fragment.NewsFeed;
 import com.example.iqbooster.login.LoginActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,6 +46,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // firebase
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
+
+    // fragment
+    private NewsFeed mNewsFeedFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +104,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mNewsFeedItem.setChecked(true);
         getSupportActionBar().setTitle("News Feed");
 
+        mNewsFeedFragment = new NewsFeed();
+        setFragment(mNewsFeedFragment);
     }
 
     @Override
@@ -172,4 +180,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        Intent loginPageIntent = new Intent(getApplicationContext(), LoginActivity.class);
 //        startActivity(loginPageIntent);
     }
+
+    /**
+     * Replacing R.id.main_container with corresponding fragment from the drawer
+     */
+    private void setFragment(Fragment fragment) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.main_container, fragment);
+        fragmentTransaction.commit();
+    }
+
 }

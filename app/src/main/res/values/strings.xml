@@ -5,6 +5,7 @@
     <string name="close">Close</string>
 
     <string name="follow">Follow</string>
+    <string name="home">home</string>
 
     <!-- drawer -->
     <string name="news_feed">News Feed</string>
@@ -25,5 +26,17 @@
     <string name="guest">Continue as a Guest</string>
     <string name="have_an_account">Already have an account? </string>
     <string name="login">Log In</string>
+
+    <!-- tags -->
+    <string name="technology">#technology</string>
+    <string name="sport">#sport</string>
+    <string name="travel">#travel</string>
+    <string name="food">#food</string>
+    <string name="psychology">#psychology</string>
+    <string name="health">#health</string>
+    <string name="business">#business</string>
+    <string name="entertainment">#entertainment</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
