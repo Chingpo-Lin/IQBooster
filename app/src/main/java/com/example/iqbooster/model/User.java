@@ -1,6 +1,7 @@
 package com.example.iqbooster.model;
 
 import android.content.Context;
+import android.security.keystore.StrongBoxUnavailableException;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;

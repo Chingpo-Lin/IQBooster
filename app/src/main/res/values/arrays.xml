@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer-array name="bubblepicker_colors">
-        <item>@color/brown_100</item>
-        <item>@color/brown_700</item>
-        <item>@color/brown_300</item>
-        <item>@color/green_700</item>
-        <item>@color/brown_200</item>
-        <item>@color/yellow_200</item>
-        <item>@color/blue_50</item>
-        <item>@color/blue_70</item>
+        <item>@color/color_tag_a</item>
+        <item>@color/color_tag_b</item>
+        <item>@color/color_tag_c</item>
+        <item>@color/color_tag_d</item>
+        <item>@color/color_tag_e</item>
+        <item>@color/color_tag_f</item>
+        <item>@color/color_tag_g</item>
+        <item>@color/color_tag_h</item>
     </integer-array>
 
     <integer-array name="bubblepicker_images">

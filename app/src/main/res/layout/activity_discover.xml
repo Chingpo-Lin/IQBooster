@@ -27,7 +27,7 @@
         android:gravity="center"
         android:lineSpacingMultiplier="1"
         android:text="@string/tap_to_choose"
-        android:textColor="@color/brown_300"
+        android:textColor="@color/color_tag_h"
         android:textSize="18sp" />
 
     <com.igalata.bubblepicker.rendering.BubblePicker

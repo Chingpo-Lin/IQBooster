@@ -21,8 +21,11 @@ import com.example.iqbooster.login.LoginActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Objects;
 
@@ -76,7 +79,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         );
 
         mDrawerLayout.addDrawerListener(mDrawerToggle);
-        mDrawerToggle.syncState();;
+        mDrawerToggle.syncState();
+        ;
         mNavigationView.setNavigationItemSelectedListener(this);
 
         mheaderView = mNavigationView.getHeaderView(0);
@@ -145,6 +149,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // TODO:
         } else if (id == mCollectItem.getItemId()) {
         } else if (id == mLogoutItem.getItemId()) {
+            mAuth.signOut();
+            recreate();
         }
 
         closeDrawer();

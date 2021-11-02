@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.example.iqbooster.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,14 +27,9 @@ public class DiscoverActivity extends AppCompatActivity {
     private static final String TAG = "DiscoverActivity";
 
     private BubblePicker picker;
-
-    private TextView mDiscover;
-    private TextView mTapToChoose;
     private Button mNextButton;
 
     Typeface type;
-
-    private FirebaseAuth mAuth;
 
     int count = 0;
     String seletedCategory = "";
@@ -43,8 +39,6 @@ public class DiscoverActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_discover);
 
-        mAuth = FirebaseAuth.getInstance(); /////////
-
         final String[] titles = getResources().getStringArray(R.array.all_categories);
         final TypedArray colors = getResources().obtainTypedArray(R.array.bubblepicker_colors);
         final TypedArray images = getResources().obtainTypedArray(R.array.bubblepicker_images);
@@ -52,13 +46,9 @@ public class DiscoverActivity extends AppCompatActivity {
         picker = findViewById(R.id.picker);
         picker.setMaxSelectedCount(3);
 
-        mDiscover = findViewById(R.id.bubblepicker_discover);
-        mTapToChoose = findViewById(R.id.bubblepicker_choose);
         mNextButton = findViewById(R.id.bubblepicker_next_button);
 
-        type = Typeface.createFromAsset(getApplicationContext().getAssets(), "font/googlesans_regular.ttf");
-        mDiscover.setTypeface(type);
-        mTapToChoose.setTypeface(type);
+        type = ResourcesCompat.getFont(getApplicationContext(), R.font.googlesans);
 
         picker.setAdapter(new BubblePickerAdapter() {
             @Override
@@ -71,8 +61,9 @@ public class DiscoverActivity extends AppCompatActivity {
             public PickerItem getItem(int position) {
                 PickerItem item = new PickerItem();
                 item.setTitle(titles[position]);
-                item.setGradient(new BubbleGradient(colors.getColor((position * 2) % 8, 0),
-                        colors.getColor((position * 2) % 8 + 1, 0), BubbleGradient.VERTICAL));
+                item.setColor(colors.getColor(position % 8, 0));
+//                item.setGradient(new BubbleGradient(colors.getColor((position * 2) % 8, 0),
+//                        colors.getColor((position * 2) % 8 + 1, 0), BubbleGradient.VERTICAL));
                 item.setTypeface(type);
                 item.setTextColor(ContextCompat.getColor(DiscoverActivity.this, android.R.color.white));
                 item.setBackgroundImage(ContextCompat.getDrawable(DiscoverActivity.this, images.getResourceId(position, 0)));
@@ -82,7 +73,7 @@ public class DiscoverActivity extends AppCompatActivity {
 
         colors.recycle();
         images.recycle();
-        picker.setBubbleSize(18);
+        picker.setBubbleSize(120);
         mNextButton.setText(getApplicationContext().getString(R.string.next));
 
         picker.setListener(new BubblePickerListener() {
