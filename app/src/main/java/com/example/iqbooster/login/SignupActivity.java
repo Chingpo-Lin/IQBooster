@@ -55,6 +55,8 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
+        mAuth = FirebaseAuth.getInstance();
+
         mEmailEditText = findViewById(R.id.signup_email_editText);
         mPasswordEditText = findViewById(R.id.signup_password_editText);
         mHaveAccountAlready = findViewById(R.id.already_have_account_textView);
@@ -73,8 +75,8 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // set some button visibility
-                mProgressBar.setVisibility(View.VISIBLE);
                 mSignupBtn.setVisibility(View.INVISIBLE);
+                mProgressBar.setVisibility(View.VISIBLE);
                 mHaveAccountAlready.setVisibility(View.INVISIBLE);
                 mLoginTextView.setVisibility(View.INVISIBLE);
 
@@ -83,19 +85,15 @@ public class SignupActivity extends AppCompatActivity {
                 String user_input_password = mPasswordEditText.getText().toString();
                 String user_input_confirm_password = mConfirmPasswordEditText.getText().toString();
 
-                if (!TextUtils.isEmpty(user_input_email) && !TextUtils.isEmpty(user_input_password) && !TextUtils.isEmpty(user_input_confirm_password) && user_input_email.toLowerCase().endsWith("@ucsd.edu")) {
+                if (!TextUtils.isEmpty(user_input_email) && !TextUtils.isEmpty(user_input_password) && !TextUtils.isEmpty(user_input_confirm_password)) {
                     if (user_input_password.equals(user_input_confirm_password)) {
                         mAuth.createUserWithEmailAndPassword(user_input_email, user_input_password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    //goToMainActivityHelper();
                                     goToSetUpAccountActivityHelper();
-                                }
-
-                                else {
+                                } else {
                                     String errormsg = task.getException().getMessage();
-                                    //Toast.makeText(RegistrationActivity.this, "Error: " + errormsg, Toast.LENGTH_LONG).show();
                                     Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Error: " + errormsg, Snackbar.LENGTH_LONG);
                                     View view = sn.getView();
                                     TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
@@ -116,32 +114,16 @@ public class SignupActivity extends AppCompatActivity {
                         });
 
                     } else {
-
-                        if (!TextUtils.isEmpty(user_input_email) && !user_input_email.endsWith(".com") && !user_input_email.endsWith(".edu")) {
-                            //Toast.makeText(RegistrationActivity.this, "Please enter a valid email address", Toast.LENGTH_LONG).show();
-                            Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Please enter a valid email address", Snackbar.LENGTH_LONG);
-                            View view = sn.getView();
-                            TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
-                            tv.setTextColor(Color.parseColor("#FFD700"));
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                                tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                            } else {
-                                tv.setGravity(Gravity.CENTER_HORIZONTAL);
-                            }
-                            sn.show();
+                        Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Passwords don't match", Snackbar.LENGTH_LONG);
+                        View view = sn.getView();
+                        TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
+                        tv.setTextColor(Color.parseColor("#FFD700"));
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                            tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                         } else {
-                            //Toast.makeText(RegistrationActivity.this, "Passwords don't match", Toast.LENGTH_LONG).show();
-                            Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Passwords don't match", Snackbar.LENGTH_LONG);
-                            View view = sn.getView();
-                            TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
-                            tv.setTextColor(Color.parseColor("#FFD700"));
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                                tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                            } else {
-                                tv.setGravity(Gravity.CENTER_HORIZONTAL);
-                            }
-                            sn.show();
+                            tv.setGravity(Gravity.CENTER_HORIZONTAL);
                         }
+                        sn.show();
                         // set some button visibility
                         mProgressBar.setVisibility(View.INVISIBLE);
                         mSignupBtn.setVisibility(View.VISIBLE);
@@ -149,32 +131,16 @@ public class SignupActivity extends AppCompatActivity {
                         mLoginTextView.setVisibility(View.VISIBLE);
                     }
                 } else {
-
-                    if (!TextUtils.isEmpty(user_input_email)&& !user_input_email.endsWith(".com") && !user_input_email.endsWith(".edu")) {
-                        //Toast.makeText(RegistrationActivity.this, "Please enter a valid email address", Toast.LENGTH_LONG).show();
-                        Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Please enter a valid email address", Snackbar.LENGTH_LONG);
-                        View view = sn.getView();
-                        TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
-                        tv.setTextColor(Color.parseColor("#FFD700"));
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                            tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                        } else {
-                            tv.setGravity(Gravity.CENTER_HORIZONTAL);
-                        }
-                        sn.show();
+                    Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Please fill all fields", Snackbar.LENGTH_LONG);
+                    View view = sn.getView();
+                    TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
+                    tv.setTextColor(Color.parseColor("#FFD700"));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                        tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                     } else {
-                        //Toast.makeText(RegistrationActivity.this, "Please fill all fields", Toast.LENGTH_LONG).show();
-                        Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Please fill all fields", Snackbar.LENGTH_LONG);
-                        View view = sn.getView();
-                        TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
-                        tv.setTextColor(Color.parseColor("#FFD700"));
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                            tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                        } else {
-                            tv.setGravity(Gravity.CENTER_HORIZONTAL);
-                        }
-                        sn.show();
+                        tv.setGravity(Gravity.CENTER_HORIZONTAL);
                     }
+                    sn.show();
                     // set some button visibility
                     mProgressBar.setVisibility(View.INVISIBLE);
                     mSignupBtn.setVisibility(View.VISIBLE);
@@ -242,38 +208,27 @@ public class SignupActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-//    /**
-//     * onStart() will automatically call after onCreate()
-//     */
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//
-//        FirebaseUser user = mAuth.getCurrentUser();
-//        if (user != null) {
-//
-//        } else {
-//
-//        }
-//
-//    }
-
     /**
-     * Helper method which use Intent to go back to the Main Page (Timeline)
+     * onStart() will automatically call after onCreate()
      */
-    private void goToMainActivityHelper() {
-        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-        //Animatoo.animateSlideUp(this); //fire the slide up animation
-        finish();
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            goToLoginInActivityHelper();
+        } else {
+
+        }
     }
 
     /**
      * Helper method which use Intent to go to the Login Page
      */
     private void goToLoginInActivityHelper() {
-        Intent goToLoginInActivity = new Intent(getApplicationContext(), LoginActivity.class);
-        goToLoginInActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(goToLoginInActivity);
+        Intent goToLoginActivity = new Intent(getApplicationContext(), LoginActivity.class);
+        goToLoginActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(goToLoginActivity);
         finish();
     }
 
