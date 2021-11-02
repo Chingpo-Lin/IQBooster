@@ -14,6 +14,7 @@ import android.text.method.PasswordTransformationMethod;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -43,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView mSignupTextView;
     private TextView mAsGuestTextView;
     private TextView mNoAccountTextView;
+    private TextView mLoginText;
 
     private FirebaseAuth mAuth;
 
@@ -61,11 +63,12 @@ public class LoginActivity extends AppCompatActivity {
         mInvisiblePasswordImageBtn = findViewById(R.id.login_invisible_imageButton);
         mProgressBar = findViewById(R.id.login_progressBar);
         mSignupTextView = findViewById(R.id.login_signup_textView);
-        mAsGuestTextView = findViewById(R.id.guest_textView);
+        mAsGuestTextView = findViewById(R.id.login_return_guest_textView);
         mNoAccountTextView = findViewById(R.id.noAccount_textView);
+        mLoginText = findViewById(R.id.login_text);
 
         mProgressBar.setVisibility(View.INVISIBLE);
-
+        mLoginText.startAnimation(AnimationUtils.loadAnimation(LoginActivity.this, R.anim.pluse));
         mInvisiblePasswordImageBtn.setVisibility(View.INVISIBLE);
         mInvisiblePasswordImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,6 +92,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), SignupActivity.class));
+            }
+        });
+
+
+        mForgotPasswordTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), ForgetActivity.class));
             }
         });
 

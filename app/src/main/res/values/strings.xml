@@ -26,6 +26,16 @@
     <string name="guest">Continue as a Guest</string>
     <string name="have_an_account">Already have an account? </string>
     <string name="login">Log In</string>
+    <string name="forget_password_next">Next</string>
+    <string name="setup_instruction">Create your account to continue!</string>
+    <string name="start">Getting Started</string>
+    <string name="setup_name">Name</string>
+    <string name="setup_username">Username</string>
+    <string name="location">Location</string>
+    <string name="setup_next">Continue</string>
+
+    <!-- database tags -->
+    <string name="db_users">users</string>
 
     <!-- tags -->
     <string name="technology">#technology</string>
