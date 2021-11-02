@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/bubblepicker_discover"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="26dp"
+        android:gravity="center"
+        android:text="@string/discover"
+        android:textAllCaps="true"
+        android:textColor="@color/blue_700"
+        android:textSize="49sp" />
+
+    <TextView
+        android:id="@+id/bubblepicker_choose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="14dp"
+        android:gravity="center"
+        android:lineSpacingMultiplier="1"
+        android:text="@string/tap_to_choose"
+        android:textColor="@color/brown_300"
+        android:textSize="18sp" />
+
+    <com.igalata.bubblepicker.rendering.BubblePicker
+        android:id="@+id/picker"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_marginTop="30dp"
+        app:backgroundColor="@android:color/white" />
+
+    <Button
+        android:id="@+id/bubblepicker_next_button"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="60dp"
+        android:text="@string/next" />
+
+</LinearLayout>

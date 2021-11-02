@@ -71,8 +71,7 @@ public class SetUpAccountActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
                                     addUserInfotoDatabase(userinput_username, useriput_prefreame, userinput_location);
-                                    // TODO: change to bubble picker later
-                                    goToMainActivityHelper();
+                                    goToBubblePickerHelper();
                                 } else {
                                     String errormsg = task.getException().getMessage();
                                     Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Error: " + errormsg, Snackbar.LENGTH_LONG);
@@ -115,10 +114,9 @@ public class SetUpAccountActivity extends AppCompatActivity {
      * Helper method which use Intent to go to the Bubble Picker
      */
     private void goToBubblePickerHelper() {
-//        Intent goToMainActivity = new Intent(getApplicationContext(), MainActivity.class);
-//        goToMainActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-//        startActivity(goToMainActivity);
-//        finish();
+        Intent goToDiscoverActivity = new Intent(this, DiscoverActivity.class);
+        startActivity(goToDiscoverActivity);
+        finish();
     }
 
     private void addUserInfotoDatabase(String input_username, String input_prefer_name, String input_location) {

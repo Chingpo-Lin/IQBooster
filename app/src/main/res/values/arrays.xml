@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="bubblepicker_colors">
+        <item>@color/brown_100</item>
+        <item>@color/brown_700</item>
+        <item>@color/brown_300</item>
+        <item>@color/green_700</item>
+        <item>@color/brown_200</item>
+        <item>@color/yellow_200</item>
+        <item>@color/blue_50</item>
+        <item>@color/blue_70</item>
+    </integer-array>
+
+    <integer-array name="bubblepicker_images">
+        <item>@drawable/technology</item>
+        <item>@drawable/sport</item>
+        <item>@drawable/travel</item>
+        <item>@drawable/food</item>
+        <item>@drawable/psychology</item>
+        <item>@drawable/health</item>
+        <item>@drawable/business</item>
+        <item>@drawable/entertainment</item>
+    </integer-array>
+
+    <string-array name="all_categories">
+        <item>#technology</item>
+        <item>#sport</item>
+        <item>#travel</item>
+        <item>#food</item>
+        <item>#psychology</item>
+        <item>#health</item>
+        <item>#business</item>
+        <item>#entertainment</item>
+    </string-array>
+</resources>
