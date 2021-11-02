@@ -16,6 +16,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.iqbooster.fragment.MyCollect;
+import com.example.iqbooster.fragment.MyPost;
 import com.example.iqbooster.fragment.NewsFeed;
 import com.example.iqbooster.login.LoginActivity;
 import com.google.android.material.navigation.NavigationView;
@@ -140,13 +142,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == mNewsFeedItem.getItemId()) {
-            getSupportActionBar().setTitle("News Feed");
+            if (getSupportActionBar().getTitle() != "News Feed") {
+                getSupportActionBar().setTitle("News Feed");
+                setFragment(new NewsFeed());
+            }
         } else if (id == mPostItem.getItemId()) {
-            // TODO:
+            if (getSupportActionBar().getTitle() != "My Post") {
+                getSupportActionBar().setTitle("My Post");
+                setFragment(new MyPost());
+            }
         } else if (id == mCollectItem.getItemId()) {
+            if (getSupportActionBar().getTitle() != "Collect") {
+                getSupportActionBar().setTitle("Collect");
+                setFragment(new MyCollect());
+            }
         } else if (id == mLogoutItem.getItemId()) {
+            mAuth.signOut();
+            recreate();
         }
-
         closeDrawer();
         return true;
     }
