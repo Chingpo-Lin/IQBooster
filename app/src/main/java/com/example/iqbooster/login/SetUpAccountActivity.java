@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.iqbooster.MainActivity;
@@ -32,12 +34,22 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class SetUpAccountActivity extends AppCompatActivity {
 
+    private ImageView mainPhoto;
+    private ImageView mFirstRecommend;
+    private ImageView mSecondRecommend;
+    private ImageView mThirdRecommend;
+    private ImageView mFirstRecommendSelected;
+    private ImageView mSecondRecommendSelected;
+    private ImageView mThirdRecommendSelected;
     private EditText mUsername;
     private EditText mPreferName;
     private EditText mLocation;
     private MaterialButton mContinueBtn;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabaseReference;
+
+    // use to identify selected avatar
+    private int mcurrentSelect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +58,22 @@ public class SetUpAccountActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-
+        mcurrentSelect = 0;
         mUsername = findViewById(R.id.setup_user_name_edit);
         mPreferName = findViewById(R.id.setup_prefer_name_edit);
         mLocation = findViewById(R.id.setup_location_edit);
         mContinueBtn = findViewById(R.id.setup_continue_btn);
+        mainPhoto = findViewById(R.id.setup_photo);
+        mFirstRecommend = findViewById(R.id.setup_photo_recommend_1);
+        mSecondRecommend = findViewById(R.id.setup_photo_recommend_2);
+        mThirdRecommend = findViewById(R.id.setup_photo_recommend_3);
+        mFirstRecommendSelected = findViewById(R.id.setup_photo_recommend_select_1);
+        mSecondRecommendSelected = findViewById(R.id.setup_photo_recommend_select_2);
+        mThirdRecommendSelected = findViewById(R.id.setup_photo_recommend_select_3);
+
+        mFirstRecommendSelected.setVisibility(View.INVISIBLE);
+        mSecondRecommendSelected.setVisibility(View.INVISIBLE);
+        mThirdRecommendSelected.setVisibility(View.INVISIBLE);
 
         mContinueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,5 +151,58 @@ public class SetUpAccountActivity extends AppCompatActivity {
         mDatabaseReference.child(getApplicationContext().getString(R.string.db_users))
                 .child(uid)
                 .setValue(currUser);
+    }
+
+    public void changeMainPhoto(View view) {
+        String value = view.getTag().toString();
+        if (value.equals("rec1")) {
+            if (mcurrentSelect == 1) {
+                mFirstRecommendSelected.setVisibility(View.INVISIBLE);
+                mFirstRecommend.clearColorFilter();
+                mainPhoto.setImageResource(R.drawable.avatar);
+                mcurrentSelect = 0;
+            } else {
+                mFirstRecommendSelected.setVisibility(View.VISIBLE);
+                mSecondRecommendSelected.setVisibility(View.INVISIBLE);
+                mThirdRecommendSelected.setVisibility(View.INVISIBLE);
+                mFirstRecommend.setColorFilter(Color.rgb(123, 123, 123), android.graphics.PorterDuff.Mode.MULTIPLY);
+                mSecondRecommend.clearColorFilter();
+                mThirdRecommend.clearColorFilter();
+                mainPhoto.setImageResource(R.drawable.food);
+                mcurrentSelect = 1;
+            }
+        } else if (value.equals("rec2")) {
+            if (mcurrentSelect == 2) {
+                mSecondRecommendSelected.setVisibility(View.INVISIBLE);
+                mSecondRecommend.clearColorFilter();
+                mainPhoto.setImageResource(R.drawable.avatar);
+                mcurrentSelect = 0;
+            } else {
+                mFirstRecommendSelected.setVisibility(View.INVISIBLE);
+                mSecondRecommendSelected.setVisibility(View.VISIBLE);
+                mThirdRecommendSelected.setVisibility(View.INVISIBLE);
+                mSecondRecommend.setColorFilter(Color.rgb(123, 123, 123), android.graphics.PorterDuff.Mode.MULTIPLY);
+                mFirstRecommend.clearColorFilter();
+                mThirdRecommend.clearColorFilter();
+                mainPhoto.setImageResource(R.drawable.sport);
+                mcurrentSelect = 2;
+            }
+        } else {
+            if (mcurrentSelect == 3) {
+                mThirdRecommendSelected.setVisibility(View.INVISIBLE);
+                mThirdRecommend.clearColorFilter();
+                mainPhoto.setImageResource(R.drawable.avatar);
+                mcurrentSelect = 0;
+            } else {
+                mFirstRecommendSelected.setVisibility(View.INVISIBLE);
+                mSecondRecommendSelected.setVisibility(View.INVISIBLE);
+                mThirdRecommendSelected.setVisibility(View.VISIBLE);
+                mThirdRecommend.setColorFilter(Color.rgb(123, 123, 123), android.graphics.PorterDuff.Mode.MULTIPLY);
+                mFirstRecommend.clearColorFilter();
+                mSecondRecommend.clearColorFilter();
+                mainPhoto.setImageResource(R.drawable.entertainment);
+                mcurrentSelect = 3;
+            }
+        }
     }
 }

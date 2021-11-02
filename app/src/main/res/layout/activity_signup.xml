@@ -31,7 +31,7 @@
         android:layout_marginTop="36sp"
         android:src="@drawable/text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.177"
+        app:layout_constraintHorizontal_bias="0.205"
         app:layout_constraintStart_toEndOf="@+id/signup_logo"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -111,12 +111,13 @@
         android:layout_height="40sp"
         android:layout_marginStart="8sp"
         android:layout_marginEnd="8sp"
-        android:layout_marginBottom="140sp"
         android:background="@drawable/roundedbutton_style"
         android:text="@string/signup"
+        app:layout_constraintVertical_bias="0.9"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
         android:id="@+id/signup_progressBar"

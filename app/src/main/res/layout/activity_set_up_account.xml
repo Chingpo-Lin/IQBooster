@@ -6,22 +6,138 @@
     android:layout_height="match_parent"
     tools:context=".login.SetUpAccountActivity">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/setup_logo"
-        android:layout_width="120sp"
-        android:layout_height="120sp"
-        android:layout_marginTop="80dp"
-        android:src="@drawable/avatar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.5" />
+
+    <TextView
+        android:id="@+id/setup_title_text"
+        android:layout_width="match_parent"
+        android:layout_height="70sp"
+        android:fontFamily="@font/login_text_style"
+        android:gravity="center"
+        android:text="@string/create_your_profile"
+        android:layout_marginBottom="20sp"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:fontFamily="@font/login_text_style"
+        app:layout_constraintBottom_toTopOf="@+id/setup_photo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/setup_photo"
+        android:layout_width="120sp"
+        android:layout_height="120sp"
+        android:layout_marginTop="150sp"
+        android:src="@drawable/avatar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/setup_photo_recommend_1"
+        android:layout_width="60sp"
+        android:layout_height="60sp"
+        android:layout_marginTop="28sp"
+        android:src="@drawable/food"
+        android:clickable="true"
+        android:onClick="changeMainPhoto"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setup_photo"
+        android:tag="rec1"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/setup_photo_recommend_select_1"
+        android:layout_width="60sp"
+        android:layout_height="60sp"
+        android:layout_marginTop="28sp"
+        android:src="@drawable/correct_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setup_photo" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/setup_photo_recommend_2"
+        android:layout_width="60sp"
+        android:layout_height="60sp"
+        android:src="@drawable/sport"
+        android:layout_marginTop="28sp"
+        android:clickable="true"
+        android:onClick="changeMainPhoto"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setup_photo"
+        android:tag="rec2"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/setup_photo_recommend_select_2"
+        android:layout_width="60sp"
+        android:layout_height="60sp"
+        android:src="@drawable/correct_icon"
+        android:layout_marginTop="28sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setup_photo"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/setup_photo_recommend_3"
+        android:layout_width="60sp"
+        android:layout_height="60sp"
+        android:layout_marginTop="28dp"
+        android:src="@drawable/entertainment"
+        android:clickable="true"
+        android:onClick="changeMainPhoto"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setup_photo"
+        android:tag="rec3"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/setup_photo_recommend_select_3"
+        android:layout_width="60sp"
+        android:layout_height="60sp"
+        android:layout_marginTop="28dp"
+        android:src="@drawable/correct_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setup_photo" />
+
+    <TextView
+        android:id="@+id/setup_select_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="@string/select_one_as_your_avatar_or"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setup_photo_recommend_1" />
+
+    <TextView
+        android:id="@+id/setup_select_custom_photo_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/upload"
+        android:textSize="15sp"
+        android:textColor="#112FD8"
+        android:clickable="true"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toEndOf="@+id/setup_select_text"
+        app:layout_constraintTop_toBottomOf="@+id/setup_photo_recommend_1" />
+
 
     <EditText
         android:id="@+id/setup_prefer_name_edit"
@@ -68,9 +184,10 @@
         android:layout_height="40sp"
         android:background="@drawable/roundedbutton_style"
         android:text="@string/setup_next"
+        app:layout_constraintVertical_bias="0.9"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/setup_location_edit" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
