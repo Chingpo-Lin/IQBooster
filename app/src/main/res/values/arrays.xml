@@ -22,14 +22,14 @@
         <item>@drawable/entertainment</item>
     </integer-array>
 
-    <string-array name="all_categories">
-        <item>#technology</item>
-        <item>#sport</item>
-        <item>#travel</item>
-        <item>#food</item>
-        <item>#psychology</item>
-        <item>#health</item>
-        <item>#business</item>
-        <item>#entertainment</item>
+    <string-array name="all_tags">
+        <item>@string/technology</item>
+        <item>@string/sport</item>
+        <item>@string/travel</item>
+        <item>@string/food</item>
+        <item>@string/psychology</item>
+        <item>@string/health</item>
+        <item>@string/business</item>
+        <item>@string/entertainment</item>
     </string-array>
 </resources>

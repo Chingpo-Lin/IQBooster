@@ -11,13 +11,17 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.iqbooster.adapter.UserSuggestionAdapter;
 import com.example.iqbooster.fragment.NewsFeed;
 import com.example.iqbooster.login.LoginActivity;
+import com.example.iqbooster.model.Tags;
+import com.example.iqbooster.model.User;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,6 +31,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -55,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // fragment
     private NewsFeed mNewsFeedFragment;
 
+    private Tags tags = new Tags(0);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +70,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
+
+        tags.setTechnology(true);
 
         mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(mToolbar);
@@ -112,6 +122,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mNewsFeedFragment = new NewsFeed();
         setFragment(mNewsFeedFragment);
+
+        DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("users");
+        df.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    Log.d(TAG, ds.getKey());
+                    String uid = ds.getValue(User.class).getUid();
+                    df.child(uid).child("tags").setValue(tags);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     @Override

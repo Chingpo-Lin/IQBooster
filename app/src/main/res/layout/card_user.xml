@@ -21,13 +21,24 @@
             android:src="@drawable/avatar"/>
 
         <TextView
+            android:id="@+id/card_user_realName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/name"
+            android:layout_marginTop="16sp"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            />
+
+        <TextView
             android:id="@+id/card_user_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/username"
-            android:layout_marginTop="16sp"
-            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:layout_marginTop="2sp"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textColor="?android:attr/textColorSecondary"
             />
 
         <com.google.android.material.button.MaterialButton
@@ -37,8 +48,8 @@
             android:layout_gravity="center"
             android:layout_marginTop="8sp"
             android:text="@string/follow"
-            app:icon="@drawable/outline_add_24"
             style="@style/Widget.MaterialComponents.Button.Icon"
+            android:layout_marginBottom="8sp"
             />
 
 

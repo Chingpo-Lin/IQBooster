@@ -20,6 +20,9 @@ public class User {
     public String following_users;
     public String follower_users;
 
+    public User() {
+    }
+
     public User(String username, String name, String email, String uid, String location, String my_posts, String collect_posts, String like_posts, String following_users, String follower_users) {
         this.username = username;
         this.name = name;

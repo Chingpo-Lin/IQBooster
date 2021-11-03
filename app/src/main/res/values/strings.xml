@@ -5,6 +5,7 @@
     <string name="close">Close</string>
 
     <string name="follow">Follow</string>
+    <string name="following">Following</string>
     <string name="home">home</string>
 
     <!-- drawer -->
@@ -14,6 +15,7 @@
     <string name="logout">Log out</string>
     <string name="username">Welcome </string>
     <string name="email"></string>
+    <string name="name">name</string>
 
     <!-- login -->
     <string name="email_hint">Email</string>
@@ -40,16 +42,29 @@
 
     <!-- database tags -->
     <string name="db_users">users</string>
+    <string name="db_tags">tags</string>
+    <string name="db_following_users">following_users</string>
 
     <!-- tags -->
-    <string name="technology">#technology</string>
-    <string name="sport">#sport</string>
-    <string name="travel">#travel</string>
-    <string name="food">#food</string>
-    <string name="psychology">#psychology</string>
-    <string name="health">#health</string>
-    <string name="business">#business</string>
-    <string name="entertainment">#entertainment</string>
+    <string name="technology">technology</string>
+    <string name="sport">sport</string>
+    <string name="travel">travel</string>
+    <string name="food">food</string>
+    <string name="psychology">psychology</string>
+    <string name="health">health</string>
+    <string name="business">business</string>
+    <string name="entertainment">entertainment</string>
+
+    <string name="hash_technology">#technology</string>
+    <string name="hash_sport">#sport</string>
+    <string name="hash_travel">#travel</string>
+    <string name="hash_food">#food</string>
+    <string name="hash_psychology">#psychology</string>
+    <string name="hash_health">#health</string>
+    <string name="hash_business">#business</string>
+    <string name="hash_entertainment">#entertainment</string>
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="next">next</string>
