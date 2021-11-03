@@ -82,15 +82,17 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/login_login_btn"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginRight="15sp"
+        android:layout_marginLeft="15sp"
         android:layout_height="40sp"
-        app:layout_constraintVertical_bias="0.9"
         android:background="@drawable/roundedbutton_style"
         android:text="@string/login_button_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/guideline"
+        app:layout_constraintVertical_bias="0" />
 
     <TextView
         android:id="@+id/forgot_passoword_textView"
