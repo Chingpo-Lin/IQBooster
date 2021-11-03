@@ -6,6 +6,7 @@
 
     <string name="follow">Follow</string>
     <string name="home">home</string>
+    <string name="article_placeholder">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</string>
 
     <!-- drawer -->
     <string name="news_feed">News Feed</string>

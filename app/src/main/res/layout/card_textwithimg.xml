@@ -12,46 +12,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="72sp"
-            android:orientation="horizontal">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/card_textwithimg_profile"
-                android:layout_width="40sp"
-                android:layout_height="40sp"
-                android:src="@drawable/avatar"
-                android:layout_marginStart="16sp"
-                android:layout_marginTop="16sp"
-                />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="12sp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/card_textwithimg_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="title"
-                    android:layout_marginTop="16sp"
-                    android:layout_gravity="center_vertical"
-                    android:textAppearance="?attr/textAppearanceHeadline6"
-                    />
-                <TextView
-                    android:id="@+id/card_textwithimg_info"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="info"
-                    android:textAppearance="?attr/textAppearanceBody2"
-                    android:textColor="?android:attr/textColorSecondary"
-                    />
-
-            </LinearLayout>
-        </LinearLayout>
+        <include
+            layout="@layout/post_heading" />
 
         <!-- Media -->
         <ImageView
@@ -80,52 +42,25 @@
 
         </LinearLayout>
 
-        <!-- Buttons -->
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_margin="8sp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-            <com.like.LikeButton
-                android:id="@+id/card_textwithimg_likebtn"
-                android:layout_width="24sp"
-                android:layout_height="24sp"
-                app:icon_size="24sp"
-                android:layout_gravity="center"
-                app:icon_type="heart" />
-
-            <TextView
-                android:id="@+id/card_textwithimg_likecount"
-                android:gravity="center_vertical"
+            <com.google.android.material.chip.Chip
+                android:id="@+id/post_heading_tagChip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4sp"
-                android:text="like count"
-                android:layout_gravity="center"
-                android:textAppearance="?attr/textAppearanceBody2"
-                android:textColor="?android:attr/textColorSecondary"
-                />
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8sp"
+                android:text="@string/technology" />
 
-            <com.like.LikeButton
-                android:gravity="center_vertical"
-                android:id="@+id/card_textwithimg_collect"
-                android:layout_width="24sp"
-                android:layout_height="24sp"
-                app:icon_size="24sp"
-                android:layout_marginStart="4sp"
-                android:layout_gravity="center"
-                app:icon_type="star" />
-
-            <ImageButton
-                android:gravity="center_vertical"
-                android:id="@+id/card_textwithimg_share"
-                android:layout_width="24sp"
-                android:layout_height="24sp"
-                android:layout_marginStart="4sp"
-                android:src="@drawable/outline_share_24"
-                />
+            <include
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                layout="@layout/layout_like_collect_share_sheet"/>
 
         </LinearLayout>
 
