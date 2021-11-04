@@ -1,6 +1,7 @@
 package com.example.iqbooster.model;
 
 import android.content.Context;
+import android.security.keystore.StrongBoxUnavailableException;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -18,6 +19,9 @@ public class User {
     public String like_posts;
     public String following_users;
     public String follower_users;
+
+    public User() {
+    }
 
     public User(String username, String name, String email, String uid, String location, String my_posts, String collect_posts, String like_posts, String following_users, String follower_users) {
         this.username = username;
