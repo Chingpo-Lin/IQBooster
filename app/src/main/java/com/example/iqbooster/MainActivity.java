@@ -23,6 +23,7 @@ import com.example.iqbooster.fragment.MyCollect;
 import com.example.iqbooster.fragment.MyPost;
 import com.example.iqbooster.fragment.NewsFeed;
 import com.example.iqbooster.login.LoginActivity;
+import com.example.iqbooster.login.SuggestionActivity;
 import com.example.iqbooster.model.Tags;
 import com.example.iqbooster.model.User;
 import com.google.android.material.navigation.NavigationView;
@@ -102,7 +103,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     goToLoginActivityHelper();
                 } else {
                     // GO TO PROFILE PAGE
-                    goToProfilePageActivityHelper();
+                    String uid = mAuth.getUid();
+                    goToProfilePageActivityHelper(uid);
                 }
                 closeDrawer();
             }
@@ -238,8 +240,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     /**
      * Helper method which uses Intent to go to the Profile Page
      */
-    private void goToProfilePageActivityHelper() {
+    private void goToProfilePageActivityHelper(String uid) {
         Intent profilePageIntent = new Intent(getApplicationContext(), UserProfilePage.class);
+        profilePageIntent.putExtra(UserProfilePage.EXTRA, uid);
         startActivity(profilePageIntent);
     }
 

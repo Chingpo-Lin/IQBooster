@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="8sp"
-                android:text="display name"
+                android:text=""
                 android:textAppearance="?attr/textAppearanceHeadline6" />
 
             <TextView
@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="2sp"
-                android:text="@string/setup_username"
+                android:text=""
                 android:textAppearance="?attr/textAppearanceBody2"
                 android:textColor="?android:attr/textColorSecondary" />
 

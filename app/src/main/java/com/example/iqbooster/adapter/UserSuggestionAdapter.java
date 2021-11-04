@@ -1,6 +1,7 @@
 package com.example.iqbooster.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.iqbooster.R;
+import com.example.iqbooster.UserProfilePage;
 import com.example.iqbooster.model.AdapterUser;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -63,10 +65,13 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
         holder.mCircleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                 intent extra: mValue.get(position).getuid();
+                Intent profilePageIntent = new Intent(mContext, UserProfilePage.class);
+                profilePageIntent.putExtra(UserProfilePage.EXTRA, mValue.get(holder.getAdapterPosition()).getUid());
+                profilePageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(profilePageIntent);
             }
         });
-        // TODO: enable follow + to unfollow icon changes, load user profile image
+        // TODO: load user profile image
         holder.mNameTextView.setText(mValue.get(holder.getAdapterPosition()).getName());
         holder.mUsernameTextView.setText(mValue.get(holder.getAdapterPosition()).getUsername());
         holder.mFollowBtn.setOnClickListener(new View.OnClickListener() {

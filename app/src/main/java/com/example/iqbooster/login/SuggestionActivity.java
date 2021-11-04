@@ -32,6 +32,7 @@ public class SuggestionActivity extends AppCompatActivity {
 
     public static final String EXTRA = "SELECTED TAGS";
     final String TAG = "SuggestionActivity";
+
     FirebaseAuth mAuth;
     FirebaseDatabase mDatabase;
     DatabaseReference mUsersRef;
