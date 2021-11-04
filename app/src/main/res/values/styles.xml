@@ -5,4 +5,27 @@
         <item name="boxBackgroundColor">#00000000</item>
     </style>
 
+    <style name="title_primary" parent="Widget.AppCompat.TextView">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
+
+    <style name="title_secondary" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_marginTop">8sp</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="custom_bottom" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_marginHorizontal">18sp</item>
+        <item name="android:layout_height">36sp</item>
+    </style>
+
+    <style name="custom_editText" parent="Widget.AppCompat.EditText">
+        <item name="android:paddingStart">16sp</item>
+        <item name="android:layout_marginHorizontal">18sp</item>
+    </style>
+
 </resources>

@@ -15,7 +15,7 @@
     <item android:id="@+id/drawer_collect"
         android:checkable="true"
         android:title="@string/collect"
-        android:icon="@drawable/outline_bookmark_24"
+        android:icon="@drawable/ic_baseline_star_24"
         />
 
     <item android:id="@+id/drawer_logout"

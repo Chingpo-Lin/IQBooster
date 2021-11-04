@@ -122,7 +122,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checkable="true"
-                            android:text="@string/technology" />
+                            android:text="@string/hash_technology" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/post_creation_sport"
@@ -130,7 +130,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checkable="true"
-                            android:text="@string/sport" />
+                            android:text="@string/hash_sport" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/post_creation_travel"
@@ -138,7 +138,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checkable="true"
-                            android:text="@string/travel" />
+                            android:text="@string/hash_travel" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/post_creation_food"
@@ -146,7 +146,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checkable="true"
-                            android:text="@string/food" />
+                            android:text="@string/hash_food" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/post_creation_psychology"
@@ -154,7 +154,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checkable="true"
-                            android:text="@string/psychology" />
+                            android:text="@string/hash_psychology" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/post_creation_health"
@@ -162,7 +162,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checkable="true"
-                            android:text="@string/health" />
+                            android:text="@string/hash_health" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/post_creation_business"
@@ -170,7 +170,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checkable="true"
-                            android:text="@string/business" />
+                            android:text="@string/hash_business" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/post_creation_entertainment"
@@ -178,7 +178,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checkable="true"
-                            android:text="@string/entertainment" />
+                            android:text="@string/hash_entertainment" />
                     </com.google.android.material.chip.ChipGroup>
                 </HorizontalScrollView>
 

@@ -11,24 +11,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="68sp"
         android:gravity="center"
         android:text="@string/discover"
-        android:textAllCaps="true"
-        android:textColor="@color/blue_700"
-        android:textSize="49sp" />
+        style="@style/title_primary"
+        />
 
     <TextView
         android:id="@+id/bubblepicker_choose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="14dp"
         android:gravity="center"
         android:lineSpacingMultiplier="1"
+        android:maxLines="1"
         android:text="@string/tap_to_choose"
-        android:textColor="@color/color_tag_h"
-        android:textSize="18sp" />
+        style="@style/title_secondary"
+        />
 
     <com.igalata.bubblepicker.rendering.BubblePicker
         android:id="@+id/picker"

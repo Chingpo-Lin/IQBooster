@@ -15,28 +15,25 @@
 
     <TextView
         android:id="@+id/setup_title_text"
-        android:layout_width="match_parent"
-        android:layout_height="70sp"
-        android:fontFamily="@font/login_text_style"
+        style="@style/title_primary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/create_your_profile"
-        android:layout_marginBottom="20sp"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        app:fontFamily="@font/login_text_style"
-        app:layout_constraintBottom_toTopOf="@+id/setup_photo"
+        android:layout_marginTop="60sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/setup_photo"
         android:layout_width="120sp"
         android:layout_height="120sp"
-        android:layout_marginTop="150sp"
+        android:layout_marginTop="20sp"
         android:src="@drawable/avatar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/setup_title_text" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/setup_photo_recommend_1"
@@ -117,7 +114,7 @@
         android:layout_height="wrap_content"
         android:text="@string/select_one_as_your_avatar_or"
         android:textSize="15sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        android:layout_marginTop="28sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.3"
         app:layout_constraintStart_toStartOf="parent"
@@ -131,7 +128,7 @@
         android:textSize="15sp"
         android:textColor="@color/blue"
         android:clickable="true"
-        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        android:layout_marginTop="28sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintStart_toEndOf="@+id/setup_select_text"
@@ -141,27 +138,23 @@
     <EditText
         android:id="@+id/setup_prefer_name_edit"
         android:layout_width="match_parent"
-        android:layout_height="40sp"
+        android:layout_height="wrap_content"
         android:hint="@string/setup_name"
-        android:layout_marginRight="18sp"
-        android:layout_marginLeft="18sp"
         android:inputType="textPersonName"
-        android:paddingStart="20sp"
+        style="@style/custom_editText"
         android:layout_marginTop="28sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline" />
+        app:layout_constraintTop_toBottomOf="@+id/setup_select_text" />
 
     <EditText
         android:id="@+id/setup_user_name_edit"
         android:layout_width="match_parent"
-        android:layout_height="40sp"
+        android:layout_height="wrap_content"
         android:hint="@string/setup_username"
-        android:layout_marginRight="18sp"
-        android:layout_marginLeft="18sp"
         android:inputType="textPersonName"
-        android:layout_marginTop="28sp"
-        android:paddingStart="20sp"
+        android:layout_marginTop="16sp"
+        style="@style/custom_editText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/setup_prefer_name_edit" />
@@ -169,13 +162,11 @@
     <EditText
         android:id="@+id/setup_location_edit"
         android:layout_width="match_parent"
-        android:layout_height="40sp"
+        android:layout_height="wrap_content"
         android:hint="@string/location"
         android:inputType="text"
-        android:layout_marginRight="18sp"
-        android:layout_marginLeft="18sp"
-        android:paddingStart="20sp"
-        android:layout_marginTop="28sp"
+        style="@style/custom_editText"
+        android:layout_marginTop="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/setup_user_name_edit" />
@@ -183,9 +174,7 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/setup_continue_btn"
         android:layout_width="match_parent"
-        android:layout_height="40sp"
-        android:layout_marginRight="18sp"
-        android:layout_marginLeft="18sp"
+        style="@style/custom_bottom"
         android:background="@drawable/roundedbutton_style"
         android:text="@string/next"
         app:layout_constraintBottom_toBottomOf="parent"

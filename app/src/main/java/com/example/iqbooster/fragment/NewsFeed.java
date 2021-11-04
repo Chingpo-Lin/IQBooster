@@ -42,7 +42,7 @@ public class NewsFeed extends Fragment {
     private ViewPager mViewPager;
     private FloatingActionButton mFloatingBtn;
 
-    private Compose mComposeFragment;
+    private PostCreation mComposeFragment;
     private homeFragment mHomeFragment;
     private technologyFragment mTechnologyFragment;
     private businessFragment mBusinessFragment;
@@ -102,7 +102,7 @@ public class NewsFeed extends Fragment {
         mTabLayout = v.findViewById(R.id.newsfeed_tabLayout);
         mViewPager = v.findViewById(R.id.newsfeed_viewpager);
         mFloatingBtn = v.findViewById(R.id.newsfeed_make_post_btn);
-        mComposeFragment = new Compose();
+        mComposeFragment = new PostCreation();
 
         mFloatingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
