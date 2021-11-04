@@ -68,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
         mLoginText = findViewById(R.id.login_text);
 
         mProgressBar.setVisibility(View.INVISIBLE);
-        mLoginText.startAnimation(AnimationUtils.loadAnimation(LoginActivity.this, R.anim.pluse));
+        // mLoginText.startAnimation(AnimationUtils.loadAnimation(LoginActivity.this, R.anim.pluse));
         mInvisiblePasswordImageBtn.setVisibility(View.INVISIBLE);
         mInvisiblePasswordImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -5,6 +5,7 @@
     <string name="close">Close</string>
 
     <string name="follow">Follow</string>
+    <string name="following">Following</string>
     <string name="home">home</string>
 
     <!-- post -->
@@ -20,6 +21,7 @@
     <string name="drawer_logout">Logout</string>
     <string name="drawer_username">Welcome </string>
     <string name="drawer_email">Click to Login/Signup</string>
+    <string name="name">name</string>
 
     <!-- login -->
     <string name="email_hint">Email</string>
@@ -32,26 +34,45 @@
     <string name="guest">Continue as a Guest</string>
     <string name="have_an_account">Already have an account? </string>
     <string name="login">Log In</string>
-    <string name="forget_password_next">Next</string>
     <string name="setup_instruction">Create your account to continue!</string>
-    <string name="start">Getting Started</string>
+    <string name="start">Sign up</string>
     <string name="setup_name">Name</string>
     <string name="setup_username">Username</string>
     <string name="location">Location</string>
-    <string name="setup_next">Continue</string>
+    <string name="create_your_profile">CREATE YOUR PROFILE</string>
+    <string name="login_title">Log In</string>
+    <string name="select_one_as_your_avatar_or">Select one as your avatar or</string>
+    <string name="upload">upload</string>
+    <string name="next">next</string>
+    <string name="tap_to_choose">Tap to choose your\ninterested categories</string>
+    <string name="discover">Discover</string>
+    <string name="login_text">Create a profile, follow other users, make your posts, boost your IQ</string>
 
     <!-- database tags -->
     <string name="db_users">users</string>
+    <string name="db_tags">tags</string>
+    <string name="db_following_users">following_users</string>
 
     <!-- tags -->
-    <string name="technology">#technology</string>
-    <string name="sport">#sport</string>
-    <string name="travel">#travel</string>
-    <string name="food">#food</string>
-    <string name="psychology">#psychology</string>
-    <string name="health">#health</string>
-    <string name="business">#business</string>
-    <string name="entertainment">#entertainment</string>
+    <string name="technology">technology</string>
+    <string name="sport">sport</string>
+    <string name="travel">travel</string>
+    <string name="food">food</string>
+    <string name="psychology">psychology</string>
+    <string name="health">health</string>
+    <string name="business">business</string>
+    <string name="entertainment">entertainment</string>
+
+    <string name="hash_technology">#technology</string>
+    <string name="hash_sport">#sport</string>
+    <string name="hash_travel">#travel</string>
+    <string name="hash_food">#food</string>
+    <string name="hash_psychology">#psychology</string>
+    <string name="hash_health">#health</string>
+    <string name="hash_business">#business</string>
+    <string name="hash_entertainment">#entertainment</string>
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
@@ -69,4 +90,5 @@
     <string name="search_searchText">What\'s on your mind?</string>
     <string name="search_hint">Try to Input: </string>
     <string name="search_marquee">#technology #sport #travel #psychology #health #business #entertainment</string>
+
 </resources>
