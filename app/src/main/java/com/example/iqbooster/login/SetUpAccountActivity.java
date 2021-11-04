@@ -1,20 +1,22 @@
 package com.example.iqbooster.login;
 
 import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
+
 import android.graphics.Color;
-import android.media.Image;
+
 import android.os.Build;
 import android.os.Bundle;
+
 import android.text.TextUtils;
+
 import android.view.Gravity;
-import android.view.KeyEvent;
+
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
+
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,6 +34,7 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+
 public class SetUpAccountActivity extends AppCompatActivity {
 
     private ImageView mainPhoto;
@@ -45,6 +48,7 @@ public class SetUpAccountActivity extends AppCompatActivity {
     private EditText mPreferName;
     private EditText mLocation;
     private MaterialButton mContinueBtn;
+    private TextView mUpload;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabaseReference;
 
@@ -59,6 +63,7 @@ public class SetUpAccountActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mcurrentSelect = 0;
+        mUpload = findViewById(R.id.setup_select_custom_photo_text);
         mUsername = findViewById(R.id.setup_user_name_edit);
         mPreferName = findViewById(R.id.setup_prefer_name_edit);
         mLocation = findViewById(R.id.setup_location_edit);
@@ -88,7 +93,7 @@ public class SetUpAccountActivity extends AppCompatActivity {
                     FirebaseUser mUser = mAuth.getCurrentUser();
                     if (mUser != null) {
                         UserProfileChangeRequest addusername = new UserProfileChangeRequest.Builder()
-                                .setDisplayName(userinput_username).build();
+                                .setDisplayName(useriput_prefreame).build();
                         mUser.updateProfile(addusername).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
@@ -115,8 +120,14 @@ public class SetUpAccountActivity extends AppCompatActivity {
             }
         });
 
+        mUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
     }
+
 
     @Override
     public void onBackPressed() {
