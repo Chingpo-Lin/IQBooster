@@ -20,7 +20,7 @@
 
     <item android:id="@+id/drawer_logout"
         android:checkable="true"
-        android:title="@string/logout"
+        android:title="@string/drawer_logout"
         android:icon="@drawable/outline_logout_24"
         />
 </menu>

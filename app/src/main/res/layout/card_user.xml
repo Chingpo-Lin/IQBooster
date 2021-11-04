@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/username"
+            android:text="@string/setup_username"
             android:layout_marginTop="16sp"
             android:textAppearance="?attr/textAppearanceHeadline6"
             />

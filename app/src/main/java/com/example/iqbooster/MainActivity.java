@@ -11,6 +11,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -89,12 +91,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onClick(View v) {
                 if (mUser == null) {
                     goToLoginActivityHelper();
-                    closeDrawer();
                 } else {
                     // GO TO PROFILE PAGE
                     goToProfilePageActivityHelper();
-                    closeDrawer();
                 }
+                closeDrawer();
             }
         });
 
@@ -138,6 +139,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * Override system method onCreateOptionsMenu which Inflates(replaces)
+     * the ToolBar to SearchBar's View
+     *
+     * @param menu [the "search" button specifically]
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.search_menu, menu);
+        return true;
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -177,6 +190,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return true;
         }
 
+        if (item.getItemId() == R.id.action_search) {
+            Intent SearchPage = new Intent(getApplicationContext(), SearchActivity.class);
+            Log.d(TAG, "Going into Search Page");
+            startActivity(SearchPage);
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -192,8 +211,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * Helper method which uses Intent to go to the Profile Page
      */
     private void goToProfilePageActivityHelper() {
-//        Intent loginPageIntent = new Intent(getApplicationContext(), LoginActivity.class);
-//        startActivity(loginPageIntent);
+        Intent profilePageIntent = new Intent(getApplicationContext(), UserProfilePage.class);
+        startActivity(profilePageIntent);
     }
 
     /**

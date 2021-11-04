@@ -6,15 +6,20 @@
 
     <string name="follow">Follow</string>
     <string name="home">home</string>
+
+    <!-- post -->
     <string name="article_placeholder">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</string>
+    <string name="add_picture">Add Picture</string>
+    <string name="title">Title</string>
+    <string name="secondary">In a few words, tells us about your articles</string>
 
     <!-- drawer -->
     <string name="news_feed">News Feed</string>
     <string name="post">Post</string>
     <string name="collect">Collect</string>
-    <string name="logout">Log out</string>
-    <string name="username">Welcome </string>
-    <string name="email"></string>
+    <string name="drawer_logout">Logout</string>
+    <string name="drawer_username">Welcome </string>
+    <string name="drawer_email">Click to Login/Signup</string>
 
     <!-- login -->
     <string name="email_hint">Email</string>
@@ -50,4 +55,18 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <!-- User Profile Page -->
+    <string name="posts_tab">posts</string>
+    <string name="follower_tab">followers</string>
+    <string name="following_tab">following</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="log_out">Logout</string>
+
+    <!-- Search page -->
+    <string name="search_title">Search</string>
+    <string name="search_by_title">Title</string>
+    <string name="search_by_username">Username</string>
+    <string name="search_searchText">What\'s on your mind?</string>
+    <string name="search_hint">Try to Input: </string>
+    <string name="search_marquee">#technology #sport #travel #psychology #health #business #entertainment</string>
 </resources>
