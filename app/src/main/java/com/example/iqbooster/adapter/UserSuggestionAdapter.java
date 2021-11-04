@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.iqbooster.R;
-import com.example.iqbooster.model.User;
+import com.example.iqbooster.model.AdapterUser;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -23,7 +23,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAdapter.ViewHolder> {
     FirebaseAuth mAuth;
     Context mContext;
-    private ArrayList<User> mValue;
+    private ArrayList<AdapterUser> mValue;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public View mView;
@@ -43,7 +43,7 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
         }
     }
 
-    public UserSuggestionAdapter(Context context, ArrayList<User> items, FirebaseAuth mAuth) {
+    public UserSuggestionAdapter(Context context, ArrayList<AdapterUser> items, FirebaseAuth mAuth) {
         this.mAuth = mAuth;
         this.mContext = context;
         this.mValue = items;
@@ -97,8 +97,7 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
         return mValue.size();
     }
 
-    public void updateList(ArrayList<User> newList) {
+    public void updateList(ArrayList<AdapterUser> newList) {
         this.mValue = newList;
-        notifyDataSetChanged();
     }
 }

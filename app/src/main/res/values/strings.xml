@@ -20,7 +20,7 @@
     <string name="collect">Collect</string>
     <string name="drawer_logout">Logout</string>
     <string name="drawer_username">Welcome </string>
-    <string name="drawer_email">Click to Login/Signup</string>
+    <string name="drawer_email">Click to Login / Sign Up</string>
     <string name="name">name</string>
 
     <!-- login -->

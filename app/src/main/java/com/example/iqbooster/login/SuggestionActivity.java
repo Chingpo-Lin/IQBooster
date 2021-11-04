@@ -15,8 +15,8 @@ import android.view.MenuItem;
 import com.example.iqbooster.MainActivity;
 import com.example.iqbooster.R;
 import com.example.iqbooster.adapter.UserSuggestionAdapter;
+import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.Tags;
-import com.example.iqbooster.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,7 +36,7 @@ public class SuggestionActivity extends AppCompatActivity {
     FirebaseDatabase mDatabase;
     DatabaseReference mUsersRef;
     HashSet<String> tagsHashSet;
-    ArrayList<User> potentialUsers;
+    ArrayList<AdapterUser> potentialUsers;
     RecyclerView mRecyclerView;
     UserSuggestionAdapter mAdapter;
 
@@ -49,7 +49,7 @@ public class SuggestionActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance();
         mUsersRef = mDatabase.getReference().child(getResources().getString(R.string.db_users));
         tagsHashSet = new HashSet<String>();
-        potentialUsers = new ArrayList<User>();
+        potentialUsers = new ArrayList<AdapterUser>();
 
         final String selectedTags = getIntent().getStringExtra(EXTRA);
         Log.d(TAG, "selectedTags has " + selectedTags);
@@ -68,46 +68,30 @@ public class SuggestionActivity extends AppCompatActivity {
         toolbar.setTitle("People you may follow");
         setSupportActionBar(toolbar);
 
+        mAdapter = new UserSuggestionAdapter(getApplicationContext(), potentialUsers, mAuth);
+
         mUsersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot ds : snapshot.getChildren()) {
-                    User currUser = ds.getValue(User.class);
-                    String uid = currUser.getUid();
-                    Log.d(TAG, "checking user: " + uid);
-                    if (!ds.hasChild("tags")) {
-                        Log.d(TAG, "Skipping user: " + uid);
-                        continue;
+                    AdapterUser currUser = ds.getValue(AdapterUser.class);
+                    Log.d(TAG, "checking user: " + currUser.getUid());
+                    if (ds.hasChild(getApplicationContext().getResources().getString(R.string.db_tags))) {
+                        Tags currTags = ds.child(getApplicationContext().getResources().getString(R.string.db_tags)).getValue(Tags.class);
+                        boolean found = false;
+                        for (String t : currTags.allTrue()) {
+                            Log.d(TAG, "checking: " + t);
+                            if (found) break;
+                            if (tagsHashSet.contains(t)) {
+                                Log.d(TAG, "adding tags" );
+                                potentialUsers.add(currUser);
+                                Log.d(TAG, "adding to potential users current size: " + potentialUsers.size());
+                                found = true;
+                            }
+                        }
                     }
-                    DatabaseReference temp = mUsersRef.child(uid).child(getResources().getString(R.string.db_tags));
-                    temp.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            Tags currTags = snapshot.getValue(Tags.class);
-                            boolean found = false;
-                            if (currTags == null) {
-                                return;
-                            }
-                            for (String t : currTags.allTrue()) {
-                                Log.d(TAG, "checking: " + t);
-                                if (found) break;
-                                if (tagsHashSet.contains(t)) {
-                                    Log.d(TAG, "adding tags" );
-                                    potentialUsers.add(currUser);
-                                    Log.d(TAG, "adding to potential users current size: " + potentialUsers.size());
-                                    found = true;
-                                }
-                            }
-                            mAdapter.updateList(potentialUsers);
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
                 }
-                mAdapter = new UserSuggestionAdapter(getApplicationContext(), potentialUsers, mAuth);
+                mAdapter.updateList(potentialUsers);
                 mRecyclerView.setAdapter(mAdapter);
             }
 

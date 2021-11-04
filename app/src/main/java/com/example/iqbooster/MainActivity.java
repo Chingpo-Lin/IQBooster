@@ -64,8 +64,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // fragment
     private NewsFeed mNewsFeedFragment;
 
-    private Tags tags = new Tags(0);
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,8 +71,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
-
-        tags.setTechnology(true);
 
         mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(mToolbar);
@@ -125,22 +121,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mNewsFeedFragment = new NewsFeed();
         setFragment(mNewsFeedFragment);
 
-        DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("users");
-        df.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    Log.d(TAG, ds.getKey());
-                    String uid = ds.getValue(User.class).getUid();
-                    df.child(uid).child("tags").setValue(tags);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+//        Tags tags = new Tags(0);
+//        tags.setTechnology(true);
+//        DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("users");
+//        df.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                for (DataSnapshot ds : snapshot.getChildren()) {
+//                    Log.d(TAG, ds.getKey());
+//                    String uid = ds.getValue(User.class).getUid();
+//                    df.child(uid).child("tags").setValue(tags);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
     }
 
     @Override
