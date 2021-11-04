@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/gray"
+    tools:context=".fragment.PostDetail">
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/postdetail_appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/postdetail_toolbar"
+                android:layout_width="match_parent"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                android:layout_height="?attr/actionBarSize"/>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/postdetail_scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/postdetail_appbar"
+            android:scrollbars="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/postdetail_imageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="194sp"
+                    android:scaleType="centerCrop"
+                    tools:ignore="UnusedAttribute" />
+
+                <include layout="@layout/post_heading" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/postdetail_chipGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16sp">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/postdetail_chip1"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/technology" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/postdetail_chip2"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/health" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/postdetail_chip3"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/psychology" />
+
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/postdetail_article_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:padding="16sp"
+                    android:text="@string/article_placeholder" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/postdetail_comments_recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16sp"
+                    android:background="@color/white" />
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </RelativeLayout>
+
+    <include
+        layout="@layout/layout_bottom_bar"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

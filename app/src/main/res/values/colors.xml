@@ -25,5 +25,8 @@
     <color name="color_tag_f">#ef0276</color>
     <color name="color_tag_g">#ff0000</color>
     <color name="color_tag_h">#11c612</color>
+  
     <color name="gold">#FFD700</color>
+    <color name="gray">#D8D8D8</color>
+
 </resources>

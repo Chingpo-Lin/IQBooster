@@ -2,20 +2,33 @@ package com.example.iqbooster.fragment;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.iqbooster.R;
+import com.example.iqbooster.fragment.tabs.businessFragment;
+import com.example.iqbooster.fragment.tabs.entertainmentFragment;
+import com.example.iqbooster.fragment.tabs.foodFragment;
+import com.example.iqbooster.fragment.tabs.healthFragment;
+import com.example.iqbooster.fragment.tabs.homeFragment;
+import com.example.iqbooster.fragment.tabs.psychologyFragment;
+import com.example.iqbooster.fragment.tabs.sportFragment;
+import com.example.iqbooster.fragment.tabs.technologyFragment;
+import com.example.iqbooster.fragment.tabs.travelFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.transition.MaterialContainerTransform;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,7 +41,17 @@ public class NewsFeed extends Fragment {
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
     private FloatingActionButton mFloatingBtn;
+
     private Compose mComposeFragment;
+    private homeFragment mHomeFragment;
+    private technologyFragment mTechnologyFragment;
+    private businessFragment mBusinessFragment;
+    private entertainmentFragment mEntertainmentFragment;
+    private foodFragment mFoodFragment;
+    private healthFragment mHealthFragment;
+    private psychologyFragment mPsychologyFragment;
+    private sportFragment mSportFragment;
+    private travelFragment mTravelFragment;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -90,10 +113,64 @@ public class NewsFeed extends Fragment {
             }
         });
 
+        // create instance of all tabs here
+        mHomeFragment = new homeFragment();
+        mTechnologyFragment = new technologyFragment();
+        mBusinessFragment = new businessFragment();
+        mEntertainmentFragment = new entertainmentFragment();
+        mFoodFragment = new foodFragment();
+        mHealthFragment = new healthFragment();
+        mPsychologyFragment = new psychologyFragment();
+        mSportFragment = new sportFragment();
+        mTravelFragment = new travelFragment();
 
         mTabLayout.setupWithViewPager(mViewPager);
 
-        return v;
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), 0);
 
+        viewPagerAdapter.addFragment(mHomeFragment, getResources().getString(R.string.home));
+        viewPagerAdapter.addFragment(mTechnologyFragment, getResources().getString(R.string.technology));
+        viewPagerAdapter.addFragment(mBusinessFragment, getResources().getString(R.string.business));
+        viewPagerAdapter.addFragment(mEntertainmentFragment, getResources().getString(R.string.entertainment));
+        viewPagerAdapter.addFragment(mFoodFragment, getResources().getString(R.string.food));
+        viewPagerAdapter.addFragment(mHealthFragment, getResources().getString(R.string.health));
+        viewPagerAdapter.addFragment(mPsychologyFragment, getResources().getString(R.string.psychology));
+        viewPagerAdapter.addFragment(mSportFragment, getResources().getString(R.string.sport));
+        viewPagerAdapter.addFragment(mTravelFragment, getResources().getString(R.string.travel));
+
+        mViewPager.setAdapter(viewPagerAdapter);
+        return v;
+    }
+
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private List<Fragment> fragments = new ArrayList<>();
+        private List<String> fragmentsTitle = new ArrayList<>();
+
+
+        public ViewPagerAdapter(@NonNull FragmentManager fm, int behavior) {
+            super(fm, behavior);
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            fragments.add(fragment);
+            fragmentsTitle.add(title);
+        }
+
+        @NonNull
+        @Override
+        public Fragment getItem(int position) {
+            return fragments.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return fragments.size();
+        }
+
+        @Nullable
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return fragmentsTitle.get(position);
+        }
     }
 }

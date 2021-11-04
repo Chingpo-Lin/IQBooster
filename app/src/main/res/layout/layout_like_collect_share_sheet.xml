@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="end"
+    android:paddingVertical="8sp"
+    android:paddingHorizontal="16sp"
+    android:orientation="horizontal">
+
+        <com.like.LikeButton
+            android:id="@+id/like_collect_share_likeButton"
+            android:layout_width="18sp"
+            android:layout_height="18sp"
+            app:icon_size="12sp"
+            android:layout_gravity="center_vertical"
+            app:icon_type="heart" />
+
+        <TextView
+            android:id="@+id/like_collect_share_likeCount"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8sp"
+            android:text="5.5K"
+            android:layout_gravity="center_vertical"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textColor="@color/yellow"
+            />
+
+        <com.like.LikeButton
+            android:gravity="center_vertical"
+            android:id="@+id/like_collect_share_collect"
+            android:layout_width="18sp"
+            android:layout_height="18sp"
+            app:icon_size="12sp"
+            android:layout_marginStart="8sp"
+            android:layout_gravity="center_vertical"
+            app:icon_type="star" />
+
+        <ImageView
+            android:gravity="center_vertical"
+            android:id="@+id/like_collect_share_share"
+            android:layout_width="18sp"
+            android:layout_height="18sp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8sp"
+            android:src="@drawable/ic_baseline_share_24"
+            />
+</LinearLayout>
