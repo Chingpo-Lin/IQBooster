@@ -55,6 +55,7 @@
     <string name="db_tags">tags</string>
     <string name="db_posts">posts</string>
     <string name="db_following_users">following_users</string>
+    <string name="db_followers_users">followers_users</string>
     <string name="db_my_post_id">my_posts_id</string>
 
     <!-- tags -->
