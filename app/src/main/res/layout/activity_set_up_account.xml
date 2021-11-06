@@ -43,22 +43,14 @@
         android:src="@drawable/food"
         android:clickable="true"
         android:onClick="changeMainPhoto"
+        android:padding="6sp"
+        android:background="@drawable/image_border"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/setup_photo"
         android:tag="rec1"/>
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/setup_photo_recommend_select_1"
-        android:layout_width="60sp"
-        android:layout_height="60sp"
-        android:layout_marginTop="28sp"
-        android:src="@drawable/correct_icon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/setup_photo" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/setup_photo_recommend_2"
@@ -66,22 +58,15 @@
         android:layout_height="60sp"
         android:src="@drawable/sport"
         android:layout_marginTop="28sp"
+        android:background="@drawable/image_border"
         android:clickable="true"
+        android:padding="6sp"
         android:onClick="changeMainPhoto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/setup_photo"
         android:tag="rec2"/>
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/setup_photo_recommend_select_2"
-        android:layout_width="60sp"
-        android:layout_height="60sp"
-        android:src="@drawable/correct_icon"
-        android:layout_marginTop="28sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/setup_photo"/>
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/setup_photo_recommend_3"
@@ -89,24 +74,15 @@
         android:layout_height="60sp"
         android:layout_marginTop="28dp"
         android:src="@drawable/entertainment"
+        android:background="@drawable/image_border"
         android:clickable="true"
+        android:padding="6sp"
         android:onClick="changeMainPhoto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/setup_photo"
         android:tag="rec3"/>
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/setup_photo_recommend_select_3"
-        android:layout_width="60sp"
-        android:layout_height="60sp"
-        android:layout_marginTop="28dp"
-        android:src="@drawable/correct_icon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.8"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/setup_photo" />
 
     <TextView
         android:id="@+id/setup_select_text"

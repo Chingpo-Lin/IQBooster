@@ -37,13 +37,12 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class SetUpAccountActivity extends AppCompatActivity {
 
+    private final int mpl = 10; // padding len
+    private final int mnpl = 0; // no padding len
     private ImageView mainPhoto;
     private ImageView mFirstRecommend;
     private ImageView mSecondRecommend;
     private ImageView mThirdRecommend;
-    private ImageView mFirstRecommendSelected;
-    private ImageView mSecondRecommendSelected;
-    private ImageView mThirdRecommendSelected;
     private EditText mUsername;
     private EditText mPreferName;
     private EditText mLocation;
@@ -72,13 +71,10 @@ public class SetUpAccountActivity extends AppCompatActivity {
         mFirstRecommend = findViewById(R.id.setup_photo_recommend_1);
         mSecondRecommend = findViewById(R.id.setup_photo_recommend_2);
         mThirdRecommend = findViewById(R.id.setup_photo_recommend_3);
-        mFirstRecommendSelected = findViewById(R.id.setup_photo_recommend_select_1);
-        mSecondRecommendSelected = findViewById(R.id.setup_photo_recommend_select_2);
-        mThirdRecommendSelected = findViewById(R.id.setup_photo_recommend_select_3);
 
-        mFirstRecommendSelected.setVisibility(View.INVISIBLE);
-        mSecondRecommendSelected.setVisibility(View.INVISIBLE);
-        mThirdRecommendSelected.setVisibility(View.INVISIBLE);
+        mFirstRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
+        mSecondRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
+        mThirdRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
 
         mContinueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,49 +164,39 @@ public class SetUpAccountActivity extends AppCompatActivity {
         String value = view.getTag().toString();
         if (value.equals("rec1")) {
             if (mcurrentSelect == 1) {
-                mFirstRecommendSelected.setVisibility(View.INVISIBLE);
+                mFirstRecommend.setPadding(mnpl, mnpl, mnpl, mnpl);
                 mFirstRecommend.clearColorFilter();
                 mainPhoto.setImageResource(R.drawable.avatar);
                 mcurrentSelect = 0;
             } else {
-                mFirstRecommendSelected.setVisibility(View.VISIBLE);
-                mSecondRecommendSelected.setVisibility(View.INVISIBLE);
-                mThirdRecommendSelected.setVisibility(View.INVISIBLE);
-                mFirstRecommend.setColorFilter(Color.rgb(123, 123, 123), android.graphics.PorterDuff.Mode.MULTIPLY);
-                mSecondRecommend.clearColorFilter();
-                mThirdRecommend.clearColorFilter();
+                mFirstRecommend.setPadding(mpl, mpl, mpl, mpl);
+                mSecondRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
+                mThirdRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
                 mainPhoto.setImageResource(R.drawable.food);
                 mcurrentSelect = 1;
             }
         } else if (value.equals("rec2")) {
             if (mcurrentSelect == 2) {
-                mSecondRecommendSelected.setVisibility(View.INVISIBLE);
+                mSecondRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
                 mSecondRecommend.clearColorFilter();
                 mainPhoto.setImageResource(R.drawable.avatar);
                 mcurrentSelect = 0;
             } else {
-                mFirstRecommendSelected.setVisibility(View.INVISIBLE);
-                mSecondRecommendSelected.setVisibility(View.VISIBLE);
-                mThirdRecommendSelected.setVisibility(View.INVISIBLE);
-                mSecondRecommend.setColorFilter(Color.rgb(123, 123, 123), android.graphics.PorterDuff.Mode.MULTIPLY);
-                mFirstRecommend.clearColorFilter();
-                mThirdRecommend.clearColorFilter();
+                mFirstRecommend.setPadding(mnpl, mnpl, mnpl, mnpl);
+                mSecondRecommend.setPadding(mpl,mpl,mpl,mpl);
+                mThirdRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
                 mainPhoto.setImageResource(R.drawable.sport);
                 mcurrentSelect = 2;
             }
         } else {
             if (mcurrentSelect == 3) {
-                mThirdRecommendSelected.setVisibility(View.INVISIBLE);
-                mThirdRecommend.clearColorFilter();
+                mThirdRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
                 mainPhoto.setImageResource(R.drawable.avatar);
                 mcurrentSelect = 0;
             } else {
-                mFirstRecommendSelected.setVisibility(View.INVISIBLE);
-                mSecondRecommendSelected.setVisibility(View.INVISIBLE);
-                mThirdRecommendSelected.setVisibility(View.VISIBLE);
-                mThirdRecommend.setColorFilter(Color.rgb(123, 123, 123), android.graphics.PorterDuff.Mode.MULTIPLY);
-                mFirstRecommend.clearColorFilter();
-                mSecondRecommend.clearColorFilter();
+                mFirstRecommend.setPadding(mnpl, mnpl, mnpl, mnpl);
+                mSecondRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
+                mThirdRecommend.setPadding(mpl,mpl,mpl,mpl);
                 mainPhoto.setImageResource(R.drawable.entertainment);
                 mcurrentSelect = 3;
             }
