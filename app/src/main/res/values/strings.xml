@@ -11,8 +11,9 @@
     <!-- post -->
     <string name="article_placeholder">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</string>
     <string name="add_picture">Add Picture</string>
-    <string name="title">Title</string>
-    <string name="secondary">In a few words, tells us about your articles</string>
+    <string name="title">Title&#8230;</string>
+    <string name="secondary">In a few words, tells us about your articles&#8230;</string>
+    <string name="tags_description">Select at most 3 tags associated with your post:</string>
 
     <!-- drawer -->
     <string name="news_feed">News Feed</string>
@@ -52,7 +53,9 @@
     <!-- database tags -->
     <string name="db_users">users</string>
     <string name="db_tags">tags</string>
+    <string name="db_posts">posts</string>
     <string name="db_following_users">following_users</string>
+    <string name="db_my_post_id">my_posts_id</string>
 
     <!-- tags -->
     <string name="technology">technology</string>

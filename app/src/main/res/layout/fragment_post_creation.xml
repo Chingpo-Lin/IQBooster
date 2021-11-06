@@ -87,6 +87,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <EditText
+                    android:id="@+id/post_creation_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16sp"
@@ -96,6 +97,7 @@
                     android:textAppearance="?attr/textAppearanceHeadline6" />
 
                 <EditText
+                    android:id="@+id/post_creation_subTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16sp"
@@ -103,6 +105,13 @@
                     android:background="@null"
                     android:hint="@string/secondary"
                     android:textAppearance="?attr/textAppearanceBody2" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16sp"
+                    android:text="@string/tags_description"
+                    android:textColor="?android:attr/textColorPrimary" />
 
                 <HorizontalScrollView
                     android:layout_width="match_parent"
@@ -183,10 +192,11 @@
                 </HorizontalScrollView>
 
                 <EditText
+                    android:id="@+id/post_creation_body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8sp"
                     android:layout_marginHorizontal="16sp"
+                    android:layout_marginTop="8sp"
                     android:background="@null"
                     android:hint="@string/article_placeholder"
                     android:textAppearance="?attr/textAppearanceBody2" />

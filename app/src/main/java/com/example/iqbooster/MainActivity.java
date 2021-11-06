@@ -35,7 +35,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
 
@@ -122,25 +124,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mNewsFeedFragment = new NewsFeed();
         setFragment(mNewsFeedFragment);
-
-//        Tags tags = new Tags(0);
-//        tags.setTechnology(true);
-//        DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("users");
-//        df.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                for (DataSnapshot ds : snapshot.getChildren()) {
-//                    Log.d(TAG, ds.getKey());
-//                    String uid = ds.getValue(User.class).getUid();
-//                    df.child(uid).child("tags").setValue(tags);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
     }
 
     @Override

@@ -26,6 +26,7 @@ import com.example.iqbooster.fragment.tabs.technologyFragment;
 import com.example.iqbooster.fragment.tabs.travelFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +53,8 @@ public class NewsFeed extends Fragment {
     private psychologyFragment mPsychologyFragment;
     private sportFragment mSportFragment;
     private travelFragment mTravelFragment;
+
+    private FirebaseAuth mAuth;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -99,16 +102,25 @@ public class NewsFeed extends Fragment {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_newsfeed, container, false);
 
+        mAuth = FirebaseAuth.getInstance();
+
         mTabLayout = v.findViewById(R.id.newsfeed_tabLayout);
         mViewPager = v.findViewById(R.id.newsfeed_viewpager);
         mFloatingBtn = v.findViewById(R.id.newsfeed_make_post_btn);
         mComposeFragment = new PostCreation();
+
+        if (mAuth.getCurrentUser() == null) {
+            mFloatingBtn.setVisibility(View.GONE);
+        } else {
+            mFloatingBtn.setVisibility(View.VISIBLE);
+        }
 
         mFloatingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.main_container, mComposeFragment);
+                fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
         });
