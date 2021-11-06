@@ -23,73 +23,95 @@
                 android:layout_height="?attr/actionBarSize"/>
         </com.google.android.material.appbar.AppBarLayout>
 
-        <LinearLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/user_profile_appbar"
-            android:orientation="vertical">
+            android:scrollbars="vertical"
+            android:layout_below="@id/user_profile_appbar">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/user_profile_circleImageView"
-                android:layout_width="80sp"
-                android:layout_height="80sp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="28sp"
-                android:src="@drawable/avatar" />
-
-            <TextView
-                android:id="@+id/user_profile_displayName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8sp"
-                android:text=""
-                android:textAppearance="?attr/textAppearanceHeadline6" />
-
-            <TextView
-                android:id="@+id/user_profile_username"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="2sp"
-                android:text=""
-                android:textAppearance="?attr/textAppearanceBody2"
-                android:textColor="?android:attr/textColorSecondary" />
-
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/user_profile_tabLayout"
+            <FrameLayout
+                android:id="@+id/user_profile_container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24sp"
-                app:tabContentStart="16sp">
+                android:layout_height="match_parent">
 
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/user_profile_postsTab"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/posts_tab" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/user_profile_followersTab"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/follower_tab" />
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/user_profile_circleImageView"
+                        android:layout_width="80sp"
+                        android:layout_height="80sp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="28sp"
+                        android:src="@drawable/avatar" />
 
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/user_profile_followingTab"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/following_tab" />
-            </com.google.android.material.tabs.TabLayout>
+                    <TextView
+                        android:id="@+id/user_profile_displayName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="8sp"
+                        android:text=""
+                        android:textAppearance="?attr/textAppearanceHeadline6" />
 
-            <androidx.viewpager.widget.ViewPager
-                android:id="@+id/user_profile_viewPager"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
-            </androidx.viewpager.widget.ViewPager>
+                    <TextView
+                        android:id="@+id/user_profile_username"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="2sp"
+                        android:text=""
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        android:textColor="?android:attr/textColorSecondary" />
 
-        </LinearLayout>
+                    <Button
+                        android:id="@+id/user_profile_followBtn"
+                        style="@style/Widget.MaterialComponents.Button.Icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="8sp"
+                        android:text="@string/follow" />
+
+                    <com.google.android.material.tabs.TabLayout
+                        android:id="@+id/user_profile_tabLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12sp"
+                        app:tabContentStart="16sp">
+
+                        <com.google.android.material.tabs.TabItem
+                            android:id="@+id/user_profile_postsTab"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/posts_tab" />
+
+                        <com.google.android.material.tabs.TabItem
+                            android:id="@+id/user_profile_followersTab"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/follower_tab" />
+
+                        <com.google.android.material.tabs.TabItem
+                            android:id="@+id/user_profile_followingTab"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/following_tab" />
+                    </com.google.android.material.tabs.TabLayout>
+
+                    <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/user_profile_viewPager"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"></androidx.viewpager.widget.ViewPager>
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+        </androidx.core.widget.NestedScrollView>
 
     </RelativeLayout>
 
