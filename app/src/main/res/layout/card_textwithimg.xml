@@ -17,6 +17,7 @@
 
         <!-- Media -->
         <ImageView
+            android:visibility="gone"
             android:id="@+id/card_textwithimg_thumbnail"
             android:layout_width="match_parent"
             android:layout_height="194sp"
@@ -31,11 +32,11 @@
             android:padding="16sp">
 
             <TextView
-                android:id="@+id/card_textwithimg_secondary"
+                android:id="@+id/card_textwithimg_subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16sp"
-                android:text="secondary"
+                android:text="subtitle"
                 android:textAppearance="?attr/textAppearanceBody2"
                 android:textColor="?android:attr/textColorSecondary"
                 />
@@ -54,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="8sp"
-                android:text="@string/technology" />
+                android:text="" />
 
             <include
                 android:layout_width="match_parent"

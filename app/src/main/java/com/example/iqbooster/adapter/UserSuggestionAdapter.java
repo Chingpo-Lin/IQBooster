@@ -37,7 +37,6 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
         public TextView mUsernameTextView;
         public MaterialButton mFollowBtn;
 
-
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             mView = itemView;

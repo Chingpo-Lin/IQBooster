@@ -25,6 +25,8 @@ import android.widget.TextView;
 import com.example.iqbooster.R;
 import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.snackbar.Snackbar;
@@ -71,7 +73,8 @@ public class PostCreation extends Fragment {
     private ImageButton mCancelBtn;
 
     private Chip mTechnology, mSport, mTravel, mFood, mPsychology, mHealth, mBusiness, mEntertainment;
-    private Tags tags;
+    private Tags userTags;
+    private Tags postTags;
     private ChipGroup mChipGroup;
     private int checkCount;
 
@@ -137,14 +140,15 @@ public class PostCreation extends Fragment {
         mUsersRef = mDatabase.getReference().child(getContext().getResources().getString(R.string.db_users));
         mPostsRef = mDatabase.getReference().child(getContext().getResources().getString(R.string.db_posts));
 
-        tags = new Tags();
+        userTags = new Tags();
+        postTags = new Tags();
         mUsersRef.child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.hasChild(getContext().getResources().getString(R.string.db_tags))) {
-                    tags = snapshot.child(getContext().getResources().getString(R.string.db_tags)).getValue(Tags.class);
+                    userTags = snapshot.child(getContext().getResources().getString(R.string.db_tags)).getValue(Tags.class);
                 } else {
-                    tags = new Tags();
+                    userTags = new Tags();
                 }
             }
 
@@ -283,16 +287,24 @@ public class PostCreation extends Fragment {
     private void createPost() {
         final String randomKey = UUID.randomUUID().toString();
         final String currUserUID = mAuth.getCurrentUser().getUid();
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
-        mPostsRef.child(randomKey).setValue(new Post(mTitleTextView.getText().toString(),
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        Post currPost = new Post(
+                randomKey,
+                mTitleTextView.getText().toString(),
                 mSubTitleTextView.getText().toString(),
-                mBodyTextView.getText().toString(), currUserUID,
-                sdf3.format(timestamp).toString(), timestamp.getTime())
-                );
-        mPostsRef.child(randomKey).child(getContext().getResources().getString(R.string.db_tags)).setValue(tags);
+                mBodyTextView.getText().toString(),
+                currUserUID,
+                sdf3.format(timestamp).toString(),
+                timestamp.getTime(),
+                postTags);
+
+
+        mPostsRef.child(randomKey).setValue(currPost);
+//        mPostsRef.child(randomKey).child(getContext().getResources().getString(R.string.db_tags)).setValue(postTags);
+
         mUsersRef.child(currUserUID).child(getContext().getResources().getString(R.string.db_my_post_id)).child(randomKey).setValue(randomKey);
-        mUsersRef.child(currUserUID).child(getContext().getResources().getString(R.string.db_tags)).setValue(tags);
+        mUsersRef.child(currUserUID).child(getContext().getResources().getString(R.string.db_tags)).setValue(userTags);
     }
 
     private void chipOnClickListener(Chip chip) {
@@ -323,66 +335,93 @@ public class PostCreation extends Fragment {
                 Log.d("PostCreation", "checking tag: " + tagName);
                 switch (tagName) {
                     default:
+                        break;
                     case "technology":
+                        Log.d("PostCreation", "setting technology");
                         if (isChecked) {
-                            tags.setTechnology(true);
+                            userTags.setTechnology(true);
+                            postTags.setTechnology(true);
                             ++checkCount;
                         } else {
-                            tags.setTechnology(false);
+                            userTags.setTechnology(false);
+                            postTags.setTechnology(false);
                             --checkCount;
                         }
                         break;
                     case "sport":
                         if (isChecked) {
-                            tags.setSport(true);
+                            userTags.setSport(true);
+                            postTags.setSport(true);
                             ++checkCount;
                         } else {
-                            tags.setSport(false);
+                            userTags.setSport(false);
+                            postTags.setSport(false);
                             --checkCount;
                         }
                         break;
                     case "food":
                         if (isChecked) {
-                            tags.setFood(true);
+                            userTags.setFood(true);
+                            postTags.setFood(true);
                             ++checkCount;
                         } else {
-                            tags.setFood(false);
+                            userTags.setFood(false);
+                            postTags.setFood(false);
                             --checkCount;
                         }
                         break;
                     case "psychology":
                         if (isChecked) {
-                            tags.setPsychology(true);
+                            userTags.setPsychology(true);
+                            postTags.setPsychology(true);
                             ++checkCount;
                         } else {
-                            tags.setPsychology(false);
+                            userTags.setPsychology(false);
+                            postTags.setPsychology(false);
                             --checkCount;
                         }
                         break;
                     case "health":
                         if (isChecked) {
-                            tags.setHealth(true);
+                            userTags.setHealth(true);
+                            postTags.setHealth(false);
                             ++checkCount;
                         } else {
-                            tags.setHealth(false);
+                            userTags.setHealth(false);
+                            postTags.setHealth(false);
                             --checkCount;
                         }
                         break;
                     case "business":
                         if (isChecked) {
-                            tags.setBusiness(true);
+                            userTags.setBusiness(true);
+                            postTags.setBusiness(true);
                             ++checkCount;
                         } else {
-                            tags.setBusiness(false);
+                            userTags.setBusiness(false);
+                            postTags.setBusiness(false);
+                            --checkCount;
+                        }
+                        break;
+                    case "travel":
+                        if (isChecked) {
+                            userTags.setTravel(true);
+                            postTags.setTravel(true);
+                            ++checkCount;
+                        } else {
+                            userTags.setTravel(false);
+                            postTags.setTravel(false);
                             --checkCount;
                         }
                         break;
                     case "entertainment":
                         if (isChecked) {
-                            tags.setEntertainment(true);
+                            userTags.setEntertainment(true);
+                            postTags.setEntertainment(true);
                             ++checkCount;
                         } else {
-                            tags.setEntertainment(false);
+                            userTags.setEntertainment(false);
+                            postTags.setEntertainment(false);
                             --checkCount;
                         }
                         break;

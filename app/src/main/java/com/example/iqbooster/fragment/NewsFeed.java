@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -41,6 +42,7 @@ public class NewsFeed extends Fragment {
     View v;
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
+    private NestedScrollView mNestedScrollView;
     private FloatingActionButton mFloatingBtn;
 
     private PostCreation mComposeFragment;
@@ -107,6 +109,7 @@ public class NewsFeed extends Fragment {
         mTabLayout = v.findViewById(R.id.newsfeed_tabLayout);
         mViewPager = v.findViewById(R.id.newsfeed_viewpager);
         mFloatingBtn = v.findViewById(R.id.newsfeed_make_post_btn);
+        mNestedScrollView = v.findViewById(R.id.newsfeed_nestedScrollView);
         mComposeFragment = new PostCreation();
 
         if (mAuth.getCurrentUser() == null) {
@@ -141,16 +144,28 @@ public class NewsFeed extends Fragment {
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), 0);
 
         viewPagerAdapter.addFragment(mHomeFragment, getResources().getString(R.string.home));
-        viewPagerAdapter.addFragment(mTechnologyFragment, getResources().getString(R.string.technology));
-        viewPagerAdapter.addFragment(mBusinessFragment, getResources().getString(R.string.business));
-        viewPagerAdapter.addFragment(mEntertainmentFragment, getResources().getString(R.string.entertainment));
-        viewPagerAdapter.addFragment(mFoodFragment, getResources().getString(R.string.food));
-        viewPagerAdapter.addFragment(mHealthFragment, getResources().getString(R.string.health));
-        viewPagerAdapter.addFragment(mPsychologyFragment, getResources().getString(R.string.psychology));
-        viewPagerAdapter.addFragment(mSportFragment, getResources().getString(R.string.sport));
-        viewPagerAdapter.addFragment(mTravelFragment, getResources().getString(R.string.travel));
+        viewPagerAdapter.addFragment(mTechnologyFragment, getResources().getString(R.string.hash_technology));
+        viewPagerAdapter.addFragment(mBusinessFragment, getResources().getString(R.string.hash_business));
+        viewPagerAdapter.addFragment(mEntertainmentFragment, getResources().getString(R.string.hash_entertainment));
+        viewPagerAdapter.addFragment(mFoodFragment, getResources().getString(R.string.hash_food));
+        viewPagerAdapter.addFragment(mHealthFragment, getResources().getString(R.string.hash_health));
+        viewPagerAdapter.addFragment(mPsychologyFragment, getResources().getString(R.string.hash_psychology));
+        viewPagerAdapter.addFragment(mSportFragment, getResources().getString(R.string.hash_sport));
+        viewPagerAdapter.addFragment(mTravelFragment, getResources().getString(R.string.hash_travel));
 
         mViewPager.setAdapter(viewPagerAdapter);
+
+//        mNestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+//            @Override
+//            public void onScrollChange(NestedScrollView nestedScrollView, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+//                if (scrollY > oldScrollY) {
+//                    mFloatingBtn.setVisibility(View.INVISIBLE);
+//                } else {
+//                    mFloatingBtn.setVisibility(View.VISIBLE);
+//                }
+//            }
+//        });
+
         return v;
     }
 

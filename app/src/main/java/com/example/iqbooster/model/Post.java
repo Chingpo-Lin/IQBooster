@@ -1,31 +1,49 @@
 package com.example.iqbooster.model;
 
 public class Post {
-    private String Title;
+    private String randomID;
+    private String title;
     private String subTitle;
     private String body;
     private String author;
     private String date;
     private long timestamp;
+    private long like_counts;
+    private Tags tags;
+    private boolean isLiked;
+    private boolean isCollected;
 
     public Post() {
     }
 
-    public Post(String title, String subTitle, String body, String author, String date, long timestamp) {
-        Title = title;
+    public Post(String randomID, String title, String subTitle, String body, String author, String date, long timestamp, Tags tags) {
+        this.randomID = randomID;
+        this.title = title;
         this.subTitle = subTitle;
         this.body = body;
         this.author = author;
         this.date = date;
         this.timestamp = timestamp;
+        this.like_counts = 0;
+        this.tags = tags;
+        this.isLiked = false;
+        this.isCollected = false;
+    }
+
+    public String getRandomID() {
+        return randomID;
+    }
+
+    public void setRandomID(String randomID) {
+        this.randomID = randomID;
     }
 
     public String getTitle() {
-        return Title;
+        return title;
     }
 
     public void setTitle(String title) {
-        Title = title;
+        this.title = title;
     }
 
     public String getSubTitle() {
@@ -66,5 +84,37 @@ public class Post {
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public long getLike_counts() {
+        return like_counts;
+    }
+
+    public void setLike_counts(long like_counts) {
+        this.like_counts = like_counts;
+    }
+
+    public Tags getTags() {
+        return tags;
+    }
+
+    public void setTags(Tags tags) {
+        this.tags = tags;
+    }
+
+    public boolean isLiked() {
+        return isLiked;
+    }
+
+    public void setLiked(boolean liked) {
+        isLiked = liked;
+    }
+
+    public boolean isCollected() {
+        return isCollected;
+    }
+
+    public void setCollected(boolean collected) {
+        isCollected = collected;
     }
 }

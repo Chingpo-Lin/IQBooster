@@ -125,3 +125,4 @@ public class SuggestionActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 }
+

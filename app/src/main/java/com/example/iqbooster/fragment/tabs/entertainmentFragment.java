@@ -2,13 +2,27 @@ package com.example.iqbooster.fragment.tabs;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.iqbooster.R;
+import com.example.iqbooster.adapter.NewsFeedAdapter;
+import com.example.iqbooster.model.Post;
+import com.example.iqbooster.model.Tags;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +39,16 @@ public class entertainmentFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private View v;
+    private RecyclerView mRecyclerView;
+    private NewsFeedAdapter mAdapter;
+    private ArrayList<Post> potentialPosts;
+
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabaseRef;
+
+    private final String TAG = "entertainmentFragment";
 
     public entertainmentFragment() {
         // Required empty public constructor
@@ -61,6 +85,47 @@ public class entertainmentFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tab, container, false);
+        v = inflater.inflate(R.layout.fragment_tab, container, false);
+
+        mAuth = FirebaseAuth.getInstance();
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference postRef = mDatabaseRef.child(getContext().getResources().getString(R.string.db_posts));
+
+        mRecyclerView = v.findViewById(R.id.fragment_tab_recyclerView);
+        potentialPosts = new ArrayList<Post>();
+        mAdapter = new NewsFeedAdapter(getContext(), potentialPosts, mAuth, true);
+        mRecyclerView.setAdapter(mAdapter);
+
+        postRef.orderByChild(getContext().getResources().getString(R.string.db_timestamp)).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                potentialPosts.clear();
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    Post currPost = ds.getValue(Post.class);
+                    if (ds.hasChild(getContext().getResources().getString(R.string.db_tags))) {
+                        Tags currPostTags = ds.child(getContext().getResources().getString(R.string.db_tags)).getValue(Tags.class);
+                        if (currPostTags != null && currPostTags.isEntertainment()) {
+                            potentialPosts.add(currPost);
+                        }
+                    }
+                }
+                mAdapter.updateList(potentialPosts);
+                mAdapter.notifyDataSetChanged();
+                mRecyclerView.setAdapter(mAdapter);
+            }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        mRecyclerView.hasFixedSize();
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        mLayoutManager.setReverseLayout(true);
+        mLayoutManager.setStackFromEnd(true);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        return v;
     }
 }

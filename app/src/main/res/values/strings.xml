@@ -57,6 +57,12 @@
     <string name="db_following_users">following_users</string>
     <string name="db_followers_users">followers_users</string>
     <string name="db_my_post_id">my_posts_id</string>
+    <string name="db_like_counts">like_counts</string>
+    <string name="db_title">title</string>
+    <string name="db_subTitle">subTitle</string>
+    <string name="db_like_post_ids">like_post_ids</string>
+    <string name="db_collect_post_ids">collect_post_ids</string>
+    <string name="db_timestamp">timestamp</string>
 
     <!-- tags -->
     <string name="technology">technology</string>

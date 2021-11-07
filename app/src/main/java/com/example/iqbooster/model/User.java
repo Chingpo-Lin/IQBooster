@@ -19,6 +19,8 @@ public class User {
     public String like_posts;
     public String following_users;
     public String follower_users;
+    public String like_post_ids;
+    public String collect_post_ids;
 
     public User() {
     }
@@ -34,6 +36,8 @@ public class User {
         this.like_posts = like_posts;
         this.following_users = following_users;
         this.follower_users = follower_users;
+        this.like_post_ids = "";
+        this.collect_post_ids = "";
     }
 
     public String getUsername() {
@@ -114,5 +118,21 @@ public class User {
 
     public void setFollower_users(String follower_users) {
         this.follower_users = follower_users;
+    }
+
+    public String getLike_post_ids() {
+        return like_post_ids;
+    }
+
+    public void setLike_post_ids(String like_post_ids) {
+        this.like_post_ids = like_post_ids;
+    }
+
+    public String getCollect_post_ids() {
+        return collect_post_ids;
+    }
+
+    public void setCollect_post_ids(String collect_post_ids) {
+        this.collect_post_ids = collect_post_ids;
     }
 }
