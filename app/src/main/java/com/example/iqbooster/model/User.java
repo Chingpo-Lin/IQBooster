@@ -16,14 +16,14 @@ public class User {
     public String location;
     public String my_posts;
     public String following_users;
-    public String follower_users;
+    public String followers_users;
     public String like_posts;
     public String collect_posts;
 
     public User() {
     }
 
-    public User(String username, String name, String email, String uid, String location, String my_posts, String following_users, String follower_users) {
+    public User(String username, String name, String email, String uid, String location, String my_posts, String following_users, String followers_users) {
         this.username = username;
         this.name = name;
         this.email = email;
@@ -31,7 +31,7 @@ public class User {
         this.location = location;
         this.my_posts = my_posts;
         this.following_users = following_users;
-        this.follower_users = follower_users;
+        this.followers_users = followers_users;
         this.like_posts = "";
         this.collect_posts = "";
     }
@@ -100,12 +100,12 @@ public class User {
         this.following_users = following_users;
     }
 
-    public String getFollower_users() {
-        return follower_users;
+    public String getFollowers_users() {
+        return followers_users;
     }
 
-    public void setFollower_users(String follower_users) {
-        this.follower_users = follower_users;
+    public void setFollowers_users(String followers_users) {
+        this.followers_users = followers_users;
     }
 
     public String getLike_posts() {

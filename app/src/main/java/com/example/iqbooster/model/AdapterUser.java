@@ -5,6 +5,7 @@ public class AdapterUser {
     private String name;
     private String email;
     private String uid;
+    private boolean changeToFollowing;
 
     public AdapterUser() {
     }
@@ -14,6 +15,7 @@ public class AdapterUser {
         this.name = name;
         this.email = email;
         this.uid = uid;
+        this.changeToFollowing = false;
     }
 
     public String getUsername() {
@@ -46,5 +48,13 @@ public class AdapterUser {
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+    public boolean customCTF() {
+        return changeToFollowing;
+    }
+
+    public void customCTF(boolean changeToFollowing) {
+        this.changeToFollowing = changeToFollowing;
     }
 }

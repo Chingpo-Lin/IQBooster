@@ -15,7 +15,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.iqbooster.fragment.MyPost;
-import com.example.iqbooster.fragment.NewsFeed;
+import com.example.iqbooster.fragment.tabs.userPageFollowersFragment;
+import com.example.iqbooster.fragment.tabs.userPageFollowingFragment;
 import com.example.iqbooster.model.AdapterUser;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.tabs.TabLayout;
@@ -47,6 +48,8 @@ public class UserProfilePage extends AppCompatActivity {
     private ViewPager mViewPager;
 
     private MyPost myPost;
+    private com.example.iqbooster.fragment.tabs.userPageFollowersFragment userPageFollowersFragment;
+    private com.example.iqbooster.fragment.tabs.userPageFollowingFragment userPageFollowingFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,12 +77,16 @@ public class UserProfilePage extends AppCompatActivity {
         mViewPager = findViewById(R.id.user_profile_viewPager);
 
         myPost = new MyPost();
+        userPageFollowersFragment = new userPageFollowersFragment();
+        userPageFollowingFragment = new userPageFollowingFragment();
 
         mTabLayout.setupWithViewPager(mViewPager);
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), 0);
 
         viewPagerAdapter.addFragment(myPost.newInstance(intentUID), getResources().getString(R.string.posts_tab));
+        viewPagerAdapter.addFragment(userPageFollowersFragment.newInstance(intentUID), getResources().getString(R.string.follower_tab));
+        viewPagerAdapter.addFragment(userPageFollowingFragment.newInstance(intentUID), getResources().getString(R.string.following_tab));
 
         mViewPager.setAdapter(viewPagerAdapter);
 

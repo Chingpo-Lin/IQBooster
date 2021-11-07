@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.iqbooster.R;
 import com.example.iqbooster.UserProfilePage;
 import com.example.iqbooster.model.AdapterUser;
+import com.example.iqbooster.model.Post;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -94,6 +95,27 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
             }
         });
 
+        if (mValue.get(holder.getAdapterPosition()).getUid().equals(mAuth.getUid())) {
+            holder.mFollowBtn.setVisibility(View.INVISIBLE);
+        }
+        currUserFollowingRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    AdapterUser dsUser = ds.getValue(AdapterUser.class);
+                    if (holder.getAbsoluteAdapterPosition() != -1 && dsUser.getUid().equalsIgnoreCase(mValue.get(holder.getAbsoluteAdapterPosition()).getUid())) {
+                        mValue.get(holder.getAbsoluteAdapterPosition()).customCTF(true);
+                        holder.mFollowBtn.setText(mContext.getResources().getString(R.string.following));
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
         holder.mFollowBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

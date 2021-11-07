@@ -12,11 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.iqbooster.R;
-import com.example.iqbooster.adapter.NewsFeedAdapter;
 import com.example.iqbooster.adapter.UserSuggestionAdapter;
 import com.example.iqbooster.model.AdapterUser;
-import com.example.iqbooster.model.Post;
-import com.example.iqbooster.model.Tags;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,17 +25,21 @@ import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link userPageFollowersFragment#newInstance} factory method to
+ * Use the {@link userPageFollowingFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class userPageFollowersFragment extends Fragment {
+public class userPageFollowingFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private final String TAG = "userPageFollowersFragment";
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
+
+    private final String TAG = "userPagePostsFollowingFragment";
 
     private View v;
     private RecyclerView mRecyclerView;
@@ -48,11 +49,7 @@ public class userPageFollowersFragment extends Fragment {
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabaseRef;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public userPageFollowersFragment() {
+    public userPageFollowingFragment() {
         // Required empty public constructor
     }
 
@@ -61,11 +58,11 @@ public class userPageFollowersFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
-     * @return A new instance of fragment userPageFollowersFragment.
+     * @return A new instance of fragment userPagePostsFollowingFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static userPageFollowersFragment newInstance(String param1) {
-        userPageFollowersFragment fragment = new userPageFollowersFragment();
+    public static userPageFollowingFragment newInstance(String param1) {
+        userPageFollowingFragment fragment = new userPageFollowingFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         fragment.setArguments(args);
@@ -96,7 +93,7 @@ public class userPageFollowersFragment extends Fragment {
         mAdapter = new UserSuggestionAdapter(getContext(), potentialUsers, mAuth);
         mRecyclerView.setAdapter(mAdapter);
 
-        pageUserRef.child(getContext().getResources().getString(R.string.db_followers_users)).addValueEventListener(new ValueEventListener() {
+        pageUserRef.child(getContext().getResources().getString(R.string.db_following_users)).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 potentialUsers.clear();
