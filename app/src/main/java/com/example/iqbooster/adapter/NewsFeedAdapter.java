@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.iqbooster.R;
+import com.example.iqbooster.UserProfilePage;
 import com.example.iqbooster.model.AdapterPost;
 import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;
@@ -99,6 +101,18 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
         DatabaseReference tagRef = currPostRef.child(mContext.getResources().getString(R.string.db_tags));
 
         // TODO: load profile Image
+
+        holder.mCircleImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent profilePageIntent = new Intent(mContext, UserProfilePage.class);
+                profilePageIntent.putExtra(UserProfilePage.EXTRA, mValue.get(holder.getBindingAdapterPosition()).getAuthor());
+                profilePageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(profilePageIntent);
+            }
+        });
+
+
         holder.mTitle.setText(mValue.get(holder.getAbsoluteAdapterPosition()).getTitle());
         currPostRef.child(mContext.getResources().getString(R.string.db_title)).addValueEventListener(new ValueEventListener() {
             @Override
@@ -304,7 +318,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                             notifyItemRemoved(currPosition);
 
                             Activity activity = (Activity) mContext;
-                            Snackbar snackbar = Snackbar.make(activity.findViewById(android.R.id.content),  "\"" + titleName.toUpperCase() + "\" has removed from your Collect", Snackbar.LENGTH_LONG);
+                            Snackbar snackbar = Snackbar.make(activity.findViewById(android.R.id.content),  "\"" + titleName + "\" has removed from your Collect", Snackbar.LENGTH_LONG);
                             snackbar.setAction("UNDO", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {

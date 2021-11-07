@@ -43,7 +43,7 @@ public class MyPost extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+//    private static final String ARG_PARAM2 = "param2";
 
     private static final String TAG = "MyPost Nav Tab";
 
@@ -68,15 +68,13 @@ public class MyPost extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment MyPost.
      */
     // TODO: Rename and change types and number of parameters
-    public static MyPost newInstance(String param1, String param2) {
+    public static MyPost newInstance(String param1) {
         MyPost fragment = new MyPost();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -86,7 +84,6 @@ public class MyPost extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -98,14 +95,20 @@ public class MyPost extends Fragment {
 
         mAuth = FirebaseAuth.getInstance();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference myPostRef = mDatabaseRef.child(getContext().getResources().getString(R.string.db_users)).child(mAuth.getUid()).child(getContext().getString(R.string.db_my_posts));
+        DatabaseReference myPostRef;
+
+        if (mParam1 != null && mParam1.equals("param1")) {
+            myPostRef = mDatabaseRef.child(getContext().getResources().getString(R.string.db_users)).child(mAuth.getUid()).child(getContext().getString(R.string.db_my_posts));
+        } else {
+            myPostRef = mDatabaseRef.child(getContext().getResources().getString(R.string.db_users)).child(mParam1).child(getContext().getString(R.string.db_my_posts));
+        }
+
         DatabaseReference postRef = mDatabaseRef.child(getContext().getResources().getString(R.string.db_posts));
 
         mRecyclerView = v.findViewById(R.id.fragment_tab_recyclerView);
         potentialPosts = new ArrayList<Post>();
         mAdapter = new NewsFeedAdapter(getContext(), potentialPosts, mAuth, false, false);
         mRecyclerView.setAdapter(mAdapter);
-
 
         myPostRef.addValueEventListener(new ValueEventListener() {
             @Override

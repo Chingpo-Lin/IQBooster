@@ -237,6 +237,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void goToProfilePageActivityHelper(String uid) {
         Intent profilePageIntent = new Intent(getApplicationContext(), UserProfilePage.class);
         profilePageIntent.putExtra(UserProfilePage.EXTRA, uid);
+        profilePageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(profilePageIntent);
     }
 

@@ -28,6 +28,7 @@
             android:layout_height="match_parent"
             android:scrollbars="vertical"
             android:fillViewport="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_below="@id/user_profile_appbar">
 
             <FrameLayout
@@ -67,7 +68,7 @@
                         android:textAppearance="?attr/textAppearanceBody2"
                         android:textColor="?android:attr/textColorSecondary" />
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:visibility="gone"
                         android:id="@+id/user_profile_followBtn"
                         style="@style/Widget.MaterialComponents.Button.Icon"
