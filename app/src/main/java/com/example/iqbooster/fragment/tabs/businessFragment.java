@@ -93,16 +93,16 @@ public class businessFragment extends Fragment {
 
         mRecyclerView = v.findViewById(R.id.fragment_tab_recyclerView);
         potentialPosts = new ArrayList<Post>();
-        mAdapter = new NewsFeedAdapter(getContext(), potentialPosts, mAuth, true);
+        mAdapter = new NewsFeedAdapter(getContext(), potentialPosts, mAuth, true, false);
         mRecyclerView.setAdapter(mAdapter);
 
-        postRef.orderByChild(getContext().getResources().getString(R.string.db_timestamp)).addListenerForSingleValueEvent(new ValueEventListener() {
+        postRef.orderByChild(getContext().getResources().getString(R.string.db_timestamp)).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 potentialPosts.clear();
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     Post currPost = ds.getValue(Post.class);
-                    if (ds.hasChild(getContext().getResources().getString(R.string.db_tags))) {
+                    if ((getContext() != null) && ds.hasChild(getContext().getResources().getString(R.string.db_tags))) {
                         Tags currPostTags = ds.child(getContext().getResources().getString(R.string.db_tags)).getValue(Tags.class);
                         if (currPostTags != null && currPostTags.isBusiness()) {
                             potentialPosts.add(currPost);

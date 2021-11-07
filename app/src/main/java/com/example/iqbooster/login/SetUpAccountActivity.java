@@ -158,7 +158,7 @@ public class SetUpAccountActivity extends AppCompatActivity {
         String uid = mAuth.getCurrentUser().getUid();
 
         User currUser = new User(input_username, input_prefer_name, useremail, uid,
-                input_location, "", "", "", "","");
+                input_location, "", "", "");
         mDatabaseReference.child(getApplicationContext().getString(R.string.db_users))
                 .child(uid)
                 .setValue(currUser);

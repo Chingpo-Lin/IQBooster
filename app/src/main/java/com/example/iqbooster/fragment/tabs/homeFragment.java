@@ -95,10 +95,10 @@ public class homeFragment extends Fragment {
 
         mRecyclerView = v.findViewById(R.id.fragment_tab_recyclerView);
         potentialPosts = new ArrayList<Post>();
-        mAdapter = new NewsFeedAdapter(getContext(), potentialPosts, mAuth, false);
+        mAdapter = new NewsFeedAdapter(getContext(), potentialPosts, mAuth, false, false);
         mRecyclerView.setAdapter(mAdapter);
 
-        postRef.orderByChild(getContext().getResources().getString(R.string.db_timestamp)).addListenerForSingleValueEvent(new ValueEventListener() {
+        postRef.orderByChild(getContext().getResources().getString(R.string.db_timestamp)).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 potentialPosts.clear();

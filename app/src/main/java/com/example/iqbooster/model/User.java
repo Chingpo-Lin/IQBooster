@@ -15,29 +15,25 @@ public class User {
     public String uid;
     public String location;
     public String my_posts;
-    public String collect_posts;
-    public String like_posts;
     public String following_users;
     public String follower_users;
-    public String like_post_ids;
-    public String collect_post_ids;
+    public String like_posts;
+    public String collect_posts;
 
     public User() {
     }
 
-    public User(String username, String name, String email, String uid, String location, String my_posts, String collect_posts, String like_posts, String following_users, String follower_users) {
+    public User(String username, String name, String email, String uid, String location, String my_posts, String following_users, String follower_users) {
         this.username = username;
         this.name = name;
         this.email = email;
         this.uid = uid;
         this.location = location;
         this.my_posts = my_posts;
-        this.collect_posts = collect_posts;
-        this.like_posts = like_posts;
         this.following_users = following_users;
         this.follower_users = follower_users;
-        this.like_post_ids = "";
-        this.collect_post_ids = "";
+        this.like_posts = "";
+        this.collect_posts = "";
     }
 
     public String getUsername() {
@@ -96,14 +92,6 @@ public class User {
         this.collect_posts = collect_posts;
     }
 
-    public String getLike_posts() {
-        return like_posts;
-    }
-
-    public void setLike_posts(String like_posts) {
-        this.like_posts = like_posts;
-    }
-
     public String getFollowing_users() {
         return following_users;
     }
@@ -120,19 +108,11 @@ public class User {
         this.follower_users = follower_users;
     }
 
-    public String getLike_post_ids() {
-        return like_post_ids;
+    public String getLike_posts() {
+        return like_posts;
     }
 
-    public void setLike_post_ids(String like_post_ids) {
-        this.like_post_ids = like_post_ids;
-    }
-
-    public String getCollect_post_ids() {
-        return collect_post_ids;
-    }
-
-    public void setCollect_post_ids(String collect_post_ids) {
-        this.collect_post_ids = collect_post_ids;
+    public void setLike_posts(String like_posts) {
+        this.like_posts = like_posts;
     }
 }

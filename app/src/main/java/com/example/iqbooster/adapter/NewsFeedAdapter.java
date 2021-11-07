@@ -2,6 +2,8 @@ package com.example.iqbooster.adapter;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
@@ -17,6 +19,7 @@ import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;
 import com.example.iqbooster.getRandom;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -28,7 +31,6 @@ import com.like.LikeButton;
 import com.like.OnLikeListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -36,7 +38,8 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
     Context mContext;
     private ArrayList<Post> mValue;
     FirebaseAuth mAuth;
-    boolean hideTag = true;
+    boolean hideTag;
+    boolean inMyCollect;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public View mView;
@@ -71,11 +74,12 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
         }
     }
 
-    public NewsFeedAdapter(Context context, ArrayList<Post> items, FirebaseAuth mAuth, boolean hideTag) {
+    public NewsFeedAdapter(Context context, ArrayList<Post> items, FirebaseAuth mAuth, boolean hideTag, boolean inMyCollect) {
         this.mAuth = mAuth;
         this.mValue = items;
         this.mContext = context;
         this.hideTag = hideTag;
+        this.inMyCollect = inMyCollect;
     }
 
     @NonNull
@@ -88,23 +92,23 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Log.d("NewsFeedAdapter: ", mValue.get(holder.getAdapterPosition()).getRandomID());
+        Log.d("NewsFeedAdapter: ", mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID());
 
         FirebaseUser currUser = mAuth.getCurrentUser();
-        DatabaseReference currPostRef = FirebaseDatabase.getInstance().getReference().child(mContext.getResources().getString(R.string.db_posts)).child(mValue.get(holder.getAdapterPosition()).getRandomID());
+        DatabaseReference currPostRef = FirebaseDatabase.getInstance().getReference().child(mContext.getResources().getString(R.string.db_posts)).child(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID());
         DatabaseReference tagRef = currPostRef.child(mContext.getResources().getString(R.string.db_tags));
 
         // TODO: load profile Image
-        holder.mTitle.setText(mValue.get(holder.getAdapterPosition()).getTitle());
+        holder.mTitle.setText(mValue.get(holder.getAbsoluteAdapterPosition()).getTitle());
         currPostRef.child(mContext.getResources().getString(R.string.db_title)).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (holder.getAdapterPosition() != -1) {
+                if (holder.getAbsoluteAdapterPosition() != -1) {
                     final String newTitle = snapshot.getValue(String.class);
-                    if (holder.getAdapterPosition() != -1) {
-                        mValue.get(holder.getAdapterPosition()).setTitle(newTitle);
-                        holder.mTitle.setText(String.valueOf(mValue.get(holder.getAdapterPosition()).getTitle()));
-//                        notifyItemChanged(holder.getAdapterPosition());
+                    if (holder.getAbsoluteAdapterPosition() != -1) {
+                        mValue.get(holder.getAbsoluteAdapterPosition()).setTitle(newTitle);
+                        holder.mTitle.setText(String.valueOf(mValue.get(holder.getAbsoluteAdapterPosition()).getTitle()));
+//                        notifyItemChanged(holder.getAbsoluteAdapterPosition());
                     }
                 }
             }
@@ -116,19 +120,19 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
         });
 
         // TODO: update info
-        holder.mInfo.setText(mValue.get(holder.getAdapterPosition()).getAuthor());
+        holder.mInfo.setText(mValue.get(holder.getAbsoluteAdapterPosition()).getAuthor());
 
         // TODO: load thumbnail Image based on Post Type, set visibility
-        holder.mSubtitle.setText(mValue.get(holder.getAdapterPosition()).getSubTitle());
+        holder.mSubtitle.setText(mValue.get(holder.getAbsoluteAdapterPosition()).getSubTitle());
         currPostRef.child(mContext.getResources().getString(R.string.db_subTitle)).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (holder.getAdapterPosition() != -1) {
+                if (holder.getAbsoluteAdapterPosition() != -1) {
                     final String newSbuTitle = snapshot.getValue(String.class);
-                    if (holder.getAdapterPosition() != -1) {
-                        mValue.get(holder.getAdapterPosition()).setTitle(newSbuTitle);
-                        holder.mTitle.setText(String.valueOf(mValue.get(holder.getAdapterPosition()).getTitle()));
-//                        notifyItemChanged(holder.getAdapterPosition());
+                    if (holder.getAbsoluteAdapterPosition() != -1) {
+                        mValue.get(holder.getAbsoluteAdapterPosition()).setTitle(newSbuTitle);
+                        holder.mTitle.setText(String.valueOf(mValue.get(holder.getAbsoluteAdapterPosition()).getTitle()));
+//                        notifyItemChanged(holder.getAbsoluteAdapterPosition());
                     }
                 }
             }
@@ -161,16 +165,16 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             holder.mFirstChip.setVisibility(View.GONE);
         }
 
-        holder.mLikeCount.setText(String.valueOf(mValue.get(holder.getAdapterPosition()).getLike_counts()));
+        holder.mLikeCount.setText(String.valueOf(mValue.get(holder.getAbsoluteAdapterPosition()).getLike_counts()));
         currPostRef.child(mContext.getResources().getString(R.string.db_like_counts)).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (holder.getAdapterPosition() != -1) {
+                if (holder.getAbsoluteAdapterPosition() != -1) {
                     final long likeCount = snapshot.getValue(Long.class);
-                    if (holder.getAdapterPosition() != -1) {
-                        mValue.get(holder.getAdapterPosition()).setLike_counts(likeCount);
-                        holder.mLikeCount.setText(String.valueOf(mValue.get(holder.getAdapterPosition()).getLike_counts()));
-//                        notifyItemChanged(holder.getAdapterPosition());
+                    if (holder.getAbsoluteAdapterPosition() != -1) {
+                        mValue.get(holder.getAbsoluteAdapterPosition()).setLike_counts(likeCount);
+                        holder.mLikeCount.setText(String.valueOf(mValue.get(holder.getAbsoluteAdapterPosition()).getLike_counts()));
+//                        notifyItemChanged(holder.getAbsoluteAdapterPosition());
                     }
                 }
             }
@@ -185,16 +189,16 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
         if (currUser != null) {
             DatabaseReference currUserRef = FirebaseDatabase.getInstance().getReference().child(mContext.getResources().getString(R.string.db_users)).child(currUser.getUid());
             holder.mCollectBtn.setVisibility(View.VISIBLE);
-            holder.mLikeBtn.setLiked(mValue.get(holder.getAdapterPosition()).isLiked());
-            holder.mCollectBtn.setLiked(mValue.get(holder.getAdapterPosition()).isCollected());
+            holder.mLikeBtn.setLiked(mValue.get(holder.getAbsoluteAdapterPosition()).isLiked());
+            holder.mCollectBtn.setLiked(mValue.get(holder.getAbsoluteAdapterPosition()).isCollected());
 
-            currUserRef.child(mContext.getResources().getString(R.string.db_like_post_ids)).addListenerForSingleValueEvent(new ValueEventListener() {
+            currUserRef.child(mContext.getResources().getString(R.string.db_like_posts)).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
                         Post dsPost = ds.getValue(Post.class);
-                        if (holder.getAdapterPosition() != -1 && dsPost.getRandomID().equalsIgnoreCase(mValue.get(holder.getAdapterPosition()).getRandomID())) {
-                            mValue.get(holder.getAdapterPosition()).setLiked(true);
+                        if (holder.getAbsoluteAdapterPosition() != -1 && dsPost.getRandomID().equalsIgnoreCase(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID())) {
+                            mValue.get(holder.getAbsoluteAdapterPosition()).setLiked(true);
                             holder.mLikeBtn.setLiked(true);
                             break;
                         }
@@ -215,12 +219,12 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             long likeCount = snapshot.getValue(Long.class) + 1;
                             currPostRef.child(mContext.getResources().getString(R.string.db_like_counts)).setValue(likeCount);
-                            if (holder.getAdapterPosition() != -1) {
-                                AdapterPost adapterPost = new AdapterPost(mValue.get(holder.getAdapterPosition()).getRandomID(), mValue.get(holder.getAdapterPosition()).getAuthor());
-                                currUserRef.child(mContext.getResources().getString(R.string.db_like_post_ids)).child(mValue.get(holder.getAdapterPosition()).getRandomID()).setValue(adapterPost);
-                                mValue.get(holder.getAdapterPosition()).setLiked(true);
+                            if (holder.getAbsoluteAdapterPosition() != -1) {
+                                AdapterPost adapterPost = new AdapterPost(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID(), mValue.get(holder.getAbsoluteAdapterPosition()).getAuthor());
+                                currUserRef.child(mContext.getResources().getString(R.string.db_like_posts)).child(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID()).setValue(adapterPost);
+                                mValue.get(holder.getAbsoluteAdapterPosition()).setLiked(true);
 //                                    holder.mLikeBtn.setLiked(true);
-//                                    notifyItemChanged(holder.getAdapterPosition());
+//                                    notifyItemChanged(holder.getAbsoluteAdapterPosition());
                             }
                         }
 
@@ -238,11 +242,11 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             long likeCount = snapshot.getValue(Long.class) - 1;
                             currPostRef.child(mContext.getResources().getString(R.string.db_like_counts)).setValue(likeCount);
-                            if (holder.getAdapterPosition() != -1) {
-                                currUserRef.child(mContext.getResources().getString(R.string.db_like_post_ids)).child(mValue.get(holder.getAdapterPosition()).getRandomID()).removeValue();
-                                mValue.get(holder.getAdapterPosition()).setLiked(false);
+                            if (holder.getAbsoluteAdapterPosition() != -1) {
+                                currUserRef.child(mContext.getResources().getString(R.string.db_like_posts)).child(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID()).removeValue();
+                                mValue.get(holder.getAbsoluteAdapterPosition()).setLiked(false);
 //                                    holder.mLikeBtn.setLiked(false);
-//                                    notifyItemChanged(holder.getAdapterPosition());
+//                                    notifyItemChanged(holder.getAbsoluteAdapterPosition());
                             }
                         }
 
@@ -254,13 +258,13 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                 }
             });
 
-            currUserRef.child(mContext.getResources().getString(R.string.db_collect_post_ids)).addListenerForSingleValueEvent(new ValueEventListener() {
+            currUserRef.child(mContext.getResources().getString(R.string.db_collect_posts)).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
                         Post dsPost = ds.getValue(Post.class);
-                        if (dsPost.getRandomID().equalsIgnoreCase(mValue.get(holder.getAdapterPosition()).getRandomID())) {
-                            mValue.get(holder.getAdapterPosition()).setCollected(true);
+                        if (holder.getAbsoluteAdapterPosition() != -1 && dsPost.getRandomID().equalsIgnoreCase(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID())) {
+                            mValue.get(holder.getAbsoluteAdapterPosition()).setCollected(true);
                             holder.mCollectBtn.setLiked(true);
                             break;
                         }
@@ -275,18 +279,45 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             holder.mCollectBtn.setOnLikeListener(new OnLikeListener() {
                 @Override
                 public void liked(LikeButton likeButton) {
-                    if (holder.getAdapterPosition() != -1) {
-                        AdapterPost adapterPost = new AdapterPost(mValue.get(holder.getAdapterPosition()).getRandomID(), mValue.get(holder.getAdapterPosition()).getAuthor());
-                        currUserRef.child(mContext.getResources().getString(R.string.db_collect_post_ids)).child(mValue.get(holder.getAdapterPosition()).getRandomID()).setValue(adapterPost);
-                        mValue.get(holder.getAdapterPosition()).setCollected(true);
+                    if (holder.getAbsoluteAdapterPosition() != -1) {
+                        AdapterPost adapterPost = new AdapterPost(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID(), mValue.get(holder.getAbsoluteAdapterPosition()).getAuthor());
+                        currUserRef.child(mContext.getResources().getString(R.string.db_collect_posts)).child(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID()).setValue(adapterPost);
+                        mValue.get(holder.getAbsoluteAdapterPosition()).setCollected(true);
                     }
                 }
 
                 @Override
                 public void unLiked(LikeButton likeButton) {
-                    currUserRef.child(mContext.getResources().getString(R.string.db_collect_post_ids)).child(mValue.get(holder.getAdapterPosition()).getRandomID()).removeValue();
-                    if (holder.getAdapterPosition() != -1) {
-                        mValue.get(holder.getAdapterPosition()).setCollected(false);
+                    if (holder.getAbsoluteAdapterPosition() != -1) {
+                        currUserRef.child(mContext.getResources().getString(R.string.db_collect_posts)).child(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID()).removeValue();
+                        mValue.get(holder.getAbsoluteAdapterPosition()).setCollected(false);
+
+                        if (inMyCollect) {
+                            int currPosition = holder.getAbsoluteAdapterPosition();
+
+                            String titleName = mValue.get(holder.getAbsoluteAdapterPosition()).getTitle();
+                            final AdapterPost deletedItem = new AdapterPost(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID(),
+                                    mValue.get(holder.getAbsoluteAdapterPosition()).getAuthor());
+                            final Post deletedPost = mValue.get(holder.getAbsoluteAdapterPosition());
+
+                            mValue.remove(currPosition);
+                            notifyItemRemoved(currPosition);
+
+                            Activity activity = (Activity) mContext;
+                            Snackbar snackbar = Snackbar.make(activity.findViewById(android.R.id.content),  "\"" + titleName.toUpperCase() + "\" has removed from your Collect", Snackbar.LENGTH_LONG);
+                            snackbar.setAction("UNDO", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    currUserRef.child(mContext.getResources().getString(R.string.db_collect_posts)).child(deletedItem.getRandomID()).setValue(deletedItem);
+                                    mValue.add(currPosition, deletedPost);
+                                    notifyItemInserted(currPosition);
+                                    mValue.get(currPosition).setCollected(true);
+                                    holder.mCollectBtn.setLiked(true);
+                                }
+                            });
+                            snackbar.setActionTextColor(Color.parseColor("#FFD700"));
+                            snackbar.show();
+                        }
                     }
                 }
             });

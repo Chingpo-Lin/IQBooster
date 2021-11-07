@@ -12,11 +12,9 @@ import androidx.fragment.app.Fragment;
 
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
@@ -25,8 +23,6 @@ import android.widget.TextView;
 import com.example.iqbooster.R;
 import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.snackbar.Snackbar;
@@ -303,7 +299,7 @@ public class PostCreation extends Fragment {
         mPostsRef.child(randomKey).setValue(currPost);
 //        mPostsRef.child(randomKey).child(getContext().getResources().getString(R.string.db_tags)).setValue(postTags);
 
-        mUsersRef.child(currUserUID).child(getContext().getResources().getString(R.string.db_my_post_id)).child(randomKey).setValue(randomKey);
+        mUsersRef.child(currUserUID).child(getContext().getResources().getString(R.string.db_my_posts)).child(randomKey).setValue(randomKey);
         mUsersRef.child(currUserUID).child(getContext().getResources().getString(R.string.db_tags)).setValue(userTags);
     }
 

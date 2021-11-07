@@ -176,20 +176,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 setFragment(new NewsFeed());
             }
         } else if (id == mPostItem.getItemId()) {
+            clearFragmentStack();
             if (getSupportActionBar().getTitle() != "My Post") {
                 getSupportActionBar().setTitle("My Post");
                 setFragment(new MyPost());
             }
         } else if (id == mCollectItem.getItemId()) {
+            clearFragmentStack();
             if (getSupportActionBar().getTitle() != "Collect") {
                 getSupportActionBar().setTitle("Collect");
                 setFragment(new MyCollect());
             }
         } else if (id == mLogoutItem.getItemId()) {
             mAuth.signOut();
-            for (Fragment fragment : getSupportFragmentManager().getFragments()) {
-                getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-            }
             recreate();
         }
         closeDrawer();
@@ -199,6 +198,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void closeDrawer() {
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
+        }
+    }
+
+    private void clearFragmentStack() {
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+            getSupportFragmentManager().beginTransaction().remove(fragment).commit();
         }
     }
 
