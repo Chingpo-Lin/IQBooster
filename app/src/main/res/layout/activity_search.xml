@@ -20,7 +20,9 @@
             android:layout_height="match_parent"
             android:hint="@string/search_searchText"
             android:minHeight="60sp"
-            app:boxBackgroundColor="@android:color/transparent">
+            app:startIconDrawable="@drawable/ic_baseline_search_24"
+            app:boxBackgroundColor="@android:color/transparent"
+            >
 
             <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                 android:id="@+id/search_activity_autoCompleteTextView"
