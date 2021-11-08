@@ -108,7 +108,7 @@ public class UserProfilePage extends AppCompatActivity {
 
         getSupportActionBar().setTitle("");
 
-        if (mAuth != null && !mAuth.getUid().equalsIgnoreCase(intentUID)) {
+        if (mAuth.getCurrentUser() != null && !mAuth.getUid().equalsIgnoreCase(intentUID)) {
             mFollowBtn.setVisibility(View.VISIBLE);
 
             DatabaseReference followingRef = mUsers.child(mAuth.getUid()).child(getResources().getString(R.string.db_following_users));

@@ -52,6 +52,7 @@
 
     <!-- database tags -->
     <string name="db_users">users</string>
+    <string name="db_username">username</string>
     <string name="db_tags">tags</string>
     <string name="db_posts">posts</string>
     <string name="db_following_users">following_users</string>

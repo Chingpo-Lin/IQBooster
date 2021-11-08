@@ -232,13 +232,15 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             long likeCount = snapshot.getValue(Long.class) + 1;
-                            currPostRef.child(mContext.getResources().getString(R.string.db_like_counts)).setValue(likeCount);
-                            if (holder.getAbsoluteAdapterPosition() != -1) {
-                                AdapterPost adapterPost = new AdapterPost(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID(), mValue.get(holder.getAbsoluteAdapterPosition()).getAuthor());
-                                currUserRef.child(mContext.getResources().getString(R.string.db_like_posts)).child(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID()).setValue(adapterPost);
-                                mValue.get(holder.getAbsoluteAdapterPosition()).setLiked(true);
+                            if (mContext != null) {
+                                currPostRef.child(mContext.getResources().getString(R.string.db_like_counts)).setValue(likeCount);
+                                if (holder.getAbsoluteAdapterPosition() != -1) {
+                                    AdapterPost adapterPost = new AdapterPost(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID(), mValue.get(holder.getAbsoluteAdapterPosition()).getAuthor());
+                                    currUserRef.child(mContext.getResources().getString(R.string.db_like_posts)).child(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID()).setValue(adapterPost);
+                                    mValue.get(holder.getAbsoluteAdapterPosition()).setLiked(true);
 //                                    holder.mLikeBtn.setLiked(true);
 //                                    notifyItemChanged(holder.getAbsoluteAdapterPosition());
+                                }
                             }
                         }
 
@@ -255,12 +257,14 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             long likeCount = snapshot.getValue(Long.class) - 1;
-                            currPostRef.child(mContext.getResources().getString(R.string.db_like_counts)).setValue(likeCount);
-                            if (holder.getAbsoluteAdapterPosition() != -1) {
-                                currUserRef.child(mContext.getResources().getString(R.string.db_like_posts)).child(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID()).removeValue();
-                                mValue.get(holder.getAbsoluteAdapterPosition()).setLiked(false);
+                            if (mContext != null) {
+                                currPostRef.child(mContext.getResources().getString(R.string.db_like_counts)).setValue(likeCount);
+                                if (holder.getAbsoluteAdapterPosition() != -1) {
+                                    currUserRef.child(mContext.getResources().getString(R.string.db_like_posts)).child(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID()).removeValue();
+                                    mValue.get(holder.getAbsoluteAdapterPosition()).setLiked(false);
 //                                    holder.mLikeBtn.setLiked(false);
 //                                    notifyItemChanged(holder.getAbsoluteAdapterPosition());
+                                }
                             }
                         }
 
@@ -350,7 +354,6 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
         }
 
         // TODO: implement Share Btn, last edit
-
     }
 
     @Override

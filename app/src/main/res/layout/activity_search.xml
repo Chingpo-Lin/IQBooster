@@ -1,134 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".SearchActivity">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="4sp"
+        android:layout_marginHorizontal="16sp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/search_activity_appbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/search_activity_toolbar"
-                android:layout_width="match_parent"
-                app:layout_scrollFlags="scroll|enterAlways"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                android:layout_height="?attr/actionBarSize"/>
-        </com.google.android.material.appbar.AppBarLayout>
-
-        <LinearLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/search_activity_appbar"
-            android:orientation="vertical">
+            android:hint="@string/search_searchText"
+            android:minHeight="60sp"
+            app:boxBackgroundColor="@android:color/transparent">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="12sp"
-                android:text="@string/search_title"
-                android:textColor="?android:attr/textColorPrimary"
-                android:textAppearance="?attr/textAppearanceHeadline4" />
-
-            <LinearLayout
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                android:id="@+id/search_activity_autoCompleteTextView"
+                style="@style/Widget.MaterialComponents.AutoCompleteTextView.FilledBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4sp"
-                android:layout_marginHorizontal="16sp"
-                android:orientation="horizontal">
+                android:layout_height="match_parent" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/search_hint"
-                    android:textAppearance="?attr/textAppearanceBody2"
-                    android:textColor="?android:attr/textColorSecondary" />
+        <com.google.android.material.button.MaterialButton
+            android:visibility="gone"
+            android:id="@+id/search_activity_searchBtn"
+            android:layout_width="52sp"
+            android:layout_height="52sp"
+            android:layout_marginHorizontal="12sp"
+            app:cornerRadius="30sp"
+            app:icon="@drawable/ic_baseline_search_24"
+            app:iconGravity="start"
+            app:iconPadding="0dp" />
+    </LinearLayout>
 
-                <TextView
-                    android:id="@+id/search_activity_marquee"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/search_marquee"
-                    android:maxLines="1"
-                    android:layout_marginStart="4sp"
-                    android:textAppearance="?attr/textAppearanceBody2"
-                    android:textColor="?android:attr/textColorSecondary"
-                    android:ellipsize="marquee"
-                    android:marqueeRepeatLimit="marquee_forever"
-                    />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16sp"
+        android:orientation="horizontal">
 
-            </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search_hint"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textColor="?android:attr/textColorSecondary" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="12sp"
-                android:layout_marginHorizontal="16sp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+        <TextView
+            android:id="@+id/search_activity_marquee"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/search_marquee"
+            android:maxLines="1"
+            android:layout_marginStart="4sp"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textColor="?android:attr/textColorSecondary"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="280sp"
-                    android:layout_height="60sp"
-                    android:hint="@string/search_searchText"
-                    android:minHeight="60sp"
-                    app:boxBackgroundColor="@android:color/transparent">
+    </LinearLayout>
 
-                    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                        android:id="@+id/search_activity_autoCompleteTextView"
-                        style="@style/Widget.MaterialComponents.AutoCompleteTextView.FilledBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-                </com.google.android.material.textfield.TextInputLayout>
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16sp"
+        android:scrollbars="none">
 
-                <com.google.android.material.button.MaterialButton
-                    android:layout_width="52sp"
-                    android:layout_height="52sp"
-                    android:layout_marginHorizontal="12sp"
-                    app:cornerRadius="30sp"
-                    app:icon="@drawable/ic_baseline_search_24"
-                    app:iconGravity="start"
-                    app:iconPadding="0dp" />
-            </LinearLayout>
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/search_activity_chipGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:singleLine="true"
+            />
 
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/search_activity_tabLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8sp"
-                app:tabContentStart="16sp">
 
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/search_activity_search_by_title_tab"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/search_by_title" />
+    </HorizontalScrollView>
 
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/search_activity_search_by_username_tab"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/search_by_username" />
-            </com.google.android.material.tabs.TabLayout>
+<!--        <com.google.android.material.tabs.TabLayout-->
+<!--            android:id="@+id/search_activity_tabLayout"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="8sp"-->
+<!--            app:tabContentStart="16sp">-->
 
-            <androidx.viewpager.widget.ViewPager
-                android:id="@+id/search_activity_viewPager"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
-            </androidx.viewpager.widget.ViewPager>
+<!--            <com.google.android.material.tabs.TabItem-->
+<!--                android:id="@+id/search_activity_search_by_title_tab"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@string/search_by_title" />-->
 
-        </LinearLayout>
+<!--            <com.google.android.material.tabs.TabItem-->
+<!--                android:id="@+id/search_activity_search_by_username_tab"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@string/search_by_username" />-->
+<!--        </com.google.android.material.tabs.TabLayout>-->
 
-    </RelativeLayout>
+<!--        <androidx.viewpager.widget.ViewPager-->
+<!--            android:id="@+id/search_activity_viewPager"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">-->
+<!--        </androidx.viewpager.widget.ViewPager>-->
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginVertical="12sp"
+        android:id="@+id/search_activity_usersRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/search_activity_postsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"/>
+
+</LinearLayout>

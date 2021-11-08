@@ -32,4 +32,15 @@
         <item>@string/business</item>
         <item>@string/entertainment</item>
     </string-array>
+
+    <string-array name="all_tags_with_hash">
+        <item>@string/hash_technology</item>
+        <item>@string/hash_sport</item>
+        <item>@string/hash_travel</item>
+        <item>@string/hash_food</item>
+        <item>@string/hash_psychology</item>
+        <item>@string/hash_health</item>
+        <item>@string/hash_business</item>
+        <item>@string/hash_entertainment</item>
+    </string-array>
 </resources>
