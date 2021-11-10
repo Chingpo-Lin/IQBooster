@@ -61,6 +61,7 @@ public class MyPost extends Fragment {
 
     public MyPost() {
         // Required empty public constructor
+        mParam1 = ARG_PARAM1;
     }
 
     /**
@@ -97,7 +98,7 @@ public class MyPost extends Fragment {
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference myPostRef;
 
-        if (mParam1 != null && mParam1.equals("param1")) {
+        if (mParam1.equalsIgnoreCase(ARG_PARAM1)) {
             myPostRef = mDatabaseRef.child(getContext().getResources().getString(R.string.db_users)).child(mAuth.getUid()).child(getContext().getString(R.string.db_my_posts));
         } else {
             myPostRef = mDatabaseRef.child(getContext().getResources().getString(R.string.db_users)).child(mParam1).child(getContext().getString(R.string.db_my_posts));
