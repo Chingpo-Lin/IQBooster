@@ -84,6 +84,8 @@
                 android:layout_marginStart="24sp" />
 
             <View
+                android:visibility="invisible"
+                android:id="@+id/comment_commentdivider"
                 android:layout_marginTop="4sp"
                 android:layout_width="match_parent"
                 android:layout_height="0.5sp"

@@ -50,11 +50,11 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/post_heading_tagChip"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="8sp"
+                android:clickable="false"
                 android:text="" />
 
             <include

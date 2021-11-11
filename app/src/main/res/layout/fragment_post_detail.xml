@@ -45,26 +45,26 @@
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/postdetail_chip1"
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:visibility="invisible"
+                            android:clickable="false"
                             android:text="" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/postdetail_chip2"
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:visibility="invisible"
+                            android:clickable="false"
                             android:text="" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/postdetail_chip3"
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:visibility="invisible"
+                            android:clickable="false"
                             android:text="" />
 
 

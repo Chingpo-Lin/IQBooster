@@ -213,6 +213,16 @@ public class PostDetail extends Fragment {
                 }
             });
 
+            firebaseCommentsQuery = currPostRef.child(getContext().getResources().getString(R.string.db_comments)).orderByChild(getContext().getResources().getString(R.string.db_timestamp));
+            firebaseCommentRetrieve(firebaseCommentsQuery);
+            mLayoutManager = new LinearLayoutManager(getContext());
+            mLayoutManager.setReverseLayout(true);
+            mLayoutManager.setStackFromEnd(true);
+            mAllCommentsRecyclerView.hasFixedSize();
+            mAllCommentsRecyclerView.setLayoutManager(mLayoutManager);
+            mAllCommentsRecyclerView.setAdapter(adapter);
+            adapter.startListening();
+
             if (mAuth.getCurrentUser() != null) {
                 mCollectButton.setVisibility(View.VISIBLE);
                 mCommentEditText.setVisibility(View.VISIBLE);
@@ -334,16 +344,6 @@ public class PostDetail extends Fragment {
                         }
                     }
                 });
-
-                firebaseCommentsQuery = currPostRef.child(getContext().getResources().getString(R.string.db_comments)).orderByChild(getContext().getResources().getString(R.string.db_timestamp));
-                firebaseCommentRetrieve(firebaseCommentsQuery);
-                mLayoutManager = new LinearLayoutManager(getContext());
-                mLayoutManager.setReverseLayout(true);
-                mLayoutManager.setStackFromEnd(true);
-                mAllCommentsRecyclerView.hasFixedSize();
-                mAllCommentsRecyclerView.setLayoutManager(mLayoutManager);
-                mAllCommentsRecyclerView.setAdapter(adapter);
-                adapter.startListening();
             }
         }
 
@@ -406,6 +406,7 @@ public class PostDetail extends Fragment {
                 holder.mUsername.setText(model.getAuthorDisplayName());
                 holder.mInfo.setText(model.getDate());
                 holder.mCommentBody.setText(model.getCommentBody());
+                holder.mDivider.setVisibility(View.VISIBLE);
 
                 holder.mCommentBody.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -472,6 +473,7 @@ public class PostDetail extends Fragment {
         public TextView mUsername;
         public TextView mInfo;
         public TextView mCommentBody;
+        public View mDivider;
 
         public RecyclerView mReplyCommentsRecyclerView;
 
@@ -483,6 +485,7 @@ public class PostDetail extends Fragment {
             mInfo = itemView.findViewById(R.id.comment_timeStamp);
             mCommentBody = itemView.findViewById(R.id.comment_commentDetail);
             mReplyCommentsRecyclerView = itemView.findViewById(R.id.comment_reply_comment_recyclerView);
+            mDivider = itemView.findViewById(R.id.comment_commentdivider);
         }
     }
 }
