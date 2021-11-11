@@ -20,6 +20,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.iqbooster.ActivityInterface;
 import com.example.iqbooster.R;
 import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;
@@ -76,6 +77,9 @@ public class PostCreation extends Fragment {
 
     private final int MAX_CHIPS = 3;
     private static final SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private ActivityInterface activityInterface;
+
+    private String newPostID;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -199,6 +203,7 @@ public class PostCreation extends Fragment {
         mCancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hideKeyboard();
                 getActivity().onBackPressed();
             }
         });
@@ -265,8 +270,11 @@ public class PostCreation extends Fragment {
                 createPost();
 
                 hideKeyboard();
-                // TODO: remove after post can be retrieved
-                getActivity().onBackPressed();
+                PostDetail postDetail = new PostDetail();
+                activityInterface.getActivityFragmentManger().popBackStack();
+                activityInterface.getActivityFragmentManger()
+                        .beginTransaction().replace(R.id.main_container, postDetail.newInstance(newPostID)).addToBackStack(null).commit();
+
             }
         });
 
@@ -282,6 +290,7 @@ public class PostCreation extends Fragment {
 
     private void createPost() {
         final String randomKey = UUID.randomUUID().toString();
+        newPostID = randomKey;
         final String currUserUID = mAuth.getCurrentUser().getUid();
 
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -424,6 +433,10 @@ public class PostCreation extends Fragment {
                 }
             }
         });
+    }
+
+    public void setActivityInterface(ActivityInterface activityInterface) {
+        this.activityInterface = activityInterface;
     }
 
 }

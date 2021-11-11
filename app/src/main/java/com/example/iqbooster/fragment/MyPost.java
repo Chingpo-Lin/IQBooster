@@ -14,7 +14,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.iqbooster.ActivityInterface;
 import com.example.iqbooster.R;
+import com.example.iqbooster.Screen;
 import com.example.iqbooster.adapter.NewsFeedAdapter;
 import com.example.iqbooster.model.AdapterPost;
 import com.example.iqbooster.model.Post;
@@ -46,6 +48,7 @@ public class MyPost extends Fragment {
 //    private static final String ARG_PARAM2 = "param2";
 
     private static final String TAG = "MyPost Nav Tab";
+    private ActivityInterface activityInterface;
 
     private View v;
     private RecyclerView mRecyclerView;
@@ -98,17 +101,21 @@ public class MyPost extends Fragment {
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference myPostRef;
 
+        mRecyclerView = v.findViewById(R.id.fragment_tab_recyclerView);
+        potentialPosts = new ArrayList<Post>();
+
         if (mParam1.equalsIgnoreCase(ARG_PARAM1)) {
+            // enter from nav drawer
             myPostRef = mDatabaseRef.child(getContext().getResources().getString(R.string.db_users)).child(mAuth.getUid()).child(getContext().getString(R.string.db_my_posts));
+            mAdapter = new NewsFeedAdapter(getContext(), potentialPosts, mAuth, false, Screen.UN_SPECIFY);
         } else {
+            // in profile page
             myPostRef = mDatabaseRef.child(getContext().getResources().getString(R.string.db_users)).child(mParam1).child(getContext().getString(R.string.db_my_posts));
+            mAdapter = new NewsFeedAdapter(getContext(), potentialPosts, mAuth, false, Screen.PROFILE_PAGE);
         }
 
         DatabaseReference postRef = mDatabaseRef.child(getContext().getResources().getString(R.string.db_posts));
-
-        mRecyclerView = v.findViewById(R.id.fragment_tab_recyclerView);
-        potentialPosts = new ArrayList<Post>();
-        mAdapter = new NewsFeedAdapter(getContext(), potentialPosts, mAuth, false, false);
+        mAdapter.setActivityInterface(activityInterface);
         mRecyclerView.setAdapter(mAdapter);
 
         myPostRef.addValueEventListener(new ValueEventListener() {
@@ -150,4 +157,7 @@ public class MyPost extends Fragment {
         return v;
     }
 
+    public void setActivityInterface(ActivityInterface activityInterface) {
+        this.activityInterface = activityInterface;
+    }
 }

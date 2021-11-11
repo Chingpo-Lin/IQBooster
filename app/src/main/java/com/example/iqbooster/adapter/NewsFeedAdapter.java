@@ -14,8 +14,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.iqbooster.ActivityInterface;
 import com.example.iqbooster.R;
+import com.example.iqbooster.Screen;
 import com.example.iqbooster.UserProfilePage;
+import com.example.iqbooster.fragment.PostDetail;
 import com.example.iqbooster.model.AdapterPost;
 import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;
@@ -41,7 +44,9 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
     private ArrayList<Post> mValue;
     FirebaseAuth mAuth;
     boolean hideTag;
-    boolean inMyCollect;
+    Screen location;
+
+    private ActivityInterface activityInterface;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public View mView;
@@ -76,12 +81,12 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
         }
     }
 
-    public NewsFeedAdapter(Context context, ArrayList<Post> items, FirebaseAuth mAuth, boolean hideTag, boolean inMyCollect) {
+    public NewsFeedAdapter(Context context, ArrayList<Post> items, FirebaseAuth mAuth, boolean hideTag, Screen location) {
         this.mAuth = mAuth;
         this.mValue = items;
         this.mContext = context;
         this.hideTag = hideTag;
-        this.inMyCollect = inMyCollect;
+        this.location = location;
     }
 
     @NonNull
@@ -138,6 +143,22 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
 
         // TODO: load thumbnail Image based on Post Type, set visibility
         holder.mSubtitle.setText(mValue.get(holder.getAbsoluteAdapterPosition()).getSubTitle());
+        holder.mSubtitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PostDetail postDetail = new PostDetail();
+                int container_id;
+                switch (location) {
+                    default:
+                        container_id = R.id.main_container;
+                        break;
+                    case PROFILE_PAGE:
+                        container_id = R.id.user_profile_container;
+                }
+                activityInterface.getActivityFragmentManger()
+                        .beginTransaction().add(container_id, postDetail.newInstance(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID())).addToBackStack(null).commit();
+            }
+        });
         currPostRef.child(mContext.getResources().getString(R.string.db_subTitle)).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -206,7 +227,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             holder.mLikeBtn.setLiked(mValue.get(holder.getAbsoluteAdapterPosition()).isLiked());
             holder.mCollectBtn.setLiked(mValue.get(holder.getAbsoluteAdapterPosition()).isCollected());
 
-            currUserRef.child(mContext.getResources().getString(R.string.db_like_posts)).addListenerForSingleValueEvent(new ValueEventListener() {
+            currUserRef.child(mContext.getResources().getString(R.string.db_like_posts)).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
@@ -276,7 +297,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                 }
             });
 
-            currUserRef.child(mContext.getResources().getString(R.string.db_collect_posts)).addListenerForSingleValueEvent(new ValueEventListener() {
+            currUserRef.child(mContext.getResources().getString(R.string.db_collect_posts)).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
@@ -310,7 +331,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                         currUserRef.child(mContext.getResources().getString(R.string.db_collect_posts)).child(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID()).removeValue();
                         mValue.get(holder.getAbsoluteAdapterPosition()).setCollected(false);
 
-                        if (inMyCollect) {
+                        if (location == Screen.MY_COLLECT) {
                             int currPosition = holder.getAbsoluteAdapterPosition();
 
                             String titleName = mValue.get(holder.getAbsoluteAdapterPosition()).getTitle();
@@ -375,4 +396,8 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
     }
 
     // TODO: remove maybe?
+
+    public void setActivityInterface(ActivityInterface activityInterface) {
+        this.activityInterface = activityInterface;
+    }
 }

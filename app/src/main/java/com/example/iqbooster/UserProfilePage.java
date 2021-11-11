@@ -30,7 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserProfilePage extends AppCompatActivity {
+public class UserProfilePage extends AppCompatActivity implements ActivityInterface{
 
     public static final String EXTRA = "USER_UID";
 
@@ -77,20 +77,23 @@ public class UserProfilePage extends AppCompatActivity {
         mViewPager = findViewById(R.id.user_profile_viewPager);
 
         myPost = new MyPost();
+        myPost = myPost.newInstance(intentUID);
+        myPost.setActivityInterface(this);
+
         userPageFollowersFragment = new userPageFollowersFragment();
+        userPageFollowersFragment = userPageFollowersFragment.newInstance(intentUID);
         userPageFollowingFragment = new userPageFollowingFragment();
+        userPageFollowingFragment = userPageFollowingFragment.newInstance(intentUID);
 
         mTabLayout.setupWithViewPager(mViewPager);
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), 0);
 
-        viewPagerAdapter.addFragment(myPost.newInstance(intentUID), getResources().getString(R.string.posts_tab));
-        viewPagerAdapter.addFragment(userPageFollowersFragment.newInstance(intentUID), getResources().getString(R.string.follower_tab));
-        viewPagerAdapter.addFragment(userPageFollowingFragment.newInstance(intentUID), getResources().getString(R.string.following_tab));
+        viewPagerAdapter.addFragment(myPost, getResources().getString(R.string.posts_tab));
+        viewPagerAdapter.addFragment(userPageFollowersFragment, getResources().getString(R.string.follower_tab));
+        viewPagerAdapter.addFragment(userPageFollowingFragment, getResources().getString(R.string.following_tab));
 
         mViewPager.setAdapter(viewPagerAdapter);
-
-
 
         mUsers.child(intentUID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -196,6 +199,11 @@ public class UserProfilePage extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    @Override
+    public FragmentManager getActivityFragmentManger() {
+        return getSupportFragmentManager();
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

@@ -13,7 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.iqbooster.ActivityInterface;
 import com.example.iqbooster.R;
+import com.example.iqbooster.Screen;
 import com.example.iqbooster.adapter.NewsFeedAdapter;
 import com.example.iqbooster.model.Post;
 import com.google.firebase.auth.FirebaseAuth;
@@ -47,6 +49,7 @@ public class homeFragment extends Fragment {
     private DatabaseReference mDatabaseRef;
 
     private final String TAG = "homeFragment";
+    private ActivityInterface activityInterface;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -95,7 +98,8 @@ public class homeFragment extends Fragment {
 
         mRecyclerView = v.findViewById(R.id.fragment_tab_recyclerView);
         potentialPosts = new ArrayList<Post>();
-        mAdapter = new NewsFeedAdapter(getContext(), potentialPosts, mAuth, false, false);
+        mAdapter = new NewsFeedAdapter(getContext(), potentialPosts, mAuth, false, Screen.UN_SPECIFY);
+        mAdapter.setActivityInterface(activityInterface);
         mRecyclerView.setAdapter(mAdapter);
 
         postRef.orderByChild(getContext().getResources().getString(R.string.db_timestamp)).addValueEventListener(new ValueEventListener() {
@@ -124,5 +128,9 @@ public class homeFragment extends Fragment {
         mLayoutManager.setStackFromEnd(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
         return v;
+    }
+
+    public void setActivityInterface(ActivityInterface activityInterface) {
+        this.activityInterface = activityInterface;
     }
 }

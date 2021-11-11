@@ -64,6 +64,8 @@
     <string name="db_like_posts">like_posts</string>
     <string name="db_collect_posts">collect_posts</string>
     <string name="db_timestamp">timestamp</string>
+    <string name="db_comments">comments</string>
+    <string name="db_comments_reply">all_replies</string>
 
     <!-- tags -->
     <string name="technology">technology</string>
@@ -84,7 +86,6 @@
     <string name="hash_business">#business</string>
     <string name="hash_entertainment">#entertainment</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- User Profile Page -->

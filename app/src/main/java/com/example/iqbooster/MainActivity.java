@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -44,7 +46,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ActivityInterface{
 
     private static final String TAG = "MainActivity: ";
 
@@ -126,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportActionBar().setTitle("News Feed");
 
         mNewsFeedFragment = new NewsFeed();
+        mNewsFeedFragment.setActivityInterface(this);
         setFragment(mNewsFeedFragment);
     }
 
@@ -173,20 +176,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == mNewsFeedItem.getItemId()) {
             if (getSupportActionBar().getTitle() != "News Feed") {
                 getSupportActionBar().setTitle("News Feed");
-                setFragment(new NewsFeed());
             }
+            NewsFeed newsFeed = new NewsFeed();
+            newsFeed.setActivityInterface(this);
+            setFragment(newsFeed);
         } else if (id == mPostItem.getItemId()) {
             clearFragmentStack();
             if (getSupportActionBar().getTitle() != "My Post") {
                 getSupportActionBar().setTitle("My Post");
-                setFragment(new MyPost());
             }
+            MyPost myPost = new MyPost();
+            myPost.setActivityInterface(this);
+            setFragment(myPost);
         } else if (id == mCollectItem.getItemId()) {
             clearFragmentStack();
             if (getSupportActionBar().getTitle() != "Collect") {
                 getSupportActionBar().setTitle("Collect");
-                setFragment(new MyCollect());
             }
+            MyCollect myCollect = new MyCollect();
+            myCollect.setActivityInterface(this);
+            setFragment(myCollect);
         } else if (id == mLogoutItem.getItemId()) {
             mAuth.signOut();
             recreate();
@@ -247,7 +256,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void setFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_container, fragment);
-        fragmentTransaction.commit();
+        fragmentTransaction.addToBackStack(null).commit();
     }
 
+    @Override
+    public FragmentManager getActivityFragmentManger() {
+        return getSupportFragmentManager();
+    }
 }

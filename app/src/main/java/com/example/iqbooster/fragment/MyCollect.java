@@ -12,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.iqbooster.ActivityInterface;
 import com.example.iqbooster.R;
+import com.example.iqbooster.Screen;
 import com.example.iqbooster.adapter.NewsFeedAdapter;
 import com.example.iqbooster.model.AdapterPost;
 import com.example.iqbooster.model.Post;
@@ -52,6 +54,8 @@ public class MyCollect extends Fragment {
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabaseRef;
+
+    private ActivityInterface activityInterface;
 
     public MyCollect() {
         // Required empty public constructor
@@ -97,7 +101,8 @@ public class MyCollect extends Fragment {
 
         mRecyclerView = v.findViewById(R.id.fragment_tab_recyclerView);
         potentialPosts = new ArrayList<Post>();
-        mAdapter = new NewsFeedAdapter(getContext(), potentialPosts, mAuth, false, true);
+        mAdapter = new NewsFeedAdapter(getContext(), potentialPosts, mAuth, false, Screen.MY_COLLECT);
+        mAdapter.setActivityInterface(activityInterface);
         mRecyclerView.setAdapter(mAdapter);
 
         myCollectRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -136,5 +141,9 @@ public class MyCollect extends Fragment {
         mLayoutManager.setStackFromEnd(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
         return v;
+    }
+
+    public void setActivityInterface(ActivityInterface activityInterface) {
+        this.activityInterface = activityInterface;
     }
 }

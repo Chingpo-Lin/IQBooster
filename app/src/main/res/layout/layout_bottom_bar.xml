@@ -5,8 +5,7 @@
     android:id="@+id/layout_bottomBar_LinearLayout"
     android:background="@drawable/background_bottom_bar"
     android:layout_width="match_parent"
-    android:layout_height="300sp"
-    app:behavior_peekHeight="56sp"
+    android:layout_height="56sp"
     app:layout_behavior="@string/bottom_sheet_behavior"
     >
 
@@ -17,6 +16,7 @@
         android:orientation="horizontal">
 
         <EditText
+            android:visibility="invisible"
             android:id="@+id/layout_bottomBar_EditText"
             android:paddingHorizontal="8sp"
             android:hint="Comment"

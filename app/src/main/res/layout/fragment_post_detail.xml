@@ -1,35 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:background="@color/gray"
-    tools:context=".fragment.PostDetail">
-
-    <RelativeLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/postdetail_appbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/postdetail_toolbar"
-                android:layout_width="match_parent"
-                app:layout_scrollFlags="scroll|enterAlways"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                android:layout_height="?attr/actionBarSize"/>
-        </com.google.android.material.appbar.AppBarLayout>
+    tools:context=".fragment.PostDetail"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/postdetail_scrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/postdetail_appbar"
+            android:layout_marginBottom="56sp"
             android:scrollbars="vertical">
 
             <LinearLayout
@@ -42,6 +26,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="194sp"
                     android:scaleType="centerCrop"
+                    android:visibility="gone"
                     tools:ignore="UnusedAttribute" />
 
                 <include layout="@layout/post_heading" />
@@ -63,21 +48,24 @@
                             style="@style/Widget.MaterialComponents.Chip.Choice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/hash_technology" />
+                            android:visibility="invisible"
+                            android:text="" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/postdetail_chip2"
                             style="@style/Widget.MaterialComponents.Chip.Choice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/hash_health" />
+                            android:visibility="invisible"
+                            android:text="" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/postdetail_chip3"
                             style="@style/Widget.MaterialComponents.Chip.Choice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/hash_business" />
+                            android:visibility="invisible"
+                            android:text="" />
 
 
                     </com.google.android.material.chip.ChipGroup>
@@ -86,6 +74,14 @@
 
                 <TextView
                     android:id="@+id/postdetail_article_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:padding="16sp"
+                    android:text="@string/article_placeholder" />
+
+                <TextView
+                    android:id="@+id/postdetail_article_body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
@@ -102,8 +98,6 @@
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
-
-    </RelativeLayout>
 
     <include
         layout="@layout/layout_bottom_bar"/>

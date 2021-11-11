@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.iqbooster.ActivityInterface;
 import com.example.iqbooster.R;
 import com.example.iqbooster.fragment.tabs.businessFragment;
 import com.example.iqbooster.fragment.tabs.entertainmentFragment;
@@ -57,6 +58,7 @@ public class NewsFeed extends Fragment {
     private travelFragment mTravelFragment;
 
     private FirebaseAuth mAuth;
+    private ActivityInterface activityInterface;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -110,7 +112,6 @@ public class NewsFeed extends Fragment {
         mViewPager = v.findViewById(R.id.newsfeed_viewpager);
         mFloatingBtn = v.findViewById(R.id.newsfeed_make_post_btn);
         mNestedScrollView = v.findViewById(R.id.newsfeed_nestedScrollView);
-        mComposeFragment = new PostCreation();
 
         if (mAuth.getCurrentUser() == null) {
             mFloatingBtn.setVisibility(View.GONE);
@@ -121,10 +122,10 @@ public class NewsFeed extends Fragment {
         mFloatingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.main_container, mComposeFragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                mComposeFragment = new PostCreation();
+                mComposeFragment.setActivityInterface(activityInterface);
+                FragmentManager fragmentManager = activityInterface.getActivityFragmentManger();
+                fragmentManager.beginTransaction().add(R.id.main_container, mComposeFragment).addToBackStack(null).commit();
             }
         });
 
@@ -138,6 +139,16 @@ public class NewsFeed extends Fragment {
         mPsychologyFragment = new psychologyFragment();
         mSportFragment = new sportFragment();
         mTravelFragment = new travelFragment();
+
+        mHomeFragment.setActivityInterface(activityInterface);
+        mTechnologyFragment.setActivityInterface(activityInterface);
+        mBusinessFragment.setActivityInterface(activityInterface);
+        mEntertainmentFragment.setActivityInterface(activityInterface);
+        mFoodFragment.setActivityInterface(activityInterface);
+        mHealthFragment.setActivityInterface(activityInterface);
+        mPsychologyFragment.setActivityInterface(activityInterface);
+        mSportFragment.setActivityInterface(activityInterface);
+        mTravelFragment.setActivityInterface(activityInterface);
 
         mTabLayout.setupWithViewPager(mViewPager);
 
@@ -167,6 +178,10 @@ public class NewsFeed extends Fragment {
 //        });
 
         return v;
+    }
+
+    public void setActivityInterface(ActivityInterface activityInterface) {
+        this.activityInterface = activityInterface;
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
