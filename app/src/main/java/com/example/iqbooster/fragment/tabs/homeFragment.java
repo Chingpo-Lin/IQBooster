@@ -102,7 +102,7 @@ public class homeFragment extends Fragment {
         mAdapter.setActivityInterface(activityInterface);
         mRecyclerView.setAdapter(mAdapter);
 
-        postRef.orderByChild(getContext().getResources().getString(R.string.db_timestamp)).addValueEventListener(new ValueEventListener() {
+        postRef.orderByChild(getContext().getResources().getString(R.string.db_timestamp)).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 potentialPosts.clear();
@@ -115,6 +115,33 @@ public class homeFragment extends Fragment {
                 mRecyclerView.setAdapter(mAdapter);
             }
 
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        postRef.orderByChild(getContext().getResources().getString(R.string.db_timestamp)).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Post currPost = snapshot.getValue(Post.class);
+                mAdapter.push_back(currPost);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {

@@ -130,7 +130,6 @@ public class MyCollect extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.d(TAG, "sth removed");
 
             }
         });

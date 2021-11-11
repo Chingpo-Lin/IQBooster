@@ -119,24 +119,25 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
 
 
         holder.mTitle.setText(mValue.get(holder.getAbsoluteAdapterPosition()).getTitle());
-        currPostRef.child(mContext.getResources().getString(R.string.db_title)).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (holder.getAbsoluteAdapterPosition() != -1) {
-                    final String newTitle = snapshot.getValue(String.class);
-                    if (holder.getAbsoluteAdapterPosition() != -1) {
-                        mValue.get(holder.getAbsoluteAdapterPosition()).setTitle(newTitle);
-                        holder.mTitle.setText(String.valueOf(mValue.get(holder.getAbsoluteAdapterPosition()).getTitle()));
-//                        notifyItemChanged(holder.getAbsoluteAdapterPosition());
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+        // TODO: update title
+//        currPostRef.child(mContext.getResources().getString(R.string.db_title)).addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if (holder.getAbsoluteAdapterPosition() != -1) {
+//                    final String newTitle = snapshot.getValue(String.class);
+//                    if (holder.getAbsoluteAdapterPosition() != -1) {
+//                        mValue.get(holder.getAbsoluteAdapterPosition()).setTitle(newTitle);
+//                        holder.mTitle.setText(String.valueOf(mValue.get(holder.getAbsoluteAdapterPosition()).getTitle()));
+////                        notifyItemChanged(holder.getAbsoluteAdapterPosition());
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
 
         // TODO: update info
         holder.mInfo.setText(mValue.get(holder.getAbsoluteAdapterPosition()).getAuthor());
@@ -159,24 +160,25 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                         .beginTransaction().add(container_id, postDetail.newInstance(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID())).addToBackStack(null).commit();
             }
         });
-        currPostRef.child(mContext.getResources().getString(R.string.db_subTitle)).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (holder.getAbsoluteAdapterPosition() != -1) {
-                    final String newSbuTitle = snapshot.getValue(String.class);
-                    if (holder.getAbsoluteAdapterPosition() != -1) {
-                        mValue.get(holder.getAbsoluteAdapterPosition()).setTitle(newSbuTitle);
-                        holder.mTitle.setText(String.valueOf(mValue.get(holder.getAbsoluteAdapterPosition()).getTitle()));
-//                        notifyItemChanged(holder.getAbsoluteAdapterPosition());
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+        // TODO: update subtitle
+//        currPostRef.child(mContext.getResources().getString(R.string.db_subTitle)).addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if (holder.getAbsoluteAdapterPosition() != -1) {
+//                    final String newSbuTitle = snapshot.getValue(String.class);
+//                    if (holder.getAbsoluteAdapterPosition() != -1) {
+//                        mValue.get(holder.getAbsoluteAdapterPosition()).setTitle(newSbuTitle);
+//                        holder.mSubtitle.setText(String.valueOf(mValue.get(holder.getAbsoluteAdapterPosition()).getTitle()));
+////                        notifyItemChanged(holder.getAbsoluteAdapterPosition());
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
 
         if (!hideTag) {
             final Tags[] currTags = new Tags[1];
@@ -227,7 +229,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             holder.mLikeBtn.setLiked(mValue.get(holder.getAbsoluteAdapterPosition()).isLiked());
             holder.mCollectBtn.setLiked(mValue.get(holder.getAbsoluteAdapterPosition()).isCollected());
 
-            currUserRef.child(mContext.getResources().getString(R.string.db_like_posts)).addValueEventListener(new ValueEventListener() {
+            currUserRef.child(mContext.getResources().getString(R.string.db_like_posts)).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
@@ -388,6 +390,12 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
 
     public void push_back(Post post) {
         this.mValue.add(post);
+        notifyItemInserted(mValue.size()-1);
+    }
+
+    public void push_front(Post post) {
+        this.mValue.add(0, post);
+        notifyItemInserted(0);
     }
 
     public void notifyIndexChanged(Post post, int at) {

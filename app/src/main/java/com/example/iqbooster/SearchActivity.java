@@ -391,7 +391,7 @@ public class SearchActivity extends AppCompatActivity {
                             final String newSbuTitle = snapshot.getValue(String.class);
                             if (holder.getAbsoluteAdapterPosition() != -1) {
                                 model.setTitle(newSbuTitle);
-                                holder.mTitle.setText(String.valueOf(model.getTitle()));
+                                holder.mSubtitle.setText(String.valueOf(model.getTitle()));
 //                        notifyItemChanged(holder.getAbsoluteAdapterPosition());
                             }
                         }
