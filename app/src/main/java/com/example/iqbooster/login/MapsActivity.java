@@ -1,16 +1,24 @@
 package com.example.iqbooster.login;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,6 +36,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -41,9 +51,8 @@ import java.util.Locale;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    private EditText mInputLocation;
+    private TextInputEditText mInputLocation;
     private GoogleMap mMap;
-    private ImageView mSearchIcon;
     private SupportMapFragment mapFragment;
     private Button mConfirmButton;
     private String mConfirmAddress;
@@ -56,7 +65,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        mSearchIcon = findViewById(R.id.search_location_icon);
         mInputLocation = findViewById(R.id.inputLocation);
         mConfirmAddress = "";
         mConfirmButton = findViewById(R.id.location_button);
@@ -79,7 +87,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                             @Override
                             public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
-                                Toast.makeText(MapsActivity.this, "permission denied", Toast.LENGTH_SHORT).show();
+                                Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Permission Denied", Snackbar.LENGTH_LONG);
+                                View view = sn.getView();
+                                TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
+                                tv.setTextColor(Color.parseColor("#FFD700"));
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                                    tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                                } else {
+                                    tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                                }
+                                sn.show();
                             }
 
                             @Override
@@ -90,45 +107,63 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-        mSearchIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String location = mInputLocation.getText().toString();
-                if (location == null) {
-                    Toast.makeText(MapsActivity.this, "type any location", Toast.LENGTH_SHORT).show();
-                } else {
-                    mConfirmAddress = location;
-                    mConfirmButton.setEnabled(true);
-                    Geocoder geocoder = new Geocoder(MapsActivity.this, Locale.getDefault());
-                    try {
-                        List<Address> listAddress = geocoder.getFromLocationName(location, 1);
-                        if (listAddress.size() > 0) {
-                            LatLng latLng = new LatLng(listAddress.get(0).getLatitude(), listAddress.get(0).getLongitude());
-                            mMap.clear();
-                            List<Address> addressName = geocoder.getFromLocation(listAddress.get(0).getLatitude(),
-                                    listAddress.get(0).getLongitude(), 1);
-                            Address obj = addressName.get(0);
-                            mConfirmAddress = obj.getLocality() + ", " + obj.getAdminArea();
-
-                            mMap.addMarker(new MarkerOptions()
-                                    .position(latLng)
-                                    .title("My search location"));
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 5.0f));
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-
         mConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent goBackSetUp = new Intent(MapsActivity.this, SetUpAccountActivity.class);
-                goBackSetUp.putExtra("location", mConfirmAddress);
-                startActivity(goBackSetUp);
-                finish();
+                Intent goBackToSetUp = new Intent();
+                goBackToSetUp.putExtra("location", mConfirmAddress);
+                setResult(88, goBackToSetUp);
+                MapsActivity.super.onBackPressed();
+            }
+        });
+
+        mInputLocation.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((actionId == EditorInfo.IME_NULL && event.getAction() == KeyEvent.ACTION_DOWN)|| (actionId == EditorInfo.IME_ACTION_DONE)){
+                    View view = getCurrentFocus();
+                    if (view != null) {
+                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    }
+
+                    String location = mInputLocation.getText().toString();
+                    if (location.isEmpty()) {
+                        Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Please Input a Location", Snackbar.LENGTH_LONG);
+                        View viewSn = sn.getView();
+                        TextView tv = (TextView) viewSn.findViewById(com.google.android.material.R.id.snackbar_text);
+                        tv.setTextColor(Color.parseColor("#FFD700"));
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                            tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                        } else {
+                            tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                        }
+                        sn.show();
+                    } else {
+                        mConfirmAddress = location;
+                        mConfirmButton.setEnabled(true);
+                        Geocoder geocoder = new Geocoder(MapsActivity.this, Locale.getDefault());
+                        try {
+                            List<Address> listAddress = geocoder.getFromLocationName(location, 1);
+                            if (listAddress.size() > 0) {
+                                LatLng latLng = new LatLng(listAddress.get(0).getLatitude(), listAddress.get(0).getLongitude());
+                                mMap.clear();
+                                List<Address> addressName = geocoder.getFromLocation(listAddress.get(0).getLatitude(),
+                                        listAddress.get(0).getLongitude(), 1);
+                                Address obj = addressName.get(0);
+                                mConfirmAddress = obj.getLocality() + ", " + obj.getAdminArea();
+
+                                mMap.addMarker(new MarkerOptions()
+                                        .position(latLng)
+                                        .title("My search location"));
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16.0f));
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                return true;
             }
         });
     }
@@ -165,7 +200,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         mInputLocation.setText(obj.getLocality() + ", " + obj.getAdminArea());
                         mConfirmAddress = obj.getLocality() + ", " + obj.getAdminArea();
                         mConfirmButton.setEnabled(true);
-
                         mMap.clear();
                         mMap.addMarker(markerOptions);
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16.0f));
@@ -187,7 +221,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
         // Add a marker in Sydney and move the camera
     }
 }

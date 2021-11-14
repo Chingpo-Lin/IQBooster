@@ -1,5 +1,6 @@
 package com.example.iqbooster.login;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -11,6 +12,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -46,6 +51,7 @@ public class SetUpAccountActivity extends AppCompatActivity {
 
     // use to identify selected avatar
     private int mcurrentSelect;
+    ActivityResultLauncher<Intent> LocationResultLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,18 +74,29 @@ public class SetUpAccountActivity extends AppCompatActivity {
         mFirstRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
         mSecondRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
         mThirdRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
-        if (getIntent().getExtras().containsKey("location")) {
-            mLocation.setText(getIntent().getExtras().get("location").toString());
-        }
+
+        LocationResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == 88) {
+                            Intent data = result.getData();
+                            if (data != null) {
+                                mLocation.setText(data.getExtras().get("location").toString());
+                            }
+                        }
+                    }
+                });
+
+
 
         mContinueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                !TextUtils.isEmpty(user_input_email)
                 String userinput_username = mUsername.getText().toString();
                 String useriput_prefreame = mPreferName.getText().toString();
-//                String userinput_location = mLocation.getText().toString().trim();
-                String userinput_location = "Santa Clara, CA";
+                String userinput_location = mLocation.getText().toString();
                 if (!TextUtils.isEmpty(userinput_username.trim()) && !TextUtils.isEmpty(useriput_prefreame.trim())
                         && !TextUtils.isEmpty(userinput_location.trim())) {
                     FirebaseUser mUser = mAuth.getCurrentUser();
@@ -124,16 +141,6 @@ public class SetUpAccountActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         // NO GO BACK
-    }
-
-    /**
-     * Helper method which use Intent to go to the Login Page
-     */
-    private void goToMainActivityHelper() {
-        Intent goToMainActivity = new Intent(getApplicationContext(), MainActivity.class);
-        goToMainActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(goToMainActivity);
-        finish();
     }
 
     /**
@@ -201,7 +208,6 @@ public class SetUpAccountActivity extends AppCompatActivity {
 
     public void getLocation(View view) {
         Intent goToMaps = new Intent(this, MapsActivity.class);
-        startActivity(goToMaps);
-        finish();
+        LocationResultLauncher.launch(goToMaps);
     }
 }
