@@ -260,7 +260,6 @@ public class SearchActivity extends AppCompatActivity {
                         getApplicationContext().startActivity(profilePageIntent);
                     }
                 });
-                // TODO: load user profile image
                 holder.mNameTextView.setText(model.getName());
                 holder.mUsernameTextView.setText(model.getUsername());
 

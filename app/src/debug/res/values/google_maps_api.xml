@@ -1,7 +1,5 @@
 <resources>
     <!--
-    TODO: Before you run your application, you need a Google Maps API key.
-
     To get one, follow this link, follow the directions and press "Create" at the end:
 
     https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=63:B0:B0:4E:0E:7F:92:5C:03:E4:F8:A6:D1:FA:23:FD:40:AF:86:39%3Bcom.example.iqbooster.login
