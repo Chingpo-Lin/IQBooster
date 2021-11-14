@@ -145,6 +145,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         Geocoder geocoder = new Geocoder(MapsActivity.this, Locale.getDefault());
                         try {
                             List<Address> listAddress = geocoder.getFromLocationName(location, 1);
+                            while (listAddress.size() == 0) {
+                                listAddress = geocoder.getFromLocationName(location, 1);
+                            }
                             if (listAddress.size() > 0) {
                                 LatLng latLng = new LatLng(listAddress.get(0).getLatitude(), listAddress.get(0).getLongitude());
                                 mMap.clear();
@@ -191,16 +194,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         try {
                             addressName = geocoder.getFromLocation(location.getLatitude(),
                                     location.getLongitude(), 1);
+                            while (addressName.size() == 0) {
+                                addressName = geocoder.getFromLocation(location.getLatitude(),
+                                        location.getLongitude(), 1);
+                            }
+                            if (addressName.size() > 0) {
+                                Address obj = addressName.get(0);
+                                mInputLocation.setText(obj.getLocality() + ", " + obj.getAdminArea());
+                                mConfirmAddress = obj.getLocality() + ", " + obj.getAdminArea();
+                                mConfirmButton.setEnabled(true);
+                                mMap.clear();
+                                mMap.addMarker(markerOptions);
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16.0f));
+                            }
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        Address obj = addressName.get(0);
-                        mInputLocation.setText(obj.getLocality() + ", " + obj.getAdminArea());
-                        mConfirmAddress = obj.getLocality() + ", " + obj.getAdminArea();
-                        mConfirmButton.setEnabled(true);
-                        mMap.clear();
-                        mMap.addMarker(markerOptions);
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16.0f));
                     }
                 });
             }

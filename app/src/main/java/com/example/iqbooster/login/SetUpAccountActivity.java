@@ -16,6 +16,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResult;
@@ -56,6 +57,8 @@ public class SetUpAccountActivity extends AppCompatActivity {
     private TextView mLocation;
     private MaterialButton mContinueBtn;
     private TextView mUpload;
+    private ProgressBar mProgressBar;
+
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabaseReference;
 
@@ -87,6 +90,8 @@ public class SetUpAccountActivity extends AppCompatActivity {
         mLocation = (TextView) findViewById(R.id.setup_location_edit);
         mContinueBtn = findViewById(R.id.setup_continue_btn);
         mainPhoto = findViewById(R.id.setup_photo);
+        mProgressBar = findViewById(R.id.setup_progressBar);
+        mProgressBar.setVisibility(View.INVISIBLE);
         mFirstRecommend = findViewById(R.id.setup_photo_recommend_1);
         mSecondRecommend = findViewById(R.id.setup_photo_recommend_2);
         mThirdRecommend = findViewById(R.id.setup_photo_recommend_3);
@@ -133,13 +138,14 @@ public class SetUpAccountActivity extends AppCompatActivity {
                         && !TextUtils.isEmpty(userinput_location.trim())) {
                     FirebaseUser mUser = mAuth.getCurrentUser();
                     if (mUser != null) {
+                        mContinueBtn.setVisibility(View.INVISIBLE);
+                        mProgressBar.setVisibility(View.VISIBLE);
                         UserProfileChangeRequest addusername = new UserProfileChangeRequest.Builder()
                                 .setDisplayName(useriput_prefreame).build();
                         mUser.updateProfile(addusername).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    goToTagPickerActivity();
                                     if (profileUri != null) {
                                         final StorageReference fileRef = firebaseStorageProfileImageRef
                                                 .child(mAuth.getCurrentUser().getUid() + ".jpg");
@@ -160,6 +166,9 @@ public class SetUpAccountActivity extends AppCompatActivity {
                                                     profileLink = downloadUrl.toString();
                                                     HashMap<String, Object> userMap = new HashMap<>();
                                                     userMap.put("image", profileLink);
+                                                } else {
+                                                    mContinueBtn.setVisibility(View.VISIBLE);
+                                                    mProgressBar.setVisibility(View.INVISIBLE);
                                                 }
                                             }
                                         }).addOnCompleteListener(new OnCompleteListener() {
@@ -167,14 +176,17 @@ public class SetUpAccountActivity extends AppCompatActivity {
                                             public void onComplete(@NonNull Task task) {
                                                 if (task.isSuccessful()) {
                                                     addUserInfotoDatabase(userinput_username, useriput_prefreame, userinput_location);
+                                                    goToTagPickerActivity();
+                                                } else {
+                                                    mContinueBtn.setVisibility(View.VISIBLE);
+                                                    mProgressBar.setVisibility(View.INVISIBLE);
                                                 }
                                             }
                                         });
                                     }
-
-
-
                                 } else {
+                                    mContinueBtn.setVisibility(View.VISIBLE);
+                                    mProgressBar.setVisibility(View.INVISIBLE);
                                     String errormsg = task.getException().getMessage();
                                     Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Error: " + errormsg, Snackbar.LENGTH_LONG);
                                     View view = sn.getView();

@@ -152,6 +152,16 @@
         android:focusableInTouchMode="false"
         app:layout_constraintTop_toBottomOf="@+id/setup_user_name_edit" />
 
+    <ProgressBar
+        android:id="@+id/setup_progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/setup_continue_btn"
+        app:layout_constraintEnd_toEndOf="@+id/setup_continue_btn"
+        app:layout_constraintStart_toStartOf="@+id/setup_continue_btn"
+        app:layout_constraintTop_toTopOf="@+id/setup_continue_btn" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/setup_continue_btn"
         android:layout_width="match_parent"
@@ -162,6 +172,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/setup_location_edit"
-        app:layout_constraintVertical_bias="0.2" />
+        app:layout_constraintVertical_bias="0.3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
