@@ -20,6 +20,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.iqbooster.R;
 import com.example.iqbooster.model.AdapterPost;
 import com.example.iqbooster.model.Comment;
@@ -127,13 +129,22 @@ public class PostDetail extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+        try {
+            ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+        } catch (Exception e) {
+
+        }
+        
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        ((AppCompatActivity)getActivity()).getSupportActionBar().show();
+        try {
+            ((AppCompatActivity)getActivity()).getSupportActionBar().show();
+        } catch (Exception e) {
+
+        }
     }
 
     @Override
@@ -149,7 +160,8 @@ public class PostDetail extends Fragment {
         if (!mParam1.equalsIgnoreCase(ARG_PARAM1)) {
             DatabaseReference currPostRef = mDataReference.child(getContext().getResources().getString(R.string.db_posts)).child(mParam1);
 
-            // TODO: loading profile image and thumbnail
+            mThumbnail = v.findViewById(R.id.postdetail_imageView);
+            mProfileImage = v.findViewById(R.id.post_heading_circleImageView);
             mHeadingTitle = v.findViewById(R.id.post_heading_title);
             mInfo = v.findViewById(R.id.post_heading_info);
 
@@ -193,6 +205,44 @@ public class PostDetail extends Fragment {
 
                     mSubtitleTextView.setText(currPost.getSubTitle());
                     mBody.setText(currPost.getBody());
+
+                    mDataReference
+                            .child(getContext().getResources().getString(R.string.db_users))
+                            .child(currPost.getAuthor())
+                            .child(getContext().getResources().getString(R.string.db_profile_image))
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if (snapshot.exists()) {
+                                        String url = snapshot.getValue(String.class);
+                                        RequestOptions requestoptions = new RequestOptions();
+                                        Glide.with(getContext())
+                                                .load(url)
+                                                .apply(requestoptions.fitCenter())
+                                                .into(mProfileImage);
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+
+                    try {
+                        String thumbnailUrl = currPost.getThumbnail_image();
+                        if (thumbnailUrl != null && !thumbnailUrl.isEmpty()) {
+                            RequestOptions requestoptions = new RequestOptions();
+                            Glide.with(getContext())
+                                    .load(thumbnailUrl)
+                                    .apply(requestoptions.fitCenter())
+                                    .into(mThumbnail);
+                            mThumbnail.setVisibility(View.VISIBLE);
+                        }
+
+                    } catch (Exception e) {
+
+                    }
                 }
 
                 @Override

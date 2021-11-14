@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.iqbooster.ActivityInterface;
 import com.example.iqbooster.R;
 import com.example.iqbooster.Screen;
@@ -105,7 +107,29 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
         DatabaseReference currPostRef = FirebaseDatabase.getInstance().getReference().child(mContext.getResources().getString(R.string.db_posts)).child(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID());
         DatabaseReference tagRef = currPostRef.child(mContext.getResources().getString(R.string.db_tags));
 
-        // TODO: load profile Image
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference
+                .child(mContext.getResources().getString(R.string.db_users))
+                .child(mValue.get(holder.getAbsoluteAdapterPosition()).getAuthor())
+                .child(mContext.getResources().getString(R.string.db_profile_image))
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            String url = snapshot.getValue(String.class);
+                            RequestOptions requestoptions = new RequestOptions();
+                            Glide.with(mContext)
+                                    .load(url)
+                                    .apply(requestoptions.fitCenter())
+                                    .into(holder.mCircleImageView);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
 
         holder.mCircleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,7 +143,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
 
 
         holder.mTitle.setText(mValue.get(holder.getAbsoluteAdapterPosition()).getTitle());
-        // TODO: update title
+        // TODO: update title if editable
 //        currPostRef.child(mContext.getResources().getString(R.string.db_title)).addValueEventListener(new ValueEventListener() {
 //            @Override
 //            public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -139,10 +163,25 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
 //            }
 //        });
 
-        // TODO: update info
+        // TODO: update info if editable
         holder.mInfo.setText(mValue.get(holder.getAbsoluteAdapterPosition()).getAuthor());
 
-        // TODO: load thumbnail Image based on Post Type, set visibility
+        // TODO: update thumbnail if editable
+        try {
+            String thumbnailUrl = mValue.get(holder.getAbsoluteAdapterPosition()).getThumbnail_image();
+            if (thumbnailUrl != null && !thumbnailUrl.isEmpty()) {
+                RequestOptions requestoptions = new RequestOptions();
+                Glide.with(mContext)
+                        .load(thumbnailUrl)
+                        .apply(requestoptions.fitCenter())
+                        .into(holder.mThumbnail);
+                holder.mThumbnail.setVisibility(View.VISIBLE);
+            }
+
+        } catch (Exception e) {
+
+        }
+
         holder.mSubtitle.setText(mValue.get(holder.getAbsoluteAdapterPosition()).getSubTitle());
         holder.mSubtitle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,7 +199,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                         .beginTransaction().add(container_id, postDetail.newInstance(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID())).addToBackStack(null).commit();
             }
         });
-        // TODO: update subtitle
+        // TODO: update subtitle if editable
 //        currPostRef.child(mContext.getResources().getString(R.string.db_subTitle)).addValueEventListener(new ValueEventListener() {
 //            @Override
 //            public void onDataChange(@NonNull DataSnapshot snapshot) {

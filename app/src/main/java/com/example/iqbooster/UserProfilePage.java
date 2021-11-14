@@ -11,9 +11,12 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.iqbooster.fragment.MyPost;
 import com.example.iqbooster.fragment.tabs.userPageFollowersFragment;
 import com.example.iqbooster.fragment.tabs.userPageFollowingFragment;
@@ -30,6 +33,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class UserProfilePage extends AppCompatActivity implements ActivityInterface{
 
     public static final String EXTRA = "USER_UID";
@@ -40,9 +45,13 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
     private FirebaseDatabase mDatabase;
     private DatabaseReference mUsers;
 
+    private CircleImageView mProfileImage;
     private TextView mDisplayName;
     private TextView mUserName;
+    private TextView mUserLocation;
     private MaterialButton mFollowBtn;
+
+    private String currPageUID;
 
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
@@ -63,15 +72,17 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         final String intentUID = getIntent().getStringExtra(EXTRA);
+        currPageUID = intentUID;
 
         mDatabase = FirebaseDatabase.getInstance();
         mUsers = mDatabase.getReference().child(getApplicationContext().getResources().getString(R.string.db_users));
         mAuth = FirebaseAuth.getInstance();
 
+        mProfileImage = findViewById(R.id.user_profile_circleImageView);
         mDisplayName = findViewById(R.id.user_profile_displayName);
         mUserName = findViewById(R.id.user_profile_username);
+        mUserLocation = findViewById(R.id.user_profile_location);
         mFollowBtn = findViewById(R.id.user_profile_followBtn);
-
 
         mTabLayout = findViewById(R.id.user_profile_tabLayout);
         mViewPager = findViewById(R.id.user_profile_viewPager);
@@ -101,6 +112,20 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
                 AdapterUser currUser = snapshot.getValue(AdapterUser.class);
                 mDisplayName.setText(currUser.getName());
                 mUserName.setText("@"+currUser.getUsername());
+                try {
+                    mUserLocation.setText(currUser.getLocation());
+                    DataSnapshot profileSnapshot = snapshot.child(getResources().getString(R.string.db_profile_image));
+                    if (profileSnapshot.exists()) {
+                        String url = profileSnapshot.getValue(String.class);
+                        RequestOptions requestoptions = new RequestOptions();
+                        Glide.with(getApplicationContext())
+                                .load(url)
+                                .apply(requestoptions.fitCenter())
+                                .into(mProfileImage);
+                    }
+                } catch (Exception e) {
+
+                }
             }
 
             @Override
@@ -182,18 +207,22 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
             });
         }
     }
-
-    /**
-     * Override system method onCreateOptionsMenu which Inflates(replaces)
-     * the ToolBar to three dot menu
-     *
-     * @param menu [the "three dot menu" button specifically]
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.user_profile_page_threedot_menu, menu);
-        return true;
-    }
+//
+//    /**
+//     * Override system method onCreateOptionsMenu which Inflates(replaces)
+//     * the ToolBar to three dot menu
+//     *
+//     * @param menu [the "three dot menu" button specifically]
+//     */
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        if (mAuth != null) {
+//            if (mAuth.getUid().equalsIgnoreCase(currPageUID)) {
+//                getMenuInflater().inflate(R.menu.user_profile_page_threedot_menu, menu);
+//            }
+//        }
+//        return true;
+//    }
 
     @Override
     public boolean onSupportNavigateUp() {

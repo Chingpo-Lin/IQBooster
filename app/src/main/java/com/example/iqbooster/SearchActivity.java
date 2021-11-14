@@ -3,6 +3,7 @@ package com.example.iqbooster;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,8 +27,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.iqbooster.adapter.NewsFeedAdapter;
 import com.example.iqbooster.adapter.UserSuggestionAdapter;
+import com.example.iqbooster.fragment.PostDetail;
 import com.example.iqbooster.model.AdapterPost;
 import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.Post;
@@ -250,7 +254,29 @@ public class SearchActivity extends AppCompatActivity {
         firebaseRecyclerAdapter4Users = new FirebaseRecyclerAdapter<AdapterUser, UserSuggestionAdapter.ViewHolder>(searchOption4Users) {
             @Override
             protected void onBindViewHolder(@NonNull UserSuggestionAdapter.ViewHolder holder, int position, @NonNull AdapterUser model) {
-//                holder.mCircleImageView.setImageResource();
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                databaseReference
+                        .child(getResources().getString(R.string.db_users))
+                        .child(model.getUid())
+                        .child(getResources().getString(R.string.db_profile_image))
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            String url = snapshot.getValue(String.class);
+                            RequestOptions requestoptions = new RequestOptions();
+                            Glide.with(getApplicationContext())
+                                    .load(url)
+                                    .apply(requestoptions.fitCenter())
+                                    .into(holder.mCircleImageView);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
                 holder.mCircleImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -260,7 +286,6 @@ public class SearchActivity extends AppCompatActivity {
                         getApplicationContext().startActivity(profilePageIntent);
                     }
                 });
-                // TODO: load user profile image
                 holder.mNameTextView.setText(model.getName());
                 holder.mUsernameTextView.setText(model.getUsername());
 
@@ -346,7 +371,29 @@ public class SearchActivity extends AppCompatActivity {
                 DatabaseReference currPostRef = FirebaseDatabase.getInstance().getReference().child(getApplicationContext().getResources().getString(R.string.db_posts)).child(model.getRandomID());
                 DatabaseReference tagRef = currPostRef.child(getApplicationContext().getResources().getString(R.string.db_tags));
 
-                // TODO: load profile Image
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                databaseReference
+                        .child(getResources().getString(R.string.db_users))
+                        .child(model.getAuthor())
+                        .child(getResources().getString(R.string.db_profile_image))
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists()) {
+                                    String url = snapshot.getValue(String.class);
+                                    RequestOptions requestoptions = new RequestOptions();
+                                    Glide.with(getApplicationContext())
+                                            .load(url)
+                                            .apply(requestoptions.fitCenter())
+                                            .into(holder.mCircleImageView);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
 
                 holder.mCircleImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -360,40 +407,84 @@ public class SearchActivity extends AppCompatActivity {
 
 
                 holder.mTitle.setText(model.getTitle());
-                currPostRef.child(getApplicationContext().getResources().getString(R.string.db_title)).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (holder.getAbsoluteAdapterPosition() != -1) {
-                            final String newTitle = snapshot.getValue(String.class);
-                            if (holder.getAbsoluteAdapterPosition() != -1) {
-                                model.setTitle(newTitle);
-                                holder.mTitle.setText(String.valueOf(model.getTitle()));
-//                        notifyItemChanged(holder.getAbsoluteAdapterPosition());
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
+                // TODO: update title if editable
+//                currPostRef.child(getApplicationContext().getResources().getString(R.string.db_title)).addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                        if (holder.getAbsoluteAdapterPosition() != -1) {
+//                            final String newTitle = snapshot.getValue(String.class);
+//                            if (holder.getAbsoluteAdapterPosition() != -1) {
+//                                model.setTitle(newTitle);
+//                                holder.mTitle.setText(String.valueOf(model.getTitle()));
+////                        notifyItemChanged(holder.getAbsoluteAdapterPosition());
+//                            }
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError error) {
+//
+//                    }
+//                });
 
                 // TODO: update info
                 holder.mInfo.setText(model.getAuthor());
 
-                // TODO: load thumbnail Image based on Post Type, set visibility
+                // TODO: update thumbnail if editable
+                try {
+                    String thumbnailUrl = model.getThumbnail_image();
+                    if (thumbnailUrl != null && !thumbnailUrl.isEmpty()) {
+                        RequestOptions requestoptions = new RequestOptions();
+                        Glide.with(getApplicationContext())
+                                .load(thumbnailUrl)
+                                .apply(requestoptions.fitCenter())
+                                .into(holder.mThumbnail);
+                        holder.mThumbnail.setVisibility(View.VISIBLE);
+                    }
+
+                } catch (Exception e) {
+
+                }
+
                 holder.mSubtitle.setText(model.getSubTitle());
-                currPostRef.child(getApplicationContext().getResources().getString(R.string.db_subTitle)).addValueEventListener(new ValueEventListener() {
+                holder.mSubtitle.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        PostDetail postDetail = new PostDetail();
+                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.search_activity_container, postDetail.newInstance(model.getRandomID())).addToBackStack(null).commit();
+                    }
+                });
+                // TODO: update subtitle if editable
+//                currPostRef.child(getApplicationContext().getResources().getString(R.string.db_subTitle)).addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                        if (holder.getAbsoluteAdapterPosition() != -1) {
+//                            final String newSbuTitle = snapshot.getValue(String.class);
+//                            if (holder.getAbsoluteAdapterPosition() != -1) {
+//                                model.setTitle(newSbuTitle);
+//                                holder.mSubtitle.setText(String.valueOf(model.getTitle()));
+////                        notifyItemChanged(holder.getAbsoluteAdapterPosition());
+//                            }
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError error) {
+//
+//                    }
+//                });
+
+
+                final Tags[] currTags = new Tags[1];
+                tagRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (holder.getAbsoluteAdapterPosition() != -1) {
-                            final String newSbuTitle = snapshot.getValue(String.class);
-                            if (holder.getAbsoluteAdapterPosition() != -1) {
-                                model.setTitle(newSbuTitle);
-                                holder.mSubtitle.setText(String.valueOf(model.getTitle()));
-//                        notifyItemChanged(holder.getAbsoluteAdapterPosition());
-                            }
+                        currTags[0] = snapshot.getValue(Tags.class);
+                        ArrayList<String> allTrue = currTags[0].allTrue();
+                        if (!allTrue.isEmpty()) {
+                            holder.mFirstChip.setText("#" + allTrue.get(0));
+                            holder.mFirstChip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
                         }
                     }
 
@@ -402,25 +493,6 @@ public class SearchActivity extends AppCompatActivity {
 
                     }
                 });
-
-
-                    final Tags[] currTags = new Tags[1];
-                    tagRef.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            currTags[0] = snapshot.getValue(Tags.class);
-                            ArrayList<String> allTrue = currTags[0].allTrue();
-                            if (!allTrue.isEmpty()) {
-                                holder.mFirstChip.setText("#" + allTrue.get(0));
-                                holder.mFirstChip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
 
 
                 holder.mLikeCount.setText(String.valueOf(model.getLike_counts()));
@@ -599,15 +671,15 @@ public class SearchActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        firebaseRecyclerAdapter4Users.stopListening();
-        firebaseRecyclerAdapter4Posts.stopListening();
+//        firebaseRecyclerAdapter4Users.stopListening();
+//        firebaseRecyclerAdapter4Posts.stopListening();
         super.onStop();
     }
 
     @Override
     protected void onResume() {
-        firebaseRecyclerAdapter4Users.startListening();
-        firebaseRecyclerAdapter4Posts.startListening();
+//        firebaseRecyclerAdapter4Users.startListening();
+//        firebaseRecyclerAdapter4Posts.startListening();
         super.onResume();
     }
 }

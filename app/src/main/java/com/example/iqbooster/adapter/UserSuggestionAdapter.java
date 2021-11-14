@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.iqbooster.R;
 import com.example.iqbooster.UserProfilePage;
 import com.example.iqbooster.model.AdapterUser;
@@ -64,7 +66,30 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-//        holder.mCircleImageView.setImageResource();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference
+                .child(mContext.getResources().getString(R.string.db_users))
+                .child(mValue.get(holder.getAbsoluteAdapterPosition()).getUid())
+                .child(mContext.getResources().getString(R.string.db_profile_image))
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    String url = snapshot.getValue(String.class);
+                    RequestOptions requestoptions = new RequestOptions();
+                    Glide.with(mContext)
+                            .load(url)
+                            .apply(requestoptions.fitCenter())
+                            .into(holder.mCircleImageView);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
         holder.mCircleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,11 +99,11 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
                 mContext.startActivity(profilePageIntent);
             }
         });
-        // TODO: load user profile image
+
         holder.mNameTextView.setText(mValue.get(holder.getAbsoluteAdapterPosition()).getName());
         holder.mUsernameTextView.setText(mValue.get(holder.getAbsoluteAdapterPosition()).getUsername());
 
-        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child(mContext.getResources().getString(R.string.db_users));
+        DatabaseReference userRef = databaseReference.child(mContext.getResources().getString(R.string.db_users));
 
         if (mAuth.getCurrentUser() != null) {
             DatabaseReference currUserFollowingRef = userRef.child(mAuth.getUid()).child(mContext.getResources().getString(R.string.db_following_users));
@@ -137,14 +162,6 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
         } else {
             holder.mFollowBtn.setVisibility(View.INVISIBLE);
         }
-
-
-//
-//        RequestOptions requestoptions = new RequestOptions();
-//        Glide.with(viewHolder.mCircleImage.getContext())
-//                .load(getRandom.getRandomUCSDDrawable())
-//                .apply(requestoptions.fitCenter())
-//                .into(viewHolder.mCircleImage);
     }
 
     @Override

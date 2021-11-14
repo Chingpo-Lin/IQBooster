@@ -62,6 +62,16 @@
                         android:textAppearance="?attr/textAppearanceBody2"
                         android:textColor="?android:attr/textColorSecondary" />
 
+                    <TextView
+                        android:id="@+id/user_profile_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="2sp"
+                        android:text=""
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        android:textColor="?android:attr/textColorSecondary" />
+
                     <com.google.android.material.button.MaterialButton
                         android:visibility="gone"
                         android:id="@+id/user_profile_followBtn"

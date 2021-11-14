@@ -124,7 +124,6 @@ public class SetUpAccountActivity extends AppCompatActivity {
                         .compress(1024)			//Final image size will be less than 1 MB(Optional)
                         .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
                         .start(10);
-
             }
         });
 
@@ -164,8 +163,6 @@ public class SetUpAccountActivity extends AppCompatActivity {
                                                 if (task.isSuccessful()) {
                                                     Uri downloadUrl = task.getResult();
                                                     profileLink = downloadUrl.toString();
-                                                    HashMap<String, Object> userMap = new HashMap<>();
-                                                    userMap.put("image", profileLink);
                                                 } else {
                                                     mContinueBtn.setVisibility(View.VISIBLE);
                                                     mProgressBar.setVisibility(View.INVISIBLE);

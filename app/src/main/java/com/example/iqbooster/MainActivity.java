@@ -23,6 +23,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.iqbooster.adapter.UserSuggestionAdapter;
 import com.example.iqbooster.fragment.MyCollect;
 import com.example.iqbooster.fragment.MyPost;
@@ -102,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mheaderView = mNavigationView.getHeaderView(0);
         mProfilePic = (ImageView) mheaderView.findViewById(R.id.drawer_avatar);
-        // TODO: add profile on click listener here...
+
         mProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -145,6 +147,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mPostItem.setVisible(true);
             mCollectItem.setVisible(true);
             mLogoutItem.setVisible(true);
+
+            DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
+            databaseRef.child(getResources().getString(R.string.db_users)).child(mAuth.getCurrentUser().getUid())
+                    .child(getResources().getString(R.string.db_profile_image))
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        String url = snapshot.getValue(String.class);
+                        RequestOptions requestoptions = new RequestOptions();
+                        Glide.with(getApplicationContext())
+                                .load(url)
+                                .apply(requestoptions.fitCenter())
+                                .into(mProfilePic);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
         }
         super.onStart();
     }

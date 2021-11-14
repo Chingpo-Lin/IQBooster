@@ -10,13 +10,14 @@ public class Post {
     private long timestamp;
     private long like_counts;
     private Tags tags;
+    private String thumbnail_image;
     private boolean isLiked;
     private boolean isCollected;
 
     public Post() {
     }
 
-    public Post(String randomID, String title, String subTitle, String body, String author, String date, long timestamp, Tags tags) {
+    public Post(String randomID, String title, String subTitle, String body, String author, String date, long timestamp, Tags tags, String thumbnail_image) {
         this.randomID = randomID;
         this.title = title;
         this.subTitle = subTitle;
@@ -26,6 +27,7 @@ public class Post {
         this.timestamp = timestamp;
         this.like_counts = 0;
         this.tags = tags;
+        this.thumbnail_image = thumbnail_image;
         this.isLiked = false;
         this.isCollected = false;
     }
@@ -100,6 +102,14 @@ public class Post {
 
     public void setTags(Tags tags) {
         this.tags = tags;
+    }
+
+    public String getThumbnail_image() {
+        return thumbnail_image;
+    }
+
+    public void setThumbnail_image(String thumbnail_image) {
+        this.thumbnail_image = thumbnail_image;
     }
 
     public boolean isLiked() {

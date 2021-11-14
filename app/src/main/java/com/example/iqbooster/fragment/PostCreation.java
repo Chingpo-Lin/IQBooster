@@ -1,11 +1,19 @@
 package com.example.iqbooster.fragment;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
@@ -18,12 +26,18 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.iqbooster.ActivityInterface;
 import com.example.iqbooster.R;
+import com.example.iqbooster.login.SetUpAccountActivity;
 import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;
+import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.snackbar.Snackbar;
@@ -33,11 +47,18 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,12 +81,16 @@ public class PostCreation extends Fragment {
     private DatabaseReference mUsersRef;
     private DatabaseReference mPostsRef;
 
-    private ConstraintLayout mAddImageConstraint;
     private TextView mPostTextView;
     private TextView mTitleTextView;
     private TextView mSubTitleTextView;
     private TextView mBodyTextView;
     private ImageButton mCancelBtn;
+
+    private ConstraintLayout mAddImageConstraint;
+    private ImageView mThumbnail;
+    private ImageView mAddPicBtn;
+    private TextView mAddPicText;
 
     private Chip mTechnology, mSport, mTravel, mFood, mPsychology, mHealth, mBusiness, mEntertainment;
     private Tags userTags;
@@ -78,6 +103,11 @@ public class PostCreation extends Fragment {
     private ActivityInterface activityInterface;
 
     private String newPostID;
+    ActivityResultLauncher<Intent> ImagePickerLauncher;
+    private Uri thumbnailUri;
+    private StorageReference firebaseStorageThumbnailRef;
+    private String thumbnailLink = "";
+    private StorageTask uploadTask;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -134,6 +164,7 @@ public class PostCreation extends Fragment {
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
+        firebaseStorageThumbnailRef = FirebaseStorage.getInstance().getReference().child(getResources().getString(R.string.db_thumbnail_image));
         mUsersRef = mDatabase.getReference().child(getContext().getResources().getString(R.string.db_users));
         mPostsRef = mDatabase.getReference().child(getContext().getResources().getString(R.string.db_posts));
 
@@ -158,20 +189,27 @@ public class PostCreation extends Fragment {
         checkCount = 0;
 
         mAddImageConstraint = v.findViewById(R.id.post_creation_add_image);
+        mThumbnail = v.findViewById(R.id.post_creation_thumbnail);
+        mAddPicBtn = v.findViewById(R.id.post_creation_add_btn);
+        mAddPicText = v.findViewById(R.id.post_creation_add_pic_textView);
         mAddImageConstraint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ImagePicker.with((Activity) getContext())
+                        .crop()	    			//Crop image(Optional), Check Customization for more option
+                        .compress(1024)			//Final image size will be less than 1 MB(Optional)
+                        .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
+                        .createIntent(new Function1<Intent, Unit>() {
+                            @Override
+                            public Unit invoke(Intent intent) {
+                                ImagePickerLauncher.launch(intent);
+                                return null;
+                            }
+                        });
             }
         });
 
         mPostTextView = v.findViewById(R.id.post_creation_post_textView);
-        mPostTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
 
         mTitleTextView = v.findViewById(R.id.post_creation_title);
         mSubTitleTextView = v.findViewById(R.id.post_creation_subTitle);
@@ -267,13 +305,25 @@ public class PostCreation extends Fragment {
                 createPost();
 
                 hideKeyboard();
-                PostDetail postDetail = new PostDetail();
-                activityInterface.getActivityFragmentManger().popBackStack();
-                activityInterface.getActivityFragmentManger()
-                        .beginTransaction().replace(R.id.main_container, postDetail.newInstance(newPostID)).addToBackStack(null).commit();
-
             }
         });
+
+
+        ImagePickerLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        Log.d(TAG, "getting a pic");
+                        Intent data = result.getData();
+                        if (data != null) {
+                            mAddPicBtn.setVisibility(View.INVISIBLE);
+                            mAddPicText.setVisibility(View.INVISIBLE);
+                            thumbnailUri = data.getData();
+                            mThumbnail.setImageURI(thumbnailUri);
+                        }
+                    }
+                });
 
         return v;
     }
@@ -289,8 +339,8 @@ public class PostCreation extends Fragment {
         final String randomKey = UUID.randomUUID().toString();
         newPostID = randomKey;
         final String currUserUID = mAuth.getCurrentUser().getUid();
-
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
         Post currPost = new Post(
                 randomKey,
                 mTitleTextView.getText().toString(),
@@ -299,14 +349,55 @@ public class PostCreation extends Fragment {
                 currUserUID,
                 sdf3.format(timestamp).toString(),
                 timestamp.getTime(),
-                postTags);
+                postTags,
+                thumbnailLink);
 
-
-        mPostsRef.child(randomKey).setValue(currPost);
-//        mPostsRef.child(randomKey).child(getContext().getResources().getString(R.string.db_tags)).setValue(postTags);
-
-        mUsersRef.child(currUserUID).child(getContext().getResources().getString(R.string.db_my_posts)).child(randomKey).setValue(randomKey);
-        mUsersRef.child(currUserUID).child(getContext().getResources().getString(R.string.db_tags)).setValue(userTags);
+        mPostsRef.child(randomKey).setValue(currPost).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    PostDetail postDetail = new PostDetail();
+                    mUsersRef.child(currUserUID).child(getContext().getResources().getString(R.string.db_my_posts)).child(randomKey).setValue(randomKey);
+                    mUsersRef.child(currUserUID).child(getContext().getResources().getString(R.string.db_tags)).setValue(userTags);
+                    if (thumbnailUri != null) {
+                        final StorageReference fileRef = firebaseStorageThumbnailRef
+                                .child(randomKey + ".jpg");
+                        uploadTask = fileRef.putFile(thumbnailUri);
+                        uploadTask.continueWithTask(new Continuation() {
+                            @Override
+                            public Object then(@NonNull Task task) throws Exception {
+                                if (!task.isSuccessful()) {
+                                    throw task.getException();
+                                }
+                                return fileRef.getDownloadUrl();
+                            }
+                        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Uri> task) {
+                                if (task.isSuccessful()) {
+                                    Uri downloadUrl = task.getResult();
+                                    thumbnailLink = downloadUrl.toString();
+                                    HashMap<String, Object> thumbnailMap = new HashMap<>();
+                                    thumbnailMap.put(getContext().getResources().getString(R.string.db_thumbnail_image), thumbnailLink);
+                                    mPostsRef.child(randomKey).updateChildren(thumbnailMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            activityInterface.getActivityFragmentManger().popBackStack();
+                                            activityInterface.getActivityFragmentManger()
+                                                    .beginTransaction().replace(R.id.main_container, postDetail.newInstance(newPostID)).addToBackStack(null).commit();
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    } else {
+                        activityInterface.getActivityFragmentManger().popBackStack();
+                        activityInterface.getActivityFragmentManger()
+                                .beginTransaction().replace(R.id.main_container, postDetail.newInstance(newPostID)).addToBackStack(null).commit();
+                    }
+                }
+            }
+        });
     }
 
     private void chipOnClickListener(Chip chip) {
