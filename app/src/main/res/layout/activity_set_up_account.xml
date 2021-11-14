@@ -135,13 +135,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/setup_prefer_name_edit" />
 
-    <EditText
+    <TextView
         android:id="@+id/setup_location_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/location"
-        android:inputType="text"
         style="@style/custom_editText"
+        android:clickable="true"
+        android:onClick="getLocation"
         android:layout_marginTop="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

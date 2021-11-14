@@ -1,25 +1,18 @@
 package com.example.iqbooster.login;
 
-import androidx.annotation.NonNull;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-
 import android.graphics.Color;
-
 import android.os.Build;
 import android.os.Bundle;
-
 import android.text.TextUtils;
-
 import android.view.Gravity;
-
 import android.view.View;
-
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.iqbooster.MainActivity;
 import com.example.iqbooster.R;
@@ -45,7 +38,7 @@ public class SetUpAccountActivity extends AppCompatActivity {
     private ImageView mThirdRecommend;
     private EditText mUsername;
     private EditText mPreferName;
-    private EditText mLocation;
+    private TextView mLocation;
     private MaterialButton mContinueBtn;
     private TextView mUpload;
     private FirebaseAuth mAuth;
@@ -65,7 +58,7 @@ public class SetUpAccountActivity extends AppCompatActivity {
         mUpload = findViewById(R.id.setup_select_custom_photo_text);
         mUsername = findViewById(R.id.setup_user_name_edit);
         mPreferName = findViewById(R.id.setup_prefer_name_edit);
-        mLocation = findViewById(R.id.setup_location_edit);
+        mLocation = (TextView) findViewById(R.id.setup_location_edit);
         mContinueBtn = findViewById(R.id.setup_continue_btn);
         mainPhoto = findViewById(R.id.setup_photo);
         mFirstRecommend = findViewById(R.id.setup_photo_recommend_1);
@@ -75,6 +68,9 @@ public class SetUpAccountActivity extends AppCompatActivity {
         mFirstRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
         mSecondRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
         mThirdRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
+        if (getIntent().getExtras().containsKey("location")) {
+            mLocation.setText(getIntent().getExtras().get("location").toString());
+        }
 
         mContinueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -201,5 +197,11 @@ public class SetUpAccountActivity extends AppCompatActivity {
                 mcurrentSelect = 3;
             }
         }
+    }
+
+    public void getLocation(View view) {
+        Intent goToMaps = new Intent(this, MapsActivity.class);
+        startActivity(goToMaps);
+        finish();
     }
 }

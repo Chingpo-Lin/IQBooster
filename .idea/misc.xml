@@ -33,8 +33,9 @@
         <entry key="app/src/main/res/layout/activity_forget_password.xml" value="0.2864864864864865" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/activity_maps.xml" value="0.24868421052631579" />
         <entry key="app/src/main/res/layout/activity_search.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/activity_set_up_account.xml" value="0.2423076923076923" />
+        <entry key="app/src/main/res/layout/activity_set_up_account.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_signup.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_suggestion.xml" value="0.30337078651685395" />
         <entry key="app/src/main/res/layout/activity_user_profile_page.xml" value="0.25" />
@@ -42,9 +43,12 @@
         <entry key="app/src/main/res/layout/card_textwithimg.xml" value="0.335" />
         <entry key="app/src/main/res/layout/card_user.xml" value="0.3157894736842105" />
         <entry key="app/src/main/res/layout/content_main.xml" value="0.1388888888888889" />
+        <entry key="app/src/main/res/layout/content_map.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/content_map2.xml" value="0.18157894736842106" />
         <entry key="app/src/main/res/layout/drawer_header.xml" value="0.1828774062816616" />
         <entry key="app/src/main/res/layout/drawer_layout.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_compose.xml" value="0.3351449275362319" />
+        <entry key="app/src/main/res/layout/fragment_first.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_my_collect.xml" value="0.3619791666666667" />
         <entry key="app/src/main/res/layout/fragment_my_post.xml" value="0.10188295556941512" />
         <entry key="app/src/main/res/layout/fragment_newsfeed.xml" value="0.25" />
@@ -52,12 +56,14 @@
         <entry key="app/src/main/res/layout/fragment_post_creation.xml" value="0.36041666666666666" />
         <entry key="app/src/main/res/layout/fragment_post_detail.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_psychology.xml" value="0.3463541666666667" />
+        <entry key="app/src/main/res/layout/fragment_second.xml" value="0.1412280701754386" />
         <entry key="app/src/main/res/layout/fragment_sport.xml" value="0.1752786220871327" />
         <entry key="app/src/main/res/layout/fragment_tab.xml" value="0.1621376811594203" />
         <entry key="app/src/main/res/layout/layout_bottom_bar.xml" value="0.335" />
         <entry key="app/src/main/res/layout/layout_comment.xml" value="0.36041666666666666" />
         <entry key="app/src/main/res/layout/layout_like_collect_share_sheet.xml" value="0.37135416666666665" />
         <entry key="app/src/main/res/layout/login_edittext_shape.xml" value="0.14814814814814814" />
+        <entry key="app/src/main/res/layout/map_activity.xml" value="0.1" />
         <entry key="app/src/main/res/layout/nav_header.xml" value="0.36041666666666666" />
         <entry key="app/src/main/res/layout/post_heading.xml" value="0.14705882352941177" />
         <entry key="app/src/main/res/menu/drawer_menu.xml" value="0.45" />
