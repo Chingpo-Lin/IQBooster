@@ -33,7 +33,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -58,7 +57,6 @@ public class PostCreation extends Fragment {
 
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
-    private FirebaseFirestore mFireStore;
     private DatabaseReference mUsersRef;
     private DatabaseReference mPostsRef;
 
@@ -136,7 +134,6 @@ public class PostCreation extends Fragment {
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
-        mFireStore = FirebaseFirestore.getInstance();
         mUsersRef = mDatabase.getReference().child(getContext().getResources().getString(R.string.db_users));
         mPostsRef = mDatabase.getReference().child(getContext().getResources().getString(R.string.db_posts));
 

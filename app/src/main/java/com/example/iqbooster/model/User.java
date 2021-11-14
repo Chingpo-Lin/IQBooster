@@ -17,13 +17,14 @@ public class User {
     public String my_posts;
     public String following_users;
     public String followers_users;
+    public String profile_image_url;
     public String like_posts;
     public String collect_posts;
 
     public User() {
     }
 
-    public User(String username, String name, String email, String uid, String location, String my_posts, String following_users, String followers_users) {
+    public User(String username, String name, String email, String uid, String location, String my_posts, String following_users, String followers_users, String profile_image_url) {
         this.username = username;
         this.name = name;
         this.email = email;
@@ -32,6 +33,7 @@ public class User {
         this.my_posts = my_posts;
         this.following_users = following_users;
         this.followers_users = followers_users;
+        this.profile_image_url = profile_image_url;
         this.like_posts = "";
         this.collect_posts = "";
     }
@@ -84,14 +86,6 @@ public class User {
         this.my_posts = my_posts;
     }
 
-    public String getCollect_posts() {
-        return collect_posts;
-    }
-
-    public void setCollect_posts(String collect_posts) {
-        this.collect_posts = collect_posts;
-    }
-
     public String getFollowing_users() {
         return following_users;
     }
@@ -108,11 +102,27 @@ public class User {
         this.followers_users = followers_users;
     }
 
+    public String getProfile_image_url() {
+        return profile_image_url;
+    }
+
+    public void setProfile_image_url(String profile_image_url) {
+        this.profile_image_url = profile_image_url;
+    }
+
     public String getLike_posts() {
         return like_posts;
     }
 
     public void setLike_posts(String like_posts) {
         this.like_posts = like_posts;
+    }
+
+    public String getCollect_posts() {
+        return collect_posts;
+    }
+
+    public void setCollect_posts(String collect_posts) {
+        this.collect_posts = collect_posts;
     }
 }
