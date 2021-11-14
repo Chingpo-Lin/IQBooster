@@ -2,12 +2,14 @@ package com.example.iqbooster.login;
 
 import androidx.annotation.NonNull;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 
 import android.graphics.Color;
 
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -24,6 +26,7 @@ import android.widget.TextView;
 import com.example.iqbooster.MainActivity;
 import com.example.iqbooster.R;
 import com.example.iqbooster.model.User;
+import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
@@ -80,6 +83,18 @@ public class SetUpAccountActivity extends AppCompatActivity {
         mSecondRecommendSelected.setVisibility(View.INVISIBLE);
         mThirdRecommendSelected.setVisibility(View.INVISIBLE);
 
+        mUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImagePicker.with(SetUpAccountActivity.this)
+                        .crop()	    			//Crop image(Optional), Check Customization for more option
+                        .compress(1024)			//Final image size will be less than 1 MB(Optional)
+                        .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
+                        .start(10);
+
+            }
+        });
+
         mContinueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,14 +135,19 @@ public class SetUpAccountActivity extends AppCompatActivity {
             }
         });
 
-        mUpload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 10) {
+            assert data != null;
+            Uri uri = data.getData();
+            mainPhoto.setImageURI(uri);
+        }
+
+    }
 
     @Override
     public void onBackPressed() {
