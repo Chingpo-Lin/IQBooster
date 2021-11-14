@@ -1,25 +1,23 @@
 package com.example.iqbooster.login;
 
-import androidx.annotation.NonNull;
-
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.app.Activity;
 import android.content.Intent;
-
 import android.graphics.Color;
-
 import android.os.Build;
 import android.os.Bundle;
-
 import android.text.TextUtils;
-
 import android.view.Gravity;
-
 import android.view.View;
-
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.iqbooster.MainActivity;
 import com.example.iqbooster.R;
@@ -37,16 +35,15 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class SetUpAccountActivity extends AppCompatActivity {
 
+    private final int mpl = 10; // padding len
+    private final int mnpl = 0; // no padding len
     private ImageView mainPhoto;
     private ImageView mFirstRecommend;
     private ImageView mSecondRecommend;
     private ImageView mThirdRecommend;
-    private ImageView mFirstRecommendSelected;
-    private ImageView mSecondRecommendSelected;
-    private ImageView mThirdRecommendSelected;
     private EditText mUsername;
     private EditText mPreferName;
-    private EditText mLocation;
+    private TextView mLocation;
     private MaterialButton mContinueBtn;
     private TextView mUpload;
     private FirebaseAuth mAuth;
@@ -54,6 +51,7 @@ public class SetUpAccountActivity extends AppCompatActivity {
 
     // use to identify selected avatar
     private int mcurrentSelect;
+    ActivityResultLauncher<Intent> LocationResultLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,28 +64,39 @@ public class SetUpAccountActivity extends AppCompatActivity {
         mUpload = findViewById(R.id.setup_select_custom_photo_text);
         mUsername = findViewById(R.id.setup_user_name_edit);
         mPreferName = findViewById(R.id.setup_prefer_name_edit);
-        mLocation = findViewById(R.id.setup_location_edit);
+        mLocation = (TextView) findViewById(R.id.setup_location_edit);
         mContinueBtn = findViewById(R.id.setup_continue_btn);
         mainPhoto = findViewById(R.id.setup_photo);
         mFirstRecommend = findViewById(R.id.setup_photo_recommend_1);
         mSecondRecommend = findViewById(R.id.setup_photo_recommend_2);
         mThirdRecommend = findViewById(R.id.setup_photo_recommend_3);
-        mFirstRecommendSelected = findViewById(R.id.setup_photo_recommend_select_1);
-        mSecondRecommendSelected = findViewById(R.id.setup_photo_recommend_select_2);
-        mThirdRecommendSelected = findViewById(R.id.setup_photo_recommend_select_3);
 
-        mFirstRecommendSelected.setVisibility(View.INVISIBLE);
-        mSecondRecommendSelected.setVisibility(View.INVISIBLE);
-        mThirdRecommendSelected.setVisibility(View.INVISIBLE);
+        mFirstRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
+        mSecondRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
+        mThirdRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
+
+        LocationResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == 88) {
+                            Intent data = result.getData();
+                            if (data != null) {
+                                mLocation.setText(data.getExtras().get("location").toString());
+                            }
+                        }
+                    }
+                });
+
+
 
         mContinueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                !TextUtils.isEmpty(user_input_email)
                 String userinput_username = mUsername.getText().toString();
                 String useriput_prefreame = mPreferName.getText().toString();
-//                String userinput_location = mLocation.getText().toString().trim();
-                String userinput_location = "Santa Clara, CA";
+                String userinput_location = mLocation.getText().toString();
                 if (!TextUtils.isEmpty(userinput_username.trim()) && !TextUtils.isEmpty(useriput_prefreame.trim())
                         && !TextUtils.isEmpty(userinput_location.trim())) {
                     FirebaseUser mUser = mAuth.getCurrentUser();
@@ -135,16 +144,6 @@ public class SetUpAccountActivity extends AppCompatActivity {
     }
 
     /**
-     * Helper method which use Intent to go to the Login Page
-     */
-    private void goToMainActivityHelper() {
-        Intent goToMainActivity = new Intent(getApplicationContext(), MainActivity.class);
-        goToMainActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(goToMainActivity);
-        finish();
-    }
-
-    /**
      * Helper method which use Intent to go to the Bubble Picker
      */
     private void goToBubblePickerHelper() {
@@ -168,52 +167,47 @@ public class SetUpAccountActivity extends AppCompatActivity {
         String value = view.getTag().toString();
         if (value.equals("rec1")) {
             if (mcurrentSelect == 1) {
-                mFirstRecommendSelected.setVisibility(View.INVISIBLE);
+                mFirstRecommend.setPadding(mnpl, mnpl, mnpl, mnpl);
                 mFirstRecommend.clearColorFilter();
                 mainPhoto.setImageResource(R.drawable.avatar);
                 mcurrentSelect = 0;
             } else {
-                mFirstRecommendSelected.setVisibility(View.VISIBLE);
-                mSecondRecommendSelected.setVisibility(View.INVISIBLE);
-                mThirdRecommendSelected.setVisibility(View.INVISIBLE);
-                mFirstRecommend.setColorFilter(Color.rgb(123, 123, 123), android.graphics.PorterDuff.Mode.MULTIPLY);
-                mSecondRecommend.clearColorFilter();
-                mThirdRecommend.clearColorFilter();
+                mFirstRecommend.setPadding(mpl, mpl, mpl, mpl);
+                mSecondRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
+                mThirdRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
                 mainPhoto.setImageResource(R.drawable.food);
                 mcurrentSelect = 1;
             }
         } else if (value.equals("rec2")) {
             if (mcurrentSelect == 2) {
-                mSecondRecommendSelected.setVisibility(View.INVISIBLE);
+                mSecondRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
                 mSecondRecommend.clearColorFilter();
                 mainPhoto.setImageResource(R.drawable.avatar);
                 mcurrentSelect = 0;
             } else {
-                mFirstRecommendSelected.setVisibility(View.INVISIBLE);
-                mSecondRecommendSelected.setVisibility(View.VISIBLE);
-                mThirdRecommendSelected.setVisibility(View.INVISIBLE);
-                mSecondRecommend.setColorFilter(Color.rgb(123, 123, 123), android.graphics.PorterDuff.Mode.MULTIPLY);
-                mFirstRecommend.clearColorFilter();
-                mThirdRecommend.clearColorFilter();
+                mFirstRecommend.setPadding(mnpl, mnpl, mnpl, mnpl);
+                mSecondRecommend.setPadding(mpl,mpl,mpl,mpl);
+                mThirdRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
                 mainPhoto.setImageResource(R.drawable.sport);
                 mcurrentSelect = 2;
             }
         } else {
             if (mcurrentSelect == 3) {
-                mThirdRecommendSelected.setVisibility(View.INVISIBLE);
-                mThirdRecommend.clearColorFilter();
+                mThirdRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
                 mainPhoto.setImageResource(R.drawable.avatar);
                 mcurrentSelect = 0;
             } else {
-                mFirstRecommendSelected.setVisibility(View.INVISIBLE);
-                mSecondRecommendSelected.setVisibility(View.INVISIBLE);
-                mThirdRecommendSelected.setVisibility(View.VISIBLE);
-                mThirdRecommend.setColorFilter(Color.rgb(123, 123, 123), android.graphics.PorterDuff.Mode.MULTIPLY);
-                mFirstRecommend.clearColorFilter();
-                mSecondRecommend.clearColorFilter();
+                mFirstRecommend.setPadding(mnpl, mnpl, mnpl, mnpl);
+                mSecondRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
+                mThirdRecommend.setPadding(mpl,mpl,mpl,mpl);
                 mainPhoto.setImageResource(R.drawable.entertainment);
                 mcurrentSelect = 3;
             }
         }
+    }
+
+    public void getLocation(View view) {
+        Intent goToMaps = new Intent(this, MapsActivity.class);
+        LocationResultLauncher.launch(goToMaps);
     }
 }

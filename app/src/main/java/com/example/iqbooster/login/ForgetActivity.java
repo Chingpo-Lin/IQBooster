@@ -103,6 +103,15 @@ public class ForgetActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Override system method onBackPress() which defines the "back" button behaviour
+     * in the Action Bar of Android
+     */
+    @Override
+    public void onBackPressed() {
+        goToLoginInActivityHelper();
+    }
+
     private void goToLoginInActivityHelper() {
         Intent goToLoginInActivity = new Intent(getApplicationContext(), LoginActivity.class);
         goToLoginInActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
