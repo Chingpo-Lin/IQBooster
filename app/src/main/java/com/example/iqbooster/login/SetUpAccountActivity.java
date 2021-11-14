@@ -27,6 +27,7 @@ import com.example.iqbooster.MainActivity;
 import com.example.iqbooster.R;
 import com.example.iqbooster.model.User;
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
@@ -36,6 +37,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+
+import java.util.HashMap;
 
 
 public class SetUpAccountActivity extends AppCompatActivity {
@@ -58,6 +64,12 @@ public class SetUpAccountActivity extends AppCompatActivity {
     // use to identify selected avatar
     private int mcurrentSelect;
 
+    private final String TAG = "SetupAccountActivity";
+    private StorageReference firebaseStorageProfileImageRef;
+    private StorageTask uploadTask;
+    String profileLink = "";
+    Uri profileUri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +77,10 @@ public class SetUpAccountActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        firebaseStorageProfileImageRef = FirebaseStorage.getInstance().getReference().child(getResources().getString(R.string.db_profile_image));
+        profileUri = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/drawable/" +
+                R.drawable.avatar);
+
         mcurrentSelect = 0;
         mUpload = findViewById(R.id.setup_select_custom_photo_text);
         mUsername = findViewById(R.id.setup_user_name_edit);
@@ -113,8 +129,41 @@ public class SetUpAccountActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    addUserInfotoDatabase(userinput_username, useriput_prefreame, userinput_location);
-                                    goToBubblePickerHelper();
+//                                    goToBubblePickerHelper();
+                                    if (profileUri != null) {
+                                        final StorageReference fileRef = firebaseStorageProfileImageRef
+                                                .child(mAuth.getCurrentUser().getUid() + ".jpg");
+                                        uploadTask = fileRef.putFile(profileUri);
+                                        uploadTask.continueWithTask(new Continuation() {
+                                            @Override
+                                            public Object then(@NonNull Task task) throws Exception {
+                                                if (!task.isSuccessful()) {
+                                                    throw task.getException();
+                                                }
+                                                return fileRef.getDownloadUrl();
+                                            }
+                                        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Uri> task) {
+                                                if (task.isSuccessful()) {
+                                                    Uri downloadUrl = task.getResult();
+                                                    profileLink = downloadUrl.toString();
+                                                    HashMap<String, Object> userMap = new HashMap<>();
+                                                    userMap.put("image", profileLink);
+                                                }
+                                            }
+                                        }).addOnCompleteListener(new OnCompleteListener() {
+                                            @Override
+                                            public void onComplete(@NonNull Task task) {
+                                                if (task.isSuccessful()) {
+                                                    addUserInfotoDatabase(userinput_username, useriput_prefreame, userinput_location);
+                                                }
+                                            }
+                                        });
+                                    }
+
+
+
                                 } else {
                                     String errormsg = task.getException().getMessage();
                                     Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Error: " + errormsg, Snackbar.LENGTH_LONG);
@@ -143,8 +192,8 @@ public class SetUpAccountActivity extends AppCompatActivity {
 
         if (requestCode == 10) {
             assert data != null;
-            Uri uri = data.getData();
-            mainPhoto.setImageURI(uri);
+            profileUri = data.getData();
+            mainPhoto.setImageURI(profileUri);
         }
 
     }
@@ -177,8 +226,15 @@ public class SetUpAccountActivity extends AppCompatActivity {
         String useremail = mAuth.getCurrentUser().getEmail();
         String uid = mAuth.getCurrentUser().getUid();
 
-        User currUser = new User(input_username, input_prefer_name, useremail, uid,
-                input_location, "", "", "");
+        User currUser = new User(input_username,
+                input_prefer_name,
+                useremail,
+                uid,
+                input_location,
+                "",
+                "",
+                "",
+                profileLink);
         mDatabaseReference.child(getApplicationContext().getString(R.string.db_users))
                 .child(uid)
                 .setValue(currUser);
@@ -191,6 +247,8 @@ public class SetUpAccountActivity extends AppCompatActivity {
                 mFirstRecommendSelected.setVisibility(View.INVISIBLE);
                 mFirstRecommend.clearColorFilter();
                 mainPhoto.setImageResource(R.drawable.avatar);
+                profileUri = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/drawable/" +
+                        R.drawable.avatar);
                 mcurrentSelect = 0;
             } else {
                 mFirstRecommendSelected.setVisibility(View.VISIBLE);
@@ -200,6 +258,8 @@ public class SetUpAccountActivity extends AppCompatActivity {
                 mSecondRecommend.clearColorFilter();
                 mThirdRecommend.clearColorFilter();
                 mainPhoto.setImageResource(R.drawable.food);
+                profileUri = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/drawable/" +
+                        R.drawable.food);
                 mcurrentSelect = 1;
             }
         } else if (value.equals("rec2")) {
@@ -207,6 +267,8 @@ public class SetUpAccountActivity extends AppCompatActivity {
                 mSecondRecommendSelected.setVisibility(View.INVISIBLE);
                 mSecondRecommend.clearColorFilter();
                 mainPhoto.setImageResource(R.drawable.avatar);
+                profileUri = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/drawable/" +
+                        R.drawable.avatar);
                 mcurrentSelect = 0;
             } else {
                 mFirstRecommendSelected.setVisibility(View.INVISIBLE);
@@ -216,6 +278,8 @@ public class SetUpAccountActivity extends AppCompatActivity {
                 mFirstRecommend.clearColorFilter();
                 mThirdRecommend.clearColorFilter();
                 mainPhoto.setImageResource(R.drawable.sport);
+                profileUri = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/drawable/" +
+                        R.drawable.sport);
                 mcurrentSelect = 2;
             }
         } else {
@@ -223,6 +287,8 @@ public class SetUpAccountActivity extends AppCompatActivity {
                 mThirdRecommendSelected.setVisibility(View.INVISIBLE);
                 mThirdRecommend.clearColorFilter();
                 mainPhoto.setImageResource(R.drawable.avatar);
+                profileUri = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/drawable/" +
+                        R.drawable.avatar);
                 mcurrentSelect = 0;
             } else {
                 mFirstRecommendSelected.setVisibility(View.INVISIBLE);
@@ -232,6 +298,8 @@ public class SetUpAccountActivity extends AppCompatActivity {
                 mFirstRecommend.clearColorFilter();
                 mSecondRecommend.clearColorFilter();
                 mainPhoto.setImageResource(R.drawable.entertainment);
+                profileUri = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/drawable/" +
+                        R.drawable.entertainment);
                 mcurrentSelect = 3;
             }
         }

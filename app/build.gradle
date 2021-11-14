@@ -43,11 +43,11 @@ dependencies {
 
     // firebase
     implementation 'com.google.firebase:firebase-auth:21.0.1'
-    implementation 'com.google.firebase:firebase-firestore:24.0.0'
     implementation 'com.google.firebase:firebase-database'
     implementation platform('com.google.firebase:firebase-bom:28.4.2')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.firebaseui:firebase-ui-database:8.0.0'
+    implementation 'com.google.firebase:firebase-storage:20.0.0'
 
     // custom SDK
     implementation 'com.github.igalata:Bubble-Picker:v0.2.4'

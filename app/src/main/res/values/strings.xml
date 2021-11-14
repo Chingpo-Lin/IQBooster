@@ -66,6 +66,7 @@
     <string name="db_timestamp">timestamp</string>
     <string name="db_comments">comments</string>
     <string name="db_comments_reply">all_replies</string>
+    <string name="db_profile_image">profile_image</string>
 
     <!-- tags -->
     <string name="technology">technology</string>
