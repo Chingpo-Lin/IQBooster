@@ -45,8 +45,7 @@ public class Comment {
     }
 
     public String getDate() {
-        return date.substring(0, date.lastIndexOf(':'));
-//        return date;
+        return date;
     }
 
     public void setDate(String date) {

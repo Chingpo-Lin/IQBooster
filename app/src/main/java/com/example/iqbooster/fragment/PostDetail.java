@@ -84,7 +84,7 @@ public class PostDetail extends Fragment {
 
     String postAuthor = "";
     String parentID = "";
-    private static final SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static final SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     public FirebaseRecyclerOptions<Comment> option;
     public FirebaseRecyclerAdapter<Comment, CommentsViewHolder> adapter;

@@ -99,7 +99,7 @@ public class PostCreation extends Fragment {
     private int checkCount;
 
     private final int MAX_CHIPS = 3;
-    private static final SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static final SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private ActivityInterface activityInterface;
 
     private String newPostID;
