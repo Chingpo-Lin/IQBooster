@@ -22,6 +22,7 @@ import com.example.iqbooster.Screen;
 import com.example.iqbooster.UserProfilePage;
 import com.example.iqbooster.fragment.PostDetail;
 import com.example.iqbooster.model.AdapterPost;
+import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;
 import com.example.iqbooster.getRandom;
@@ -164,7 +165,26 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
 //        });
 
         // TODO: update info if editable
-        holder.mInfo.setText(mValue.get(holder.getAbsoluteAdapterPosition()).getAuthor());
+        DatabaseReference postUserRef = FirebaseDatabase.getInstance().getReference()
+                .child(mContext.getResources().getString(R.string.db_users))
+                .child(mValue.get(holder.getAbsoluteAdapterPosition()).getAuthor());
+        postUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                try {
+                    AdapterUser postUser = snapshot.getValue(AdapterUser.class);
+                    String info = postUser.getName()  + " \u22C5 " + mValue.get(holder.getAbsoluteAdapterPosition()).getDate();
+                    holder.mInfo.setText(info);
+                } catch (Exception e) {
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         // TODO: update thumbnail if editable
         try {

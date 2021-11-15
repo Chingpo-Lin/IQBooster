@@ -73,7 +73,8 @@ public class Post {
     }
 
     public String getDate() {
-        return date;
+        return date.substring(0, date.lastIndexOf(':'));
+//        return date;
     }
 
     public void setDate(String date) {
