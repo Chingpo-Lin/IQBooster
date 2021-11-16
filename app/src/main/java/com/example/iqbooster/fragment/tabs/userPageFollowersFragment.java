@@ -3,6 +3,7 @@ package com.example.iqbooster.fragment.tabs;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +19,7 @@ import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,7 +35,6 @@ import java.util.ArrayList;
  */
 public class userPageFollowersFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -63,7 +64,6 @@ public class userPageFollowersFragment extends Fragment {
      * @param param1 Parameter 1.
      * @return A new instance of fragment userPageFollowersFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static userPageFollowersFragment newInstance(String param1) {
         userPageFollowersFragment fragment = new userPageFollowersFragment();
         Bundle args = new Bundle();
@@ -96,19 +96,48 @@ public class userPageFollowersFragment extends Fragment {
         mAdapter = new UserSuggestionAdapter(getContext(), potentialUsers, mAuth);
         mRecyclerView.setAdapter(mAdapter);
 
-        pageUserRef.child(getContext().getResources().getString(R.string.db_followers_users)).addValueEventListener(new ValueEventListener() {
+//        pageUserRef.child(getContext().getResources().getString(R.string.db_followers_users)).addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                potentialUsers.clear();
+//                for (DataSnapshot ds : snapshot.getChildren()) {
+//                    AdapterUser dsUser = ds.getValue(AdapterUser.class);
+//                    potentialUsers.add(dsUser);
+//                }
+//                mAdapter.updateList(potentialUsers);
+//                mAdapter.notifyDataSetChanged();
+//                mRecyclerView.setAdapter(mAdapter);
+//            }
+//
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+
+        pageUserRef.child(getContext().getResources().getString(R.string.db_followers_users)).addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                potentialUsers.clear();
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    AdapterUser dsUser = ds.getValue(AdapterUser.class);
-                    potentialUsers.add(dsUser);
-                }
-                mAdapter.updateList(potentialUsers);
-                mAdapter.notifyDataSetChanged();
-                mRecyclerView.setAdapter(mAdapter);
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                AdapterUser currUser = snapshot.getValue(AdapterUser.class);
+                mAdapter.push_back(currUser);
             }
 
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                AdapterUser currUser = snapshot.getValue(AdapterUser.class);
+                mAdapter.remove(currUser.getUid());
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {

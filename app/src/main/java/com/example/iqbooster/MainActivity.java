@@ -99,25 +99,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
-        ;
         mNavigationView.setNavigationItemSelectedListener(this);
 
         mheaderView = mNavigationView.getHeaderView(0);
         mProfilePic = (ImageView) mheaderView.findViewById(R.id.drawer_avatar);
-
-        mProfilePic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mUser == null) {
-                    goToLoginActivityHelper();
-                } else {
-                    // GO TO PROFILE PAGE
-                    String uid = mAuth.getUid();
-                    goToProfilePageActivityHelper(uid);
-                }
-                closeDrawer();
-            }
-        });
 
         mUsername = (TextView) mheaderView.findViewById(R.id.drawer_username);
         mEmailAddress = (TextView) mheaderView.findViewById(R.id.drawer_email);
@@ -137,13 +122,45 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onStart() {
         FirebaseUser user = mAuth.getCurrentUser();
+
+        mProfilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (user == null) {
+                    goToLoginActivityHelper();
+                } else {
+                    // GO TO PROFILE PAGE
+                    String uid = mAuth.getUid();
+                    goToProfilePageActivityHelper(uid);
+                }
+                closeDrawer();
+            }
+        });
+
         if (user == null) {
+            mUsername.setText(getResources().getString(R.string.drawer_username));
+            mEmailAddress.setText(getResources().getString(R.string.drawer_email));
             mPostItem.setVisible(false);
             mCollectItem.setVisible(false);
             mLogoutItem.setVisible(false);
         } else {
             mUsername.setText(user.getDisplayName());
-            mEmailAddress.setText(user.getEmail());
+            FirebaseDatabase.getInstance().getReference().child(getResources().getString(R.string.db_users)).child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    String emailAndUserName = user.getEmail();
+                    if (snapshot.hasChild(getResources().getString(R.string.db_username))) {
+                        String username = snapshot.child(getResources().getString(R.string.db_username)).getValue(String.class);
+                        emailAndUserName = "@" + username + " \u22C5 " + emailAndUserName;
+                        mEmailAddress.setText(emailAndUserName);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
             mPostItem.setVisible(true);
             mCollectItem.setVisible(true);
             mLogoutItem.setVisible(true);

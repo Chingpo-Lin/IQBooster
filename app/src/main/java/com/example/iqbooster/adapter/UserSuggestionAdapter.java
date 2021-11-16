@@ -172,4 +172,21 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
     public void updateList(ArrayList<AdapterUser> newList) {
         this.mValue = newList;
     }
+
+    public void push_back(AdapterUser adapterUser) {
+        this.mValue.add(adapterUser);
+        notifyItemInserted(this.mValue.size()-1);
+    }
+
+    public void remove(String UID) {
+        int idx = 0;
+        for (AdapterUser user : mValue) {
+            if (user.getUid().equalsIgnoreCase(UID)) {
+                break;
+            }
+            ++idx;
+        }
+        mValue.remove(idx);
+        notifyItemRemoved(idx);
+    }
 }

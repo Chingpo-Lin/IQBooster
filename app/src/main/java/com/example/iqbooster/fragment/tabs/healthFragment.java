@@ -3,6 +3,7 @@ package com.example.iqbooster.fragment.tabs;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +19,7 @@ import com.example.iqbooster.adapter.NewsFeedAdapter;
 import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,12 +35,10 @@ import java.util.ArrayList;
  */
 public class healthFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -65,7 +65,6 @@ public class healthFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment healthFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static healthFragment newInstance(String param1, String param2) {
         healthFragment fragment = new healthFragment();
         Bundle args = new Bundle();
@@ -100,24 +99,54 @@ public class healthFragment extends Fragment {
         mAdapter.setActivityInterface(activityInterface);
         mRecyclerView.setAdapter(mAdapter);
 
-        postRef.orderByChild(getContext().getResources().getString(R.string.db_timestamp)).addValueEventListener(new ValueEventListener() {
+//        postRef.orderByChild(getContext().getResources().getString(R.string.db_timestamp)).addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                potentialPosts.clear();
+//                for (DataSnapshot ds : snapshot.getChildren()) {
+//                    Post currPost = ds.getValue(Post.class);
+//                    if ((getContext() != null) && ds.hasChild(getContext().getResources().getString(R.string.db_tags))) {
+//                        Tags currPostTags = ds.child(getContext().getResources().getString(R.string.db_tags)).getValue(Tags.class);
+//                        if (currPostTags != null && currPostTags.isHealth()) {
+//                            potentialPosts.add(currPost);
+//                        }
+//                    }
+//                }
+//                mAdapter.updateList(potentialPosts);
+//                mAdapter.notifyDataSetChanged();
+//                mRecyclerView.setAdapter(mAdapter);
+//            }
+//
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+
+        postRef.orderByChild(getContext().getResources().getString(R.string.db_timestamp)).addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                potentialPosts.clear();
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    Post currPost = ds.getValue(Post.class);
-                    if ((getContext() != null) && ds.hasChild(getContext().getResources().getString(R.string.db_tags))) {
-                        Tags currPostTags = ds.child(getContext().getResources().getString(R.string.db_tags)).getValue(Tags.class);
-                        if (currPostTags != null && currPostTags.isHealth()) {
-                            potentialPosts.add(currPost);
-                        }
-                    }
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Post currPost = snapshot.getValue(Post.class);
+                if (currPost.getTags().isHealth()) {
+                    mAdapter.push_back(currPost);
                 }
-                mAdapter.updateList(potentialPosts);
-                mAdapter.notifyDataSetChanged();
-                mRecyclerView.setAdapter(mAdapter);
             }
 
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {

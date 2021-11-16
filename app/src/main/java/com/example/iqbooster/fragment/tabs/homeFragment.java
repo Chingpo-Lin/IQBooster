@@ -102,25 +102,26 @@ public class homeFragment extends Fragment {
         mAdapter.setActivityInterface(activityInterface);
         mRecyclerView.setAdapter(mAdapter);
 
-        postRef.orderByChild(getContext().getResources().getString(R.string.db_timestamp)).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                potentialPosts.clear();
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    Post currPost = ds.getValue(Post.class);
-                    potentialPosts.add(currPost);
-                }
-                mAdapter.updateList(potentialPosts);
-                mAdapter.notifyDataSetChanged();
-                mRecyclerView.setAdapter(mAdapter);
-            }
+//        postRef.orderByChild(getContext().getResources().getString(R.string.db_timestamp)).addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                potentialPosts.clear();
+//                for (DataSnapshot ds : snapshot.getChildren()) {
+//                    Post currPost = ds.getValue(Post.class);
+//                    potentialPosts.add(currPost);
+//                }
+//                mAdapter.updateList(potentialPosts);
+//                mAdapter.notifyDataSetChanged();
+//                mRecyclerView.setAdapter(mAdapter);
+//            }
+//
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
 
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
         postRef.orderByChild(getContext().getResources().getString(R.string.db_timestamp)).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -130,12 +131,12 @@ public class homeFragment extends Fragment {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
+                // add here if post can be edited
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
+                // add here if post can be removed
             }
 
             @Override
