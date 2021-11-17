@@ -207,22 +207,33 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
             });
         }
     }
-//
-//    /**
-//     * Override system method onCreateOptionsMenu which Inflates(replaces)
-//     * the ToolBar to three dot menu
-//     *
-//     * @param menu [the "three dot menu" button specifically]
-//     */
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        if (mAuth != null) {
-//            if (mAuth.getUid().equalsIgnoreCase(currPageUID)) {
-//                getMenuInflater().inflate(R.menu.user_profile_page_threedot_menu, menu);
-//            }
-//        }
-//        return true;
-//    }
+
+    /**
+     * Override system method onCreateOptionsMenu which Inflates(replaces)
+     * the ToolBar to three dot menu
+     *
+     * @param menu [the "three dot menu" button specifically]
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (mAuth.getCurrentUser() != null) {
+            if (mAuth.getUid().equalsIgnoreCase(currPageUID)) {
+                getMenuInflater().inflate(R.menu.user_profile_page_threedot_menu, menu);
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.threedots_logout:
+                mAuth.signOut();
+                recreate();
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     @Override
     public boolean onSupportNavigateUp() {

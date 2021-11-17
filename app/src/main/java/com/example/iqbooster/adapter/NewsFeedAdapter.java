@@ -21,6 +21,7 @@ import com.example.iqbooster.R;
 import com.example.iqbooster.Screen;
 import com.example.iqbooster.UserProfilePage;
 import com.example.iqbooster.fragment.PostDetail;
+import com.example.iqbooster.login.LoginActivity;
 import com.example.iqbooster.model.AdapterPost;
 import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.Post;
@@ -426,11 +427,17 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                 @Override
                 public void liked(LikeButton likeButton) {
                     holder.mLikeBtn.setLiked(false);
+                    Intent LoginInActivityIntent = new Intent(mContext, LoginActivity.class);
+                    LoginInActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContext.startActivity(LoginInActivityIntent);
                 }
 
                 @Override
                 public void unLiked(LikeButton likeButton) {
                     holder.mLikeBtn.setLiked(false);
+                    Intent LoginInActivityIntent = new Intent(mContext, LoginActivity.class);
+                    LoginInActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContext.startActivity(LoginInActivityIntent);
                 }
             });
         }

@@ -1,6 +1,7 @@
 package com.example.iqbooster.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.iqbooster.R;
+import com.example.iqbooster.login.LoginActivity;
 import com.example.iqbooster.model.AdapterPost;
 import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.Comment;
@@ -410,6 +412,24 @@ public class PostDetail extends Fragment {
                             mCommentEditText.requestFocus();
                             showKeyboard();
                         }
+                    }
+                });
+            } else {
+                mLikeButton.setOnLikeListener(new OnLikeListener() {
+                    @Override
+                    public void liked(LikeButton likeButton) {
+                        mLikeButton.setLiked(false);
+                        Intent LoginInActivityIntent = new Intent(getContext(), LoginActivity.class);
+                        LoginInActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getContext().startActivity(LoginInActivityIntent);
+                    }
+
+                    @Override
+                    public void unLiked(LikeButton likeButton) {
+                        mLikeButton.setLiked(false);
+                        Intent LoginInActivityIntent = new Intent(getContext(), LoginActivity.class);
+                        LoginInActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getContext().startActivity(LoginInActivityIntent);
                     }
                 });
             }

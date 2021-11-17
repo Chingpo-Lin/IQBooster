@@ -33,6 +33,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.iqbooster.adapter.NewsFeedAdapter;
 import com.example.iqbooster.adapter.UserSuggestionAdapter;
 import com.example.iqbooster.fragment.PostDetail;
+import com.example.iqbooster.login.LoginActivity;
 import com.example.iqbooster.model.AdapterPost;
 import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.Post;
@@ -659,11 +660,17 @@ public class SearchActivity extends AppCompatActivity {
                         @Override
                         public void liked(LikeButton likeButton) {
                             holder.mLikeBtn.setLiked(false);
+                            Intent LoginInActivityIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                            LoginInActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            getApplicationContext().startActivity(LoginInActivityIntent);
                         }
 
                         @Override
                         public void unLiked(LikeButton likeButton) {
                             holder.mLikeBtn.setLiked(false);
+                            Intent LoginInActivityIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                            LoginInActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            getApplicationContext().startActivity(LoginInActivityIntent);
                         }
                     });
                 }
@@ -1214,11 +1221,17 @@ public class SearchActivity extends AppCompatActivity {
                     @Override
                     public void liked(LikeButton likeButton) {
                         holder.mLikeBtn.setLiked(false);
+                        Intent LoginInActivityIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                        LoginInActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getApplicationContext().startActivity(LoginInActivityIntent);
                     }
 
                     @Override
                     public void unLiked(LikeButton likeButton) {
                         holder.mLikeBtn.setLiked(false);
+                        Intent LoginInActivityIntent = new Intent(mContext, LoginActivity.class);
+                        LoginInActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getApplicationContext().startActivity(LoginInActivityIntent);
                     }
                 });
             }

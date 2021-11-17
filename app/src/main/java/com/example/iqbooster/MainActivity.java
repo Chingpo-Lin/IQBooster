@@ -140,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (user == null) {
             mUsername.setText(getResources().getString(R.string.drawer_username));
             mEmailAddress.setText(getResources().getString(R.string.drawer_email));
+            mProfilePic.setImageResource(R.drawable.avatar);
             mPostItem.setVisible(false);
             mCollectItem.setVisible(false);
             mLogoutItem.setVisible(false);
