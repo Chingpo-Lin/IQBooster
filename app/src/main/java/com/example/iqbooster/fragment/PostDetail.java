@@ -24,6 +24,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.iqbooster.R;
 import com.example.iqbooster.model.AdapterPost;
+import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.Comment;
 import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;
@@ -187,7 +188,27 @@ public class PostDetail extends Fragment {
                     Post currPost = snapshot.getValue(Post.class);
                     mHeadingTitle.setText(currPost.getTitle());
                     postAuthor = currPost.getAuthor();
-                    mInfo.setText(currPost.getAuthor());
+                    DatabaseReference postUserRef = FirebaseDatabase.getInstance().getReference()
+                            .child(getContext().getResources().getString(R.string.db_users))
+                            .child(postAuthor);
+                    postUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            try {
+                                AdapterUser postUser = snapshot.getValue(AdapterUser.class);
+                                String info = postUser.getName()  + " \u22C5 " + currPost.getDate();
+                                mInfo.setText(info);
+                            } catch (Exception e) {
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
                     Tags currTags = currPost.getTags();
                     ArrayList<String> allTrue = currTags.allTrue();
                     if (allTrue.size() >= 1) {

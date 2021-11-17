@@ -121,7 +121,8 @@ public class userPageFollowingFragment extends Fragment {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
+                AdapterUser currUser = snapshot.getValue(AdapterUser.class);
+                mAdapter.changeChild(currUser.getUid(), currUser);
             }
 
             @Override

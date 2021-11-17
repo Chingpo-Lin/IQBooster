@@ -131,12 +131,14 @@ public class homeFragment extends Fragment {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                // add here if post can be edited
+                Post currPost = snapshot.getValue(Post.class);
+                mAdapter.changeChild(currPost.getRandomID(), currPost);
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-                // add here if post can be removed
+                Post currPost = snapshot.getValue(Post.class);
+                mAdapter.remove(currPost.getRandomID());
             }
 
             @Override

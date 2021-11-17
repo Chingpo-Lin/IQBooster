@@ -3,6 +3,7 @@ package com.example.iqbooster.fragment;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,6 +26,7 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -115,33 +117,84 @@ public class MyPost extends Fragment {
         mAdapter.setActivityInterface(activityInterface);
         mRecyclerView.setAdapter(mAdapter);
 
-        myPostRef.addValueEventListener(new ValueEventListener() {
+//        myPostRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                potentialPosts.clear();
+//                for (DataSnapshot ds : snapshot.getChildren()) {
+//                    String postID = ds.getValue(String.class);
+//                    Log.d(TAG, postID);
+//                    postRef.child(postID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+//                            Log.d(TAG, postID);
+//                            Post post = task.getResult().getValue(Post.class);
+//                            potentialPosts.add(post);
+//                            Log.d(TAG, post.getTitle());
+//                            mAdapter.notifyItemInserted(potentialPosts.size()-1);
+//                        }
+//                    });
+//                }
+//                mAdapter.updateList(potentialPosts);
+//                mAdapter.notifyDataSetChanged();
+//                mRecyclerView.setAdapter(mAdapter);
+//            }
+//
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                Log.d(TAG, "sth removed");
+//
+//            }
+//        });
+
+        myPostRef.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                potentialPosts.clear();
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    String postID = ds.getValue(String.class);
-                    Log.d(TAG, postID);
-                    postRef.child(postID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                String currPostID = snapshot.getValue(String.class);
+
+                postRef.child(currPostID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DataSnapshot> task) {
-                            Log.d(TAG, postID);
                             Post post = task.getResult().getValue(Post.class);
-                            potentialPosts.add(post);
-                            Log.d(TAG, post.getTitle());
-                            mAdapter.notifyItemInserted(potentialPosts.size()-1);
+                            mAdapter.push_back(post);
                         }
                     });
-                }
-                mAdapter.updateList(potentialPosts);
-                mAdapter.notifyDataSetChanged();
-                mRecyclerView.setAdapter(mAdapter);
             }
 
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                String currPostID = snapshot.getValue(String.class);
+
+                postRef.child(currPostID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        Post post = task.getResult().getValue(Post.class);
+                        mAdapter.changeChild(post.getRandomID(), post);
+                    }
+                });
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                String currPostID = snapshot.getValue(String.class);
+
+                postRef.child(currPostID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        Post post = task.getResult().getValue(Post.class);
+                        mAdapter.remove(post.getRandomID());
+                    }
+                });
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.d(TAG, "sth removed");
 
             }
         });

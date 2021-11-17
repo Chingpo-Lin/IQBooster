@@ -101,7 +101,7 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
         });
 
         holder.mNameTextView.setText(mValue.get(holder.getAbsoluteAdapterPosition()).getName());
-        holder.mUsernameTextView.setText(mValue.get(holder.getAbsoluteAdapterPosition()).getUsername());
+        holder.mUsernameTextView.setText("@" + mValue.get(holder.getAbsoluteAdapterPosition()).getUsername());
 
         DatabaseReference userRef = databaseReference.child(mContext.getResources().getString(R.string.db_users));
 
@@ -188,5 +188,17 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
         }
         mValue.remove(idx);
         notifyItemRemoved(idx);
+    }
+
+    public void changeChild(String UID, AdapterUser changedUser) {
+        int idx = 0;
+        for (AdapterUser user : mValue) {
+            if (user.getUid().equalsIgnoreCase(UID)) {
+                break;
+            }
+            ++idx;
+        }
+        mValue.set(idx, changedUser);
+        notifyItemChanged(idx);
     }
 }

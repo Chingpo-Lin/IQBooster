@@ -457,12 +457,29 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
         notifyItemInserted(0);
     }
 
-    public void notifyIndexChanged(Post post, int at) {
-        this.mValue.set(at, post);
-        notifyItemChanged(at);
+    public void remove(String RID) {
+        int idx = 0;
+        for (Post post : mValue) {
+            if (post.getRandomID().equalsIgnoreCase(RID)) {
+                break;
+            }
+            ++idx;
+        }
+        mValue.remove(idx);
+        notifyItemRemoved(idx);
     }
 
-    // TODO: remove maybe?
+    public void changeChild(String RID, Post changedPost) {
+        int idx = 0;
+        for (Post post : mValue) {
+            if (post.getRandomID().equalsIgnoreCase(RID)) {
+                break;
+            }
+            ++idx;
+        }
+        mValue.set(idx, changedPost);
+        notifyItemChanged(idx);
+    }
 
     public void setActivityInterface(ActivityInterface activityInterface) {
         this.activityInterface = activityInterface;
