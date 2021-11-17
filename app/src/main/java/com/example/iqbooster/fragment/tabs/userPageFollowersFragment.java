@@ -49,7 +49,6 @@ public class userPageFollowersFragment extends Fragment {
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabaseRef;
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 

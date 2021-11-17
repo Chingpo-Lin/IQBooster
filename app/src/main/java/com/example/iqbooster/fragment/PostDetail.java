@@ -55,7 +55,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class PostDetail extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -93,7 +92,6 @@ public class PostDetail extends Fragment {
 
     View v;
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -108,7 +106,6 @@ public class PostDetail extends Fragment {
      * @param param1 Parameter 1.
      * @return A new instance of fragment PostDetail.
      */
-    // TODO: Rename and change types and number of parameters
     public static PostDetail newInstance(String param1) {
         PostDetail fragment = new PostDetail();
         Bundle args = new Bundle();
