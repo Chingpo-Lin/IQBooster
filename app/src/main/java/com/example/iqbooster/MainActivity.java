@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NewsFeed mNewsFeedFragment;
 
     // 速度阈值，当摇晃速度达到这值后产生作用
-    private static final int SPEED_THRESHOLD = 1000;
+    private static final int SPEED_THRESHOLD = 1300;
     // 两次检测的时间间隔
     private static final int UPDATE_INTERVAL_TIME = 120;
     SensorManager sensorManager;
@@ -282,11 +282,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     long randomIdx = ThreadLocalRandom.current().nextLong(count);
                     long currIdx = 0;
 
+                    Log.d(TAG, "count: " + count);
+                    Log.d(TAG, "randomIdx: " + randomIdx);
+
                     for (DataSnapshot dsPost : snapshot.getChildren()) {
                         if (currIdx < randomIdx) {
                             ++currIdx;
                             continue;
                         }
+                        Log.d(TAG, "currIdx: " + currIdx);
                         retPost[0] = dsPost.getValue(Post.class);
                         break;
                     }
@@ -315,10 +319,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     ImageView mThumbnail = dialogView.findViewById(R.id.card_textwithimg_thumbnail);
                     TextView mSubtitle = dialogView.findViewById(R.id.card_textwithimg_subtitle);
                     Chip mFirstChip = dialogView.findViewById(R.id.post_heading_tagChip);
+                    Chip mSecondChip = dialogView.findViewById(R.id.post_heading_tagChip2);
+                    Chip mThirdChip = dialogView.findViewById(R.id.post_heading_tagChip3);
 
                     LikeButton mLikeBtn = dialogView.findViewById(R.id.like_collect_share_likeButton);
                     TextView mLikeCount = dialogView.findViewById(R.id.like_collect_share_likeCount);
-                    LikeButton mCollectBtn = dialogView.findViewById(R.id.like_collect_share_collect);
                     ImageView mShare = dialogView.findViewById(R.id.like_collect_share_share);
 
                     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -389,14 +394,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             .child(getResources().getString(R.string.db_posts))
                             .child(retPost[0].getRandomID())
                             .child(getResources().getString(R.string.db_tags))
-                            .addValueEventListener(new ValueEventListener() {
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             currTags[0] = snapshot.getValue(Tags.class);
                             ArrayList<String> allTrue = currTags[0].allTrue();
-                            if (!allTrue.isEmpty()) {
+                            if (allTrue.size() >= 1) {
                                 mFirstChip.setText("#" + allTrue.get(0));
                                 mFirstChip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
+                                mFirstChip.setVisibility(View.VISIBLE);
+                            }
+                            if (allTrue.size() >= 2) {
+                                mSecondChip.setText("#" + allTrue.get(1));
+                                mSecondChip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
+                                mSecondChip.setVisibility(View.VISIBLE);
+                            }
+                            if (allTrue.size() >= 3) {
+                                mThirdChip.setText("#" + allTrue.get(2));
+                                mThirdChip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
+                                mThirdChip.setVisibility(View.VISIBLE);
                             }
                         }
 
