@@ -504,7 +504,7 @@ public class SearchActivity extends AppCompatActivity {
 
 
                 final Tags[] currTags = new Tags[1];
-                tagRef.addValueEventListener(new ValueEventListener() {
+                tagRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         currTags[0] = snapshot.getValue(Tags.class);
@@ -1065,7 +1065,7 @@ public class SearchActivity extends AppCompatActivity {
 
 
             final Tags[] currTags = new Tags[1];
-            tagRef.addValueEventListener(new ValueEventListener() {
+            tagRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     currTags[0] = snapshot.getValue(Tags.class);

@@ -242,7 +242,8 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
 
         if (!hideTag) {
             final Tags[] currTags = new Tags[1];
-            tagRef.addValueEventListener(new ValueEventListener() {
+            // TODO: update tags if editable
+            tagRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     currTags[0] = snapshot.getValue(Tags.class);

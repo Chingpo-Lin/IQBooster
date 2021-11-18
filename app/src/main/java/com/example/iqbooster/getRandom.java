@@ -1,6 +1,17 @@
 package com.example.iqbooster;
 
+import android.content.Context;
+
+import androidx.annotation.NonNull;
+
+import com.example.iqbooster.model.Post;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class getRandom {
 
@@ -10,6 +21,7 @@ public class getRandom {
      * @return a random color
      */
     private static final Random RANDOM = new Random();
+
     public static String getRandomColor() {
         switch (RANDOM.nextInt(8)) {
             default:
