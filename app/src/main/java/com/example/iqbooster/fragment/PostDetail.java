@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.iqbooster.R;
+import com.example.iqbooster.UserProfilePage;
 import com.example.iqbooster.login.LoginActivity;
 import com.example.iqbooster.model.AdapterPost;
 import com.example.iqbooster.model.AdapterUser;
@@ -249,6 +250,16 @@ public class PostDetail extends Fragment {
                                 }
                             });
 
+                    mProfileImage.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent profilePageIntent = new Intent(getContext(), UserProfilePage.class);
+                            profilePageIntent.putExtra(UserProfilePage.EXTRA, currPost.getAuthor());
+                            profilePageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            getContext().startActivity(profilePageIntent);
+                        }
+                    });
+
                     try {
                         String thumbnailUrl = currPost.getThumbnail_image();
                         if (thumbnailUrl != null && !thumbnailUrl.isEmpty()) {
@@ -270,6 +281,7 @@ public class PostDetail extends Fragment {
 
                 }
             });
+
             currPostRef.child(getContext().getResources().getString(R.string.db_like_counts)).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
