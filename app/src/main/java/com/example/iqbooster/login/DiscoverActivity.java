@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 
-import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -16,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 
 import com.example.iqbooster.R;
 import com.google.android.material.card.MaterialCardView;
@@ -38,19 +36,28 @@ public class DiscoverActivity extends AppCompatActivity {
     private MaterialCardView mTravel_card;
     private ImageView mTravel_image;
     private ImageView mTravel_select;
-    private MaterialCardView mPsych_card;
-    private ImageView mPsych_image;
-    private ImageView mPsych_select;
     private MaterialCardView mFood_card;
     private ImageView mFood_image;
     private ImageView mFood_select;
+    private MaterialCardView mPsych_card;
+    private ImageView mPsych_image;
+    private ImageView mPsych_select;
+    private MaterialCardView mHealth_card;
+    private ImageView mHealth_image;
+    private ImageView mHealth_select;
+    private MaterialCardView mBusiness_card;
+    private ImageView mBusiness_image;
+    private ImageView mBusiness_select;
     private MaterialCardView mEntertain_card;
     private ImageView mEntertain_image;
     private ImageView mEntertain_select;
-    private final String[] mList = {"technology", "sport", "travel", "psychology", "food", "entertainment"};
-    private int[] mSelect;
+
+    // tech0 -> sport1 -> travel2 -> food3 -> psych4 -> health5 -> business6 -> entertainment7
+    // final String[] mList = getResources().getStringArray(R.array.all_tags);
+    final String[] mList = {"technology", "sport", "travel", "food", "psychology", "health", "business", "entertainment"};
+    private boolean[] mSelect;
     private int mNumber;
-    private float mRadius = 300;
+    // private float mRadius = 300;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,20 +70,26 @@ public class DiscoverActivity extends AppCompatActivity {
         mPsych_card = findViewById(R.id.psychology_picker);
         mFood_card = findViewById(R.id.food_picker);
         mEntertain_card = findViewById(R.id.entertainment_picker);
+        mHealth_card = findViewById(R.id.health_picker);
+        mBusiness_card = findViewById(R.id.business_picker);
         mTech_image = findViewById(R.id.technology_picker_image);
         mSport_image = findViewById(R.id.sport_picker_image);
         mTravel_image = findViewById(R.id.travel_picker_image);
         mPsych_image = findViewById(R.id.psychology_picker_image);
         mFood_image = findViewById(R.id.food_picker_image);
         mEntertain_image = findViewById(R.id.entertainment_picker_image);
+        mHealth_image = findViewById(R.id.health_picker_image);
+        mBusiness_image = findViewById(R.id.business_picker_image);
         mTech_select = findViewById(R.id.technology_select);
         mSport_select = findViewById(R.id.sport_select);
         mTravel_select = findViewById(R.id.travel_select);
         mPsych_select = findViewById(R.id.psychology_select);
         mFood_select = findViewById(R.id.food_select);
         mEntertain_select = findViewById(R.id.entertainment_select);
+        mHealth_select = findViewById(R.id.health_select);
+        mBusiness_select = findViewById(R.id.business_select);
 
-        mSelect = new int[6];
+        mSelect = new boolean[8]; // initial all false
         mNumber = 0;
 
         mNextButton = findViewById(R.id.picker_next_button);
@@ -102,24 +115,38 @@ public class DiscoverActivity extends AppCompatActivity {
             }
         });
 
-        mPsych_card.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectTag(3, mPsych_image, mPsych_select);
-            }
-        });
-
         mFood_card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectTag(4, mFood_image, mFood_select);
+                selectTag(3, mFood_image, mFood_select);
+            }
+        });
+
+        mPsych_card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectTag(4, mPsych_image, mPsych_select);
+            }
+        });
+
+        mHealth_card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectTag(5, mHealth_image, mHealth_select);
+            }
+        });
+
+        mBusiness_card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectTag(6, mBusiness_image, mBusiness_select);
             }
         });
 
         mEntertain_card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectTag(5, mEntertain_image, mEntertain_select);
+                selectTag(7, mEntertain_image, mEntertain_select);
             }
         });
 
@@ -127,13 +154,13 @@ public class DiscoverActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (mNumber == 0) {
-                    String error = "Please Select At Least One Category";
+                    String error = "Please Select At Least One Tag";
                     Snackbar sn = Snackbar.make(findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
                     sn.show();
                 } else {
                     String selectedTags = "";
                     for (int i = 0; i < mList.length; i++) {
-                        if (mSelect[i] == 1) {
+                        if (mSelect[i]) {
                             selectedTags += mList[i] + ",";
                         }
                     }
@@ -153,7 +180,7 @@ public class DiscoverActivity extends AppCompatActivity {
 
     public void selectTag(int num, ImageView image, ImageView select) {
         if (mNumber <= 3) {
-            if (mSelect[num] == 0) {
+            if (!mSelect[num]) {
                 if (mNumber == 3) {
                     String error = "You can only choose maximum of 3 tags";
                     Snackbar sn = Snackbar.make(findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
@@ -177,7 +204,7 @@ public class DiscoverActivity extends AppCompatActivity {
                 image.clearColorFilter();
                 mNumber--;
             }
-            mSelect[num] = 1 - mSelect[num]; // 0 -> 1, 1 -> 0
+            mSelect[num] = !mSelect[num]; // 0 -> 1, 1 -> 0
         } else {
             String error = "You can choose maximum 3 tags";
             Snackbar sn = Snackbar.make(findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);

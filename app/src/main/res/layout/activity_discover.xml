@@ -50,7 +50,7 @@
                     style="@style/custom_picker_card"
                     android:id="@+id/technology_picker"
                     android:clickable="true"
-                    android:layout_width="180sp"
+                    android:layout_width="wrap_content"
                     android:layout_height="70sp">
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -91,7 +91,7 @@
                     style="@style/custom_picker_card"
                     android:id="@+id/sport_picker"
                     android:clickable="true"
-                    android:layout_width="180sp"
+                    android:layout_width="wrap_content"
                     android:layout_height="70sp"
                     android:layout_marginLeft="15sp">
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -128,6 +128,48 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </com.google.android.material.card.MaterialCardView>
 
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/custom_picker_card"
+                    android:id="@+id/health_picker"
+                    android:clickable="true"
+                    android:layout_width="wrap_content"
+                    android:layout_marginLeft="15sp"
+                    android:layout_height="70sp">
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:id="@+id/health_picker_image"
+                            android:layout_width="70sp"
+                            android:layout_height="70sp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:src="@drawable/health"/>
+
+                        <ImageView
+                            android:visibility="invisible"
+                            android:id="@+id/health_select"
+                            android:layout_width="30sp"
+                            android:layout_height="30sp"
+                            android:src="@drawable/ic_baseline_done_white_24"
+                            app:layout_constraintBottom_toBottomOf="@+id/health_picker_image"
+                            app:layout_constraintEnd_toEndOf="@+id/health_picker_image"
+                            app:layout_constraintStart_toStartOf="@+id/health_picker_image"
+                            app:layout_constraintTop_toTopOf="@+id/health_picker_image" />
+
+                        <TextView
+                            android:layout_width="110sp"
+                            android:layout_height="70sp"
+                            android:text="@string/hash_health"
+                            android:textStyle="bold"
+                            android:textSize="15sp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/health_picker_image"
+                            android:gravity="center"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+
             </LinearLayout>
 
             <LinearLayout
@@ -140,7 +182,7 @@
                     style="@style/custom_picker_card"
                     android:id="@+id/travel_picker"
                     android:clickable="true"
-                    android:layout_width="180sp"
+                    android:layout_width="wrap_content"
                     android:layout_height="70sp">
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -180,7 +222,7 @@
                     style="@style/custom_picker_card"
                     android:id="@+id/psychology_picker"
                     android:clickable="true"
-                    android:layout_width="210sp"
+                    android:layout_width="wrap_content"
                     android:layout_height="70sp"
                     android:layout_marginLeft="15sp">
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -229,7 +271,7 @@
                     style="@style/custom_picker_card"
                     android:id="@+id/food_picker"
                     android:clickable="true"
-                    android:layout_width="180sp"
+                    android:layout_width="wrap_content"
                     android:layout_height="70sp">
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -269,7 +311,7 @@
                     style="@style/custom_picker_card"
                     android:id="@+id/entertainment_picker"
                     android:clickable="true"
-                    android:layout_width="210sp"
+                    android:layout_width="wrap_content"
                     android:layout_height="70sp"
                     android:layout_marginLeft="15sp">
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -301,6 +343,46 @@
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintStart_toEndOf="@id/entertainment_picker_image"
                             android:textStyle="bold"
+                            android:textSize="15sp"
+                            android:gravity="center"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/custom_picker_card"
+                    android:id="@+id/business_picker"
+                    android:clickable="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="70sp"
+                    android:layout_marginLeft="15sp">
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:id="@+id/business_picker_image"
+                            android:layout_width="70sp"
+                            android:layout_height="70sp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:src="@drawable/business"/>
+
+                        <ImageView
+                            android:id="@+id/business_select"
+                            android:layout_width="30sp"
+                            android:layout_height="30sp"
+                            android:visibility="invisible"
+                            android:src="@drawable/ic_baseline_done_white_24"
+                            app:layout_constraintBottom_toBottomOf="@+id/business_picker_image"
+                            app:layout_constraintEnd_toEndOf="@+id/business_picker_image"
+                            app:layout_constraintStart_toStartOf="@+id/business_picker_image"
+                            app:layout_constraintTop_toTopOf="@+id/business_picker_image" />
+                        <TextView
+                            android:layout_width="110sp"
+                            android:layout_height="70sp"
+                            android:text="@string/hash_business"
+                            android:textStyle="bold"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/business_picker_image"
                             android:textSize="15sp"
                             android:gravity="center"/>
                     </androidx.constraintlayout.widget.ConstraintLayout>
