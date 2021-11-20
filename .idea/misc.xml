@@ -4,17 +4,21 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../../layout/custom_preview.xml" value="0.11574074074074074" />
-        <entry key="../../../../../../../layout/custom_preview.xml" value="0.22447916666666667" />
         <entry key="../../../../layout/custom_preview.xml" value="0.3125" />
         <entry key="../../Library/Android/sdk/platforms/android-30/data/res/layout/simple_list_item_1.xml" value="0.2765625" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.14074074074074075" />
         <entry key="app/src/main/res/drawable/background_bottom_bar.xml" value="0.34629629629629627" />
         <entry key="app/src/main/res/drawable/baseline_visibility_24.xml" value="0.2638888888888889" />
         <entry key="app/src/main/res/drawable/ic_baseline_arrow_back_24.xml" value="0.4421875" />
+        <entry key="app/src/main/res/drawable/ic_baseline_check_24.xml" value="0.29912280701754385" />
         <entry key="app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.3707692307692308" />
+        <entry key="app/src/main/res/drawable/ic_baseline_done_24.xml" value="0.29912280701754385" />
+        <entry key="app/src/main/res/drawable/ic_baseline_done_white_24.xml" value="0.29912280701754385" />
         <entry key="app/src/main/res/drawable/ic_baseline_edit_24.xml" value="0.15185185185185185" />
+        <entry key="app/src/main/res/drawable/ic_baseline_my_location_24.xml" value="0.29912280701754385" />
         <entry key="app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.2638888888888889" />
         <entry key="app/src/main/res/drawable/ic_baseline_share_24.xml" value="0.2638888888888889" />
+        <entry key="app/src/main/res/drawable/ic_baseline_star_24.xml" value="0.29912280701754385" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.2638888888888889" />
         <entry key="app/src/main/res/drawable/ic_outline_check_circle_24.xml" value="0.14074074074074075" />
         <entry key="app/src/main/res/drawable/ic_outline_email_24.xml" value="0.14074074074074075" />
@@ -53,7 +57,6 @@
         <entry key="app/src/main/res/layout/content_map2.xml" value="0.18157894736842106" />
         <entry key="app/src/main/res/layout/dialog_pick_a_picture.xml" value="0.335" />
         <entry key="app/src/main/res/layout/dialog_shake.xml" value="0.5" />
-        <entry key="app/src/main/res/layout/dialog_pick_a_picture.xml" value="0.335" />
         <entry key="app/src/main/res/layout/drawer_header.xml" value="0.1828774062816616" />
         <entry key="app/src/main/res/layout/drawer_layout.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_compose.xml" value="0.3351449275362319" />
@@ -68,20 +71,19 @@
         <entry key="app/src/main/res/layout/fragment_second.xml" value="0.1412280701754386" />
         <entry key="app/src/main/res/layout/fragment_sport.xml" value="0.1752786220871327" />
         <entry key="app/src/main/res/layout/fragment_tab.xml" value="0.1621376811594203" />
-        <entry key="app/src/main/res/layout/layout_bottom_bar.xml" value="0.22260515106371656" />
+        <entry key="app/src/main/res/layout/layout_bottom_bar.xml" value="0.335" />
         <entry key="app/src/main/res/layout/layout_comment.xml" value="0.36041666666666666" />
-        <entry key="app/src/main/res/layout/layout_like_collect_share_sheet.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/layout_like_collect_share_sheet.xml" value="0.37135416666666665" />
         <entry key="app/src/main/res/layout/login_edittext_shape.xml" value="0.14814814814814814" />
         <entry key="app/src/main/res/layout/map_activity.xml" value="0.1" />
         <entry key="app/src/main/res/layout/nav_header.xml" value="0.36041666666666666" />
-        <entry key="app/src/main/res/layout/post_heading.xml" value="0.14882104217010228" />
+        <entry key="app/src/main/res/layout/post_heading.xml" value="0.14705882352941177" />
         <entry key="app/src/main/res/menu/drawer_menu.xml" value="0.335" />
         <entry key="app/src/main/res/menu/edit_menu.xml" value="0.23958333333333334" />
         <entry key="app/src/main/res/menu/nav_menu.xml" value="0.2015625" />
         <entry key="app/src/main/res/menu/search_menu.xml" value="0.22870370370370371" />
         <entry key="app/src/main/res/menu/suggestion_menu.xml" value="0.20092592592592592" />
         <entry key="app/src/main/res/menu/user_profile_page_threedot_menu.xml" value="0.3118279569892473" />
-        <entry key="app/src/main/res/xml/provider_path.xml" value="0.21041666666666667" />
       </map>
     </option>
   </component>
