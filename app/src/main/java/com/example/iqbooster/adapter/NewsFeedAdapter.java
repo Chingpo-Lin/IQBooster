@@ -1,12 +1,18 @@
 package com.example.iqbooster.adapter;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +23,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.iqbooster.ActivityInterface;
+import com.example.iqbooster.BuildConfig;
 import com.example.iqbooster.R;
 import com.example.iqbooster.Screen;
 import com.example.iqbooster.UserProfilePage;
@@ -27,6 +34,7 @@ import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;
 import com.example.iqbooster.getRandom;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,6 +47,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.net.URI;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -57,6 +68,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
         public CircleImageView mCircleImageView; // post_heading_circleImageView
         public TextView mTitle; // post_heading_title
         public TextView mInfo; // post_heading_info
+        public MaterialCardView cardView;
 
         public ImageView mThumbnail;  // card_textwithimg_thumbnail
         public TextView mSubtitle; // card_textwithimg_subtitle
@@ -73,6 +85,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             mCircleImageView = itemView.findViewById(R.id.post_heading_circleImageView);
             mTitle = itemView.findViewById(R.id.post_heading_title);
             mInfo = itemView.findViewById(R.id.post_heading_info);
+            cardView = itemView.findViewById(R.id.card);
 
             mThumbnail = itemView.findViewById(R.id.card_textwithimg_thumbnail);
             mSubtitle = itemView.findViewById(R.id.card_textwithimg_subtitle);
@@ -443,6 +456,72 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
         }
 
         // TODO: implement Share Btn, last edit
+        /*holder.mShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+                // 指定发送内容的类型
+                sendIntent.setType("text/plain");
+                mContext.startActivity(Intent.createChooser(sendIntent, "Share to..."));
+            }
+        });*/
+/*        holder.mShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Drawable drawable=holder.mThumbnail.getDrawable();
+                mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID();
+                Bitmap bitmap=((BitmapDrawable)drawable).getBitmap();
+
+                try {
+                    File file = new File(mContext.getApplicationContext().getExternalCacheDir(), File.separator +"office.jpg");
+                    FileOutputStream fOut = new FileOutputStream(file);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+                    fOut.flush();
+                    fOut.close();
+                    file.setReadable(true, false);
+                    final Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    Uri photoURI = FileProvider.getUriForFile(mContext.getApplicationContext(), BuildConfig.APPLICATION_ID +".provider", file);
+
+                    intent.putExtra(Intent.EXTRA_STREAM, photoURI);
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    intent.setType("image/jpg");
+
+                    mContext.startActivity(Intent.createChooser(intent, "Share image via"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });*/
+
+        holder.mShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bitmap bitmap = getBitMapFromView(holder.cardView);
+                try {
+                    File file = new File(mContext.getApplicationContext().getExternalCacheDir(), File.separator + "office.jpg");
+                    FileOutputStream fOut = new FileOutputStream(file);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+                    fOut.flush();
+                    fOut.close();
+                    file.setReadable(true, false);
+                    Uri photoURI = FileProvider.getUriForFile(mContext.getApplicationContext(), BuildConfig.APPLICATION_ID + ".provider", file);
+                    final Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra(Intent.EXTRA_STREAM, photoURI);
+                    intent.putExtra(Intent.EXTRA_TEXT, "Hey, I found this interesting article on IQBooster. Take a look!");
+                    intent.setType("image/jpg");
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    //mContext.startActivity(Intent.createChooser(intent, "Share the article to"));
+                    mContext.startActivity(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
 
     @Override
@@ -490,5 +569,19 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
 
     public void setActivityInterface(ActivityInterface activityInterface) {
         this.activityInterface = activityInterface;
+    }
+
+    @SuppressLint("ResourceAsColor")
+    private Bitmap getBitMapFromView(View view){
+        Bitmap returnBitMap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(returnBitMap);
+        Drawable bgDrawable = view.getBackground();
+        if(bgDrawable != null){
+            bgDrawable.draw(canvas);
+        } else {
+            canvas.drawColor(android.R.color.white);
+        }
+        view.draw(canvas);
+        return returnBitMap;
     }
 }
