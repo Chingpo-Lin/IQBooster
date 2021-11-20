@@ -61,6 +61,8 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
         public ImageView mThumbnail;  // card_textwithimg_thumbnail
         public TextView mSubtitle; // card_textwithimg_subtitle
         public Chip mFirstChip; // post_heading_tagChip
+        public Chip mSecondChip; // post_heading_tagChip2
+        public Chip mThirdChip; // post_heading_tagChip3
 
         public LikeButton mLikeBtn; // like_collect_share_likeButton
         public TextView mLikeCount; // like_collect_share_likeCount
@@ -77,6 +79,8 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             mThumbnail = itemView.findViewById(R.id.card_textwithimg_thumbnail);
             mSubtitle = itemView.findViewById(R.id.card_textwithimg_subtitle);
             mFirstChip = itemView.findViewById(R.id.post_heading_tagChip);
+            mSecondChip = itemView.findViewById(R.id.post_heading_tagChip2);
+            mThirdChip = itemView.findViewById(R.id.post_heading_tagChip3);
 
             mLikeBtn = itemView.findViewById(R.id.like_collect_share_likeButton);
             mLikeCount = itemView.findViewById(R.id.like_collect_share_likeCount);
@@ -188,6 +192,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
         });
 
         // TODO: update thumbnail if editable
+        holder.mThumbnail.setVisibility(View.GONE);
         try {
             String thumbnailUrl = mValue.get(holder.getAbsoluteAdapterPosition()).getThumbnail_image();
             if (thumbnailUrl != null && !thumbnailUrl.isEmpty()) {
@@ -240,6 +245,9 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
 //            }
 //        });
 
+        holder.mFirstChip.setVisibility(View.GONE);
+        holder.mSecondChip.setVisibility(View.GONE);
+        holder.mThirdChip.setVisibility(View.GONE);
         if (!hideTag) {
             final Tags[] currTags = new Tags[1];
             // TODO: update tags if editable
@@ -248,9 +256,20 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     currTags[0] = snapshot.getValue(Tags.class);
                     ArrayList<String> allTrue = currTags[0].allTrue();
-                    if (!allTrue.isEmpty()) {
+                    if (allTrue.size() >= 1) {
                         holder.mFirstChip.setText("#" + allTrue.get(0));
                         holder.mFirstChip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
+                        holder.mFirstChip.setVisibility(View.VISIBLE);
+                    }
+                    if (allTrue.size() >= 2) {
+                        holder.mSecondChip.setText("#" + allTrue.get(1));
+                        holder.mSecondChip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
+                        holder.mSecondChip.setVisibility(View.VISIBLE);
+                    }
+                    if (allTrue.size() >= 3) {
+                        holder.mThirdChip.setText("#" + allTrue.get(2));
+                        holder.mThirdChip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
+                        holder.mThirdChip.setVisibility(View.VISIBLE);
                     }
                 }
 
@@ -259,8 +278,6 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
 
                 }
             });
-        } else {
-            holder.mFirstChip.setVisibility(View.GONE);
         }
 
         holder.mLikeCount.setText(String.valueOf(mValue.get(holder.getAbsoluteAdapterPosition()).getLike_counts()));
@@ -282,6 +299,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
 
             }
         });
+
 
         // if user is log in
         if (currUser != null) {

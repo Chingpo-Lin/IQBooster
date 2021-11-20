@@ -272,7 +272,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             // 开始效果
             LayoutInflater inflater = this.getLayoutInflater();
-            View dialogView = inflater.inflate(R.layout.dialog_shake, null);
+            View dialogView = inflater.inflate(R.layout.card_textwithimg, null);
 
             final Post[] retPost = new Post[1];
             FirebaseDatabase.getInstance().getReference().child(getResources().getString(R.string.db_posts)).addListenerForSingleValueEvent(new ValueEventListener() {

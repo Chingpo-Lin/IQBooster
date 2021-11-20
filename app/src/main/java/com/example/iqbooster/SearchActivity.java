@@ -457,6 +457,7 @@ public class SearchActivity extends AppCompatActivity {
                 });
 
                 // TODO: update thumbnail if editable
+                holder.mThumbnail.setVisibility(View.GONE);
                 try {
                     String thumbnailUrl = model.getThumbnail_image();
                     if (thumbnailUrl != null && !thumbnailUrl.isEmpty()) {
@@ -502,16 +503,29 @@ public class SearchActivity extends AppCompatActivity {
 //                    }
 //                });
 
-
+                holder.mFirstChip.setVisibility(View.GONE);
+                holder.mSecondChip.setVisibility(View.GONE);
+                holder.mThirdChip.setVisibility(View.GONE);
                 final Tags[] currTags = new Tags[1];
                 tagRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         currTags[0] = snapshot.getValue(Tags.class);
                         ArrayList<String> allTrue = currTags[0].allTrue();
-                        if (!allTrue.isEmpty()) {
+                        if (allTrue.size() >= 1) {
                             holder.mFirstChip.setText("#" + allTrue.get(0));
                             holder.mFirstChip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
+                            holder.mFirstChip.setVisibility(View.VISIBLE);
+                        }
+                        if (allTrue.size() >= 2) {
+                            holder.mSecondChip.setText("#" + allTrue.get(1));
+                            holder.mSecondChip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
+                            holder.mSecondChip.setVisibility(View.VISIBLE);
+                        }
+                        if (allTrue.size() >= 3) {
+                            holder.mThirdChip.setText("#" + allTrue.get(2));
+                            holder.mThirdChip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
+                            holder.mThirdChip.setVisibility(View.VISIBLE);
                         }
                     }
 
@@ -1018,6 +1032,7 @@ public class SearchActivity extends AppCompatActivity {
             });
 
             // TODO: update thumbnail if editable
+            holder.mThumbnail.setVisibility(View.GONE);
             try {
                 String thumbnailUrl = mValue.get(holder.getAbsoluteAdapterPosition()).getThumbnail_image();
                 if (thumbnailUrl != null && !thumbnailUrl.isEmpty()) {
@@ -1063,16 +1078,29 @@ public class SearchActivity extends AppCompatActivity {
 //                    }
 //                });
 
-
+            holder.mFirstChip.setVisibility(View.GONE);
+            holder.mSecondChip.setVisibility(View.GONE);
+            holder.mThirdChip.setVisibility(View.GONE);
             final Tags[] currTags = new Tags[1];
             tagRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     currTags[0] = snapshot.getValue(Tags.class);
                     ArrayList<String> allTrue = currTags[0].allTrue();
-                    if (!allTrue.isEmpty()) {
+                    if (allTrue.size() >= 1) {
                         holder.mFirstChip.setText("#" + allTrue.get(0));
                         holder.mFirstChip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
+                        holder.mFirstChip.setVisibility(View.VISIBLE);
+                    }
+                    if (allTrue.size() >= 2) {
+                        holder.mSecondChip.setText("#" + allTrue.get(1));
+                        holder.mSecondChip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
+                        holder.mSecondChip.setVisibility(View.VISIBLE);
+                    }
+                    if (allTrue.size() >= 3) {
+                        holder.mThirdChip.setText("#" + allTrue.get(2));
+                        holder.mThirdChip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
+                        holder.mThirdChip.setVisibility(View.VISIBLE);
                     }
                 }
 

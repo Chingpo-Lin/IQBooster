@@ -2,6 +2,7 @@ package com.example.iqbooster.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -25,6 +26,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.iqbooster.R;
 import com.example.iqbooster.UserProfilePage;
+import com.example.iqbooster.getRandom;
 import com.example.iqbooster.login.LoginActivity;
 import com.example.iqbooster.model.AdapterPost;
 import com.example.iqbooster.model.AdapterUser;
@@ -213,14 +215,17 @@ public class PostDetail extends Fragment {
                     ArrayList<String> allTrue = currTags.allTrue();
                     if (allTrue.size() >= 1) {
                         mFirstChip.setText("#" + allTrue.get(0));
+                        mFirstChip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
                         mFirstChip.setVisibility(View.VISIBLE);
                     }
                     if (allTrue.size() >= 2) {
                         mSecondChip.setText("#" + allTrue.get(1));
+                        mSecondChip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
                         mSecondChip.setVisibility(View.VISIBLE);
                     }
                     if (allTrue.size() >= 3) {
                         mThirdChip.setText("#" + allTrue.get(2));
+                        mThirdChip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
                         mThirdChip.setVisibility(View.VISIBLE);
                     }
 
