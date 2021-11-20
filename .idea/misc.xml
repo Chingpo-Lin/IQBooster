@@ -39,6 +39,7 @@
         <entry key="app/src/main/res/layout/activity_search.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_set_up_account.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_signup.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_splash.xml" value="0.1640625" />
         <entry key="app/src/main/res/layout/activity_suggestion.xml" value="0.30337078651685395" />
         <entry key="app/src/main/res/layout/activity_user_profile_page.xml" value="0.25" />
         <entry key="app/src/main/res/layout/card_textonly.xml" value="0.20208333333333334" />
