@@ -10,11 +10,12 @@
             android:id="@+id/user_profile_appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+            android:background="@android:color/transparent"
+            android:elevation="0dp"
+            app:elevation="0dp">
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/user_profile_toolbar"
                 android:layout_width="match_parent"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 android:layout_height="?attr/actionBarSize"/>
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -83,6 +84,9 @@
                         android:text="@string/follow" />
 
                     <com.google.android.material.tabs.TabLayout
+                        app:tabSelectedTextColor="@color/purple_500"
+                        app:tabIndicatorColor="@color/purple_500"
+                        app:tabRippleColor="@color/purple_200"
                         android:id="@+id/user_profile_tabLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

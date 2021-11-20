@@ -29,7 +29,7 @@
         android:id="@+id/setup_photo"
         android:layout_width="120sp"
         android:layout_height="120sp"
-        android:layout_marginTop="20sp"
+        android:layout_marginTop="48sp"
         android:src="@drawable/avatar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -92,27 +92,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/select_one_as_your_avatar_or"
-        android:textSize="15sp"
+        android:textSize="6pt"
         android:layout_marginTop="28sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/setup_photo_recommend_1" />
 
+
     <TextView
         android:id="@+id/setup_select_custom_photo_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/upload"
-        android:textSize="15sp"
-        android:textColor="@color/blue"
-        android:clickable="true"
         android:layout_marginTop="28sp"
+        android:clickable="true"
+        android:text="@string/upload"
+        android:textColor="@color/blue"
+        android:textSize="6pt"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintHorizontal_bias="0.05"
         app:layout_constraintStart_toEndOf="@+id/setup_select_text"
         app:layout_constraintTop_toBottomOf="@+id/setup_photo_recommend_1" />
-
 
     <EditText
         android:id="@+id/setup_prefer_name_edit"

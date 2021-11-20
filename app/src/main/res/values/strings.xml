@@ -49,6 +49,8 @@
     <string name="tap_to_choose">Tap to choose your interested areas</string>
     <string name="discover">Discover</string>
     <string name="login_page_secondary_text">Create a profile, follow other users, \nmake your posts, read posts to boost your IQ, and more.</string>
+    <string name="suggestion_title">People to Follow</string>
+    <string name="suggestion_secondary">suggested for you</string>
 
     <!-- database tags -->
     <string name="db_users">users</string>

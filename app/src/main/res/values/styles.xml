@@ -28,4 +28,9 @@
         <item name="android:layout_marginHorizontal">18sp</item>
     </style>
 
+    <style name="custom_chip_choices" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/chip_bg</item>
+        <item name="rippleColor">@color/chip_ripple_color</item>
+    </style>
+
 </resources>
