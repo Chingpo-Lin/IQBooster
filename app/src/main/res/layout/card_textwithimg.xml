@@ -29,13 +29,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16sp">
+            android:padding="22sp">
 
             <TextView
                 android:id="@+id/card_textwithimg_subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16sp"
                 android:text="subtitle"
                 android:textAppearance="?attr/textAppearanceBody2"
                 android:textColor="?android:attr/textColorSecondary"
@@ -45,7 +44,7 @@
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_marginHorizontal="8sp"
+            android:layout_marginHorizontal="12sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
