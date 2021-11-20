@@ -546,7 +546,29 @@ public class PostDetail extends Fragment {
 
             @Override
             protected void onBindViewHolder(@NonNull CommentsViewHolder holder, int position, @NonNull Comment model) {
-                // TODO: load profile page
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                databaseReference
+                        .child(getContext().getResources().getString(R.string.db_users))
+                        .child(model.getAuthorID())
+                        .child(getContext().getResources().getString(R.string.db_profile_image))
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists()) {
+                                    String url = snapshot.getValue(String.class);
+                                    RequestOptions requestoptions = new RequestOptions();
+                                    Glide.with(getContext())
+                                            .load(url)
+                                            .apply(requestoptions.fitCenter())
+                                            .into(holder.mCircleImage);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
                 holder.mUsername.setText(model.getAuthorDisplayName());
                 holder.mInfo.setText(model.getDate());
                 holder.mCommentBody.setText(model.getCommentBody());
@@ -577,6 +599,29 @@ public class PostDetail extends Fragment {
                 replyAdapter = new FirebaseRecyclerAdapter<Comment, CommentsViewHolder>(replyOption) {
                     @Override
                     protected void onBindViewHolder(@NonNull CommentsViewHolder holder, int position, @NonNull Comment model) {
+                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                        databaseReference
+                                .child(getContext().getResources().getString(R.string.db_users))
+                                .child(model.getAuthorID())
+                                .child(getContext().getResources().getString(R.string.db_profile_image))
+                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        if (snapshot.exists()) {
+                                            String url = snapshot.getValue(String.class);
+                                            RequestOptions requestoptions = new RequestOptions();
+                                            Glide.with(getContext())
+                                                    .load(url)
+                                                    .apply(requestoptions.fitCenter())
+                                                    .into(holder.mCircleImage);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
                         holder.mUsername.setText(model.getAuthorDisplayName());
                         holder.mInfo.setText(model.getDate());
                         holder.mCommentBody.setText(model.getCommentBody());

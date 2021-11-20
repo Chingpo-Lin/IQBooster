@@ -22,6 +22,7 @@
             android:hint="Comment"
             android:inputType="text"
             android:maxLines="1"
+            android:imeOptions="actionDone"
             android:layout_marginStart="16sp"
             android:background="@drawable/login_edittext_shape"
             android:layout_width="216sp"
