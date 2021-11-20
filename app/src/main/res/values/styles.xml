@@ -28,4 +28,9 @@
         <item name="android:layout_marginHorizontal">18sp</item>
     </style>
 
+    <style name="startup" parent="Theme.AppCompat.Light.NoActionBar">
+
+
+    </style>
+
 </resources>
