@@ -8,6 +8,7 @@ import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -52,12 +53,8 @@ public class DiscoverActivity extends AppCompatActivity {
     private ImageView mEntertain_image;
     private ImageView mEntertain_select;
 
-    // tech0 -> sport1 -> travel2 -> food3 -> psych4 -> health5 -> business6 -> entertainment7
-    // final String[] mList = getResources().getStringArray(R.array.all_tags);
-    final String[] mList = {"technology", "sport", "travel", "food", "psychology", "health", "business", "entertainment"};
     private boolean[] mSelect;
     private int mNumber;
-    // private float mRadius = 300;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +87,8 @@ public class DiscoverActivity extends AppCompatActivity {
         mBusiness_select = findViewById(R.id.business_select);
 
         mSelect = new boolean[8]; // initial all false
+        // tech0 -> sport1 -> travel2 -> food3 -> psych4 -> health5 -> business6 -> entertainment7
+        final String[] mList = getResources().getStringArray(R.array.all_tags);
         mNumber = 0;
 
         mNextButton = findViewById(R.id.picker_next_button);
@@ -154,7 +153,7 @@ public class DiscoverActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (mNumber == 0) {
-                    String error = "Please Select At Least One Tag";
+                    String error = "please select at least one tag";
                     Snackbar sn = Snackbar.make(findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
                     sn.show();
                 } else {
@@ -168,6 +167,7 @@ public class DiscoverActivity extends AppCompatActivity {
                     if (!selectedTags.isEmpty()) {
                         selectedTags = selectedTags.substring(0, selectedTags.lastIndexOf(","));
                     }
+                    Log.d(TAG, selectedTags);
                     Intent goToSuggestionList = new Intent(getApplicationContext(), SuggestionActivity.class);
                     goToSuggestionList.putExtra(SuggestionActivity.EXTRA, selectedTags);
                     startActivity(goToSuggestionList);
@@ -196,7 +196,7 @@ public class DiscoverActivity extends AppCompatActivity {
                     return;
                 } else {
                     select.setVisibility(View.VISIBLE);
-                    image.setColorFilter(Color.RED, PorterDuff.Mode.LIGHTEN);
+                    image.setColorFilter(Color.parseColor("#FF6200EE"), PorterDuff.Mode.LIGHTEN);
                     mNumber++;
                 }
             } else {
