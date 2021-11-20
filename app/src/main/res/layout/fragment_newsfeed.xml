@@ -18,6 +18,9 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.tabs.TabLayout
+                app:tabSelectedTextColor="@color/purple_500"
+                app:tabIndicatorColor="@color/purple_500"
+                app:tabRippleColor="@color/purple_200"
                 android:id="@+id/newsfeed_tabLayout"
                 android:layout_width="match_parent"
                 app:tabMode="scrollable"

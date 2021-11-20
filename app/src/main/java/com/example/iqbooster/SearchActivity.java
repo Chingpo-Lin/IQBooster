@@ -4,11 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -215,7 +213,7 @@ public class SearchActivity extends AppCompatActivity {
             chip.setText(tagsName);
             chip.setClickable(true);
             chip.setCloseIconVisible(true);
-            chip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
+            chip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
             chipGroup.addView(chip);
             chip.setOnCloseIconClickListener(new View.OnClickListener() {
                 @Override
@@ -457,6 +455,7 @@ public class SearchActivity extends AppCompatActivity {
                 });
 
                 // TODO: update thumbnail if editable
+                holder.mThumbnail.setVisibility(View.GONE);
                 try {
                     String thumbnailUrl = model.getThumbnail_image();
                     if (thumbnailUrl != null && !thumbnailUrl.isEmpty()) {
@@ -502,16 +501,29 @@ public class SearchActivity extends AppCompatActivity {
 //                    }
 //                });
 
-
+                holder.mFirstChip.setVisibility(View.GONE);
+                holder.mSecondChip.setVisibility(View.GONE);
+                holder.mThirdChip.setVisibility(View.GONE);
                 final Tags[] currTags = new Tags[1];
-                tagRef.addValueEventListener(new ValueEventListener() {
+                tagRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         currTags[0] = snapshot.getValue(Tags.class);
                         ArrayList<String> allTrue = currTags[0].allTrue();
-                        if (!allTrue.isEmpty()) {
+                        if (allTrue.size() >= 1) {
                             holder.mFirstChip.setText("#" + allTrue.get(0));
-                            holder.mFirstChip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
+                            holder.mFirstChip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
+                            holder.mFirstChip.setVisibility(View.VISIBLE);
+                        }
+                        if (allTrue.size() >= 2) {
+                            holder.mSecondChip.setText("#" + allTrue.get(1));
+                            holder.mSecondChip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
+                            holder.mSecondChip.setVisibility(View.VISIBLE);
+                        }
+                        if (allTrue.size() >= 3) {
+                            holder.mThirdChip.setText("#" + allTrue.get(2));
+                            holder.mThirdChip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
+                            holder.mThirdChip.setVisibility(View.VISIBLE);
                         }
                     }
 
@@ -530,7 +542,7 @@ public class SearchActivity extends AppCompatActivity {
                             final long likeCount = snapshot.getValue(Long.class);
                             if (holder.getAbsoluteAdapterPosition() != -1) {
                                 model.setLike_counts(likeCount);
-                                holder.mLikeCount.setText(String.valueOf(model.getLike_counts()));
+                                holder.mLikeCount.setText(helperClass.formatLikeCount(model.getLike_counts()));
 //                        notifyItemChanged(holder.getAbsoluteAdapterPosition());
                             }
                         }
@@ -1018,6 +1030,7 @@ public class SearchActivity extends AppCompatActivity {
             });
 
             // TODO: update thumbnail if editable
+            holder.mThumbnail.setVisibility(View.GONE);
             try {
                 String thumbnailUrl = mValue.get(holder.getAbsoluteAdapterPosition()).getThumbnail_image();
                 if (thumbnailUrl != null && !thumbnailUrl.isEmpty()) {
@@ -1063,16 +1076,29 @@ public class SearchActivity extends AppCompatActivity {
 //                    }
 //                });
 
-
+            holder.mFirstChip.setVisibility(View.GONE);
+            holder.mSecondChip.setVisibility(View.GONE);
+            holder.mThirdChip.setVisibility(View.GONE);
             final Tags[] currTags = new Tags[1];
-            tagRef.addValueEventListener(new ValueEventListener() {
+            tagRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     currTags[0] = snapshot.getValue(Tags.class);
                     ArrayList<String> allTrue = currTags[0].allTrue();
-                    if (!allTrue.isEmpty()) {
+                    if (allTrue.size() >= 1) {
                         holder.mFirstChip.setText("#" + allTrue.get(0));
-                        holder.mFirstChip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
+                        holder.mFirstChip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
+                        holder.mFirstChip.setVisibility(View.VISIBLE);
+                    }
+                    if (allTrue.size() >= 2) {
+                        holder.mSecondChip.setText("#" + allTrue.get(1));
+                        holder.mSecondChip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
+                        holder.mSecondChip.setVisibility(View.VISIBLE);
+                    }
+                    if (allTrue.size() >= 3) {
+                        holder.mThirdChip.setText("#" + allTrue.get(2));
+                        holder.mThirdChip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
+                        holder.mThirdChip.setVisibility(View.VISIBLE);
                     }
                 }
 
@@ -1091,7 +1117,7 @@ public class SearchActivity extends AppCompatActivity {
                         final long likeCount = snapshot.getValue(Long.class);
                         if (holder.getAbsoluteAdapterPosition() != -1) {
                             mValue.get(holder.getAbsoluteAdapterPosition()).setLike_counts(likeCount);
-                            holder.mLikeCount.setText(String.valueOf(mValue.get(holder.getAbsoluteAdapterPosition()).getLike_counts()));
+                            holder.mLikeCount.setText(helperClass.formatLikeCount(mValue.get(holder.getAbsoluteAdapterPosition()).getLike_counts()));
 //                        notifyItemChanged(holder.getAbsoluteAdapterPosition());
                         }
                     }

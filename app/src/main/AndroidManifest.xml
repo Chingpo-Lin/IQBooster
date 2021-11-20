@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -39,11 +40,21 @@
             android:name=".UserProfilePage"
             android:exported="false" />
         <activity
+            android:name=".SplashActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+        <activity
             android:name=".login.SetUpAccountActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".login.ForgetActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".login.LoginActivity"
             android:exported="false" />
@@ -64,7 +75,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-    </activity>
+        </activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"

@@ -45,7 +45,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 
-import java.util.HashMap;
 
 
 public class SetUpAccountActivity extends AppCompatActivity {
@@ -297,9 +296,9 @@ public class SetUpAccountActivity extends AppCompatActivity {
                 mFirstRecommend.setPadding(mpl, mpl, mpl, mpl);
                 mSecondRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
                 mThirdRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
-                mainPhoto.setImageResource(R.drawable.food);
+                mainPhoto.setImageResource(R.drawable.pig);
                 profileUri = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/drawable/" +
-                        R.drawable.food);
+                        R.drawable.pig);
                 mcurrentSelect = 1;
             }
         } else if (value.equals("rec2")) {
@@ -314,9 +313,9 @@ public class SetUpAccountActivity extends AppCompatActivity {
                 mFirstRecommend.setPadding(mnpl, mnpl, mnpl, mnpl);
                 mSecondRecommend.setPadding(mpl,mpl,mpl,mpl);
                 mThirdRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
-                mainPhoto.setImageResource(R.drawable.sport);
+                mainPhoto.setImageResource(R.drawable.lion);
                 profileUri = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/drawable/" +
-                        R.drawable.sport);
+                        R.drawable.lion);
                 mcurrentSelect = 2;
             }
         } else {
@@ -330,9 +329,9 @@ public class SetUpAccountActivity extends AppCompatActivity {
                 mFirstRecommend.setPadding(mnpl, mnpl, mnpl, mnpl);
                 mSecondRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
                 mThirdRecommend.setPadding(mpl,mpl,mpl,mpl);
-                mainPhoto.setImageResource(R.drawable.entertainment);
+                mainPhoto.setImageResource(R.drawable.panda);
                 profileUri = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/drawable/" +
-                        R.drawable.entertainment);
+                        R.drawable.panda);
                 mcurrentSelect = 3;
             }
         }

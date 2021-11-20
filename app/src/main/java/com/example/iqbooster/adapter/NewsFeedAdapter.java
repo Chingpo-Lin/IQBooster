@@ -33,7 +33,7 @@ import com.example.iqbooster.model.AdapterPost;
 import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;
-import com.example.iqbooster.getRandom;
+import com.example.iqbooster.helperClass;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
@@ -73,6 +73,8 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
         public ImageView mThumbnail;  // card_textwithimg_thumbnail
         public TextView mSubtitle; // card_textwithimg_subtitle
         public Chip mFirstChip; // post_heading_tagChip
+        public Chip mSecondChip; // post_heading_tagChip2
+        public Chip mThirdChip; // post_heading_tagChip3
 
         public LikeButton mLikeBtn; // like_collect_share_likeButton
         public TextView mLikeCount; // like_collect_share_likeCount
@@ -90,6 +92,8 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             mThumbnail = itemView.findViewById(R.id.card_textwithimg_thumbnail);
             mSubtitle = itemView.findViewById(R.id.card_textwithimg_subtitle);
             mFirstChip = itemView.findViewById(R.id.post_heading_tagChip);
+            mSecondChip = itemView.findViewById(R.id.post_heading_tagChip2);
+            mThirdChip = itemView.findViewById(R.id.post_heading_tagChip3);
 
             mLikeBtn = itemView.findViewById(R.id.like_collect_share_likeButton);
             mLikeCount = itemView.findViewById(R.id.like_collect_share_likeCount);
@@ -201,6 +205,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
         });
 
         // TODO: update thumbnail if editable
+        holder.mThumbnail.setVisibility(View.GONE);
         try {
             String thumbnailUrl = mValue.get(holder.getAbsoluteAdapterPosition()).getThumbnail_image();
             if (thumbnailUrl != null && !thumbnailUrl.isEmpty()) {
@@ -253,16 +258,31 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
 //            }
 //        });
 
+        holder.mFirstChip.setVisibility(View.GONE);
+        holder.mSecondChip.setVisibility(View.GONE);
+        holder.mThirdChip.setVisibility(View.GONE);
         if (!hideTag) {
             final Tags[] currTags = new Tags[1];
-            tagRef.addValueEventListener(new ValueEventListener() {
+            // TODO: update tags if editable
+            tagRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     currTags[0] = snapshot.getValue(Tags.class);
                     ArrayList<String> allTrue = currTags[0].allTrue();
-                    if (!allTrue.isEmpty()) {
+                    if (allTrue.size() >= 1) {
                         holder.mFirstChip.setText("#" + allTrue.get(0));
-                        holder.mFirstChip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
+                        holder.mFirstChip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
+                        holder.mFirstChip.setVisibility(View.VISIBLE);
+                    }
+                    if (allTrue.size() >= 2) {
+                        holder.mSecondChip.setText("#" + allTrue.get(1));
+                        holder.mSecondChip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
+                        holder.mSecondChip.setVisibility(View.VISIBLE);
+                    }
+                    if (allTrue.size() >= 3) {
+                        holder.mThirdChip.setText("#" + allTrue.get(2));
+                        holder.mThirdChip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
+                        holder.mThirdChip.setVisibility(View.VISIBLE);
                     }
                 }
 
@@ -271,8 +291,6 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
 
                 }
             });
-        } else {
-            holder.mFirstChip.setVisibility(View.GONE);
         }
 
         holder.mLikeCount.setText(String.valueOf(mValue.get(holder.getAbsoluteAdapterPosition()).getLike_counts()));
@@ -283,7 +301,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                     final long likeCount = snapshot.getValue(Long.class);
                     if (holder.getAbsoluteAdapterPosition() != -1) {
                         mValue.get(holder.getAbsoluteAdapterPosition()).setLike_counts(likeCount);
-                        holder.mLikeCount.setText(String.valueOf(mValue.get(holder.getAbsoluteAdapterPosition()).getLike_counts()));
+                        holder.mLikeCount.setText(helperClass.formatLikeCount(mValue.get(holder.getAbsoluteAdapterPosition()).getLike_counts()));
 //                        notifyItemChanged(holder.getAbsoluteAdapterPosition());
                     }
                 }
@@ -454,47 +472,6 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                 }
             });
         }
-
-        // TODO: implement Share Btn, last edit
-        /*holder.mShare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
-                // 指定发送内容的类型
-                sendIntent.setType("text/plain");
-                mContext.startActivity(Intent.createChooser(sendIntent, "Share to..."));
-            }
-        });*/
-/*        holder.mShare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Drawable drawable=holder.mThumbnail.getDrawable();
-                mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID();
-                Bitmap bitmap=((BitmapDrawable)drawable).getBitmap();
-
-                try {
-                    File file = new File(mContext.getApplicationContext().getExternalCacheDir(), File.separator +"office.jpg");
-                    FileOutputStream fOut = new FileOutputStream(file);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-                    fOut.flush();
-                    fOut.close();
-                    file.setReadable(true, false);
-                    final Intent intent = new Intent(android.content.Intent.ACTION_SEND);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    Uri photoURI = FileProvider.getUriForFile(mContext.getApplicationContext(), BuildConfig.APPLICATION_ID +".provider", file);
-
-                    intent.putExtra(Intent.EXTRA_STREAM, photoURI);
-                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    intent.setType("image/jpg");
-
-                    mContext.startActivity(Intent.createChooser(intent, "Share image via"));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });*/
 
         holder.mShare.setOnClickListener(new View.OnClickListener() {
             @Override

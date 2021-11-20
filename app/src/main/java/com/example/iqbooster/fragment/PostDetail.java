@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -32,6 +33,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.iqbooster.BuildConfig;
 import com.example.iqbooster.R;
+import com.example.iqbooster.UserProfilePage;
+import com.example.iqbooster.helperClass;
 import com.example.iqbooster.login.LoginActivity;
 import com.example.iqbooster.model.AdapterPost;
 import com.example.iqbooster.model.AdapterUser;
@@ -224,14 +227,17 @@ public class PostDetail extends Fragment {
                     ArrayList<String> allTrue = currTags.allTrue();
                     if (allTrue.size() >= 1) {
                         mFirstChip.setText("#" + allTrue.get(0));
+                        mFirstChip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
                         mFirstChip.setVisibility(View.VISIBLE);
                     }
                     if (allTrue.size() >= 2) {
                         mSecondChip.setText("#" + allTrue.get(1));
+                        mSecondChip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
                         mSecondChip.setVisibility(View.VISIBLE);
                     }
                     if (allTrue.size() >= 3) {
                         mThirdChip.setText("#" + allTrue.get(2));
+                        mThirdChip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
                         mThirdChip.setVisibility(View.VISIBLE);
                     }
 
@@ -261,6 +267,16 @@ public class PostDetail extends Fragment {
                                 }
                             });
 
+                    mProfileImage.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent profilePageIntent = new Intent(getContext(), UserProfilePage.class);
+                            profilePageIntent.putExtra(UserProfilePage.EXTRA, currPost.getAuthor());
+                            profilePageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            getContext().startActivity(profilePageIntent);
+                        }
+                    });
+
                     try {
                         String thumbnailUrl = currPost.getThumbnail_image();
                         if (thumbnailUrl != null && !thumbnailUrl.isEmpty()) {
@@ -282,11 +298,12 @@ public class PostDetail extends Fragment {
 
                 }
             });
+
             currPostRef.child(getContext().getResources().getString(R.string.db_like_counts)).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     Long newCount = snapshot.getValue(Long.class);
-                    mLikeCountTextView.setText(String.valueOf(newCount));
+                    mLikeCountTextView.setText(helperClass.formatLikeCount(newCount));
                 }
 
                 @Override
@@ -445,6 +462,7 @@ public class PostDetail extends Fragment {
                     }
                 });
             }
+
             mShareBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
