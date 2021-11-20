@@ -26,7 +26,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.iqbooster.R;
 import com.example.iqbooster.UserProfilePage;
-import com.example.iqbooster.getRandom;
+import com.example.iqbooster.helperClass;
 import com.example.iqbooster.login.LoginActivity;
 import com.example.iqbooster.model.AdapterPost;
 import com.example.iqbooster.model.AdapterUser;
@@ -215,17 +215,17 @@ public class PostDetail extends Fragment {
                     ArrayList<String> allTrue = currTags.allTrue();
                     if (allTrue.size() >= 1) {
                         mFirstChip.setText("#" + allTrue.get(0));
-                        mFirstChip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
+                        mFirstChip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
                         mFirstChip.setVisibility(View.VISIBLE);
                     }
                     if (allTrue.size() >= 2) {
                         mSecondChip.setText("#" + allTrue.get(1));
-                        mSecondChip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
+                        mSecondChip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
                         mSecondChip.setVisibility(View.VISIBLE);
                     }
                     if (allTrue.size() >= 3) {
                         mThirdChip.setText("#" + allTrue.get(2));
-                        mThirdChip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
+                        mThirdChip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
                         mThirdChip.setVisibility(View.VISIBLE);
                     }
 
@@ -291,7 +291,7 @@ public class PostDetail extends Fragment {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     Long newCount = snapshot.getValue(Long.class);
-                    mLikeCountTextView.setText(String.valueOf(newCount));
+                    mLikeCountTextView.setText(helperClass.formatLikeCount(newCount));
                 }
 
                 @Override

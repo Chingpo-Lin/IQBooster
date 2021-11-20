@@ -26,7 +26,7 @@ import com.example.iqbooster.model.AdapterPost;
 import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;
-import com.example.iqbooster.getRandom;
+import com.example.iqbooster.helperClass;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -258,17 +258,17 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                     ArrayList<String> allTrue = currTags[0].allTrue();
                     if (allTrue.size() >= 1) {
                         holder.mFirstChip.setText("#" + allTrue.get(0));
-                        holder.mFirstChip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
+                        holder.mFirstChip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
                         holder.mFirstChip.setVisibility(View.VISIBLE);
                     }
                     if (allTrue.size() >= 2) {
                         holder.mSecondChip.setText("#" + allTrue.get(1));
-                        holder.mSecondChip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
+                        holder.mSecondChip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
                         holder.mSecondChip.setVisibility(View.VISIBLE);
                     }
                     if (allTrue.size() >= 3) {
                         holder.mThirdChip.setText("#" + allTrue.get(2));
-                        holder.mThirdChip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
+                        holder.mThirdChip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
                         holder.mThirdChip.setVisibility(View.VISIBLE);
                     }
                 }
@@ -288,7 +288,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                     final long likeCount = snapshot.getValue(Long.class);
                     if (holder.getAbsoluteAdapterPosition() != -1) {
                         mValue.get(holder.getAbsoluteAdapterPosition()).setLike_counts(likeCount);
-                        holder.mLikeCount.setText(String.valueOf(mValue.get(holder.getAbsoluteAdapterPosition()).getLike_counts()));
+                        holder.mLikeCount.setText(helperClass.formatLikeCount(mValue.get(holder.getAbsoluteAdapterPosition()).getLike_counts()));
 //                        notifyItemChanged(holder.getAbsoluteAdapterPosition());
                     }
                 }

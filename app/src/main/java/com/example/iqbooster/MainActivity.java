@@ -37,7 +37,6 @@ import com.example.iqbooster.fragment.MyCollect;
 import com.example.iqbooster.fragment.MyPost;
 import com.example.iqbooster.fragment.NewsFeed;
 import com.example.iqbooster.fragment.PostDetail;
-import com.example.iqbooster.login.DiscoverActivity;
 import com.example.iqbooster.login.LoginActivity;
 import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.Post;
@@ -401,17 +400,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             ArrayList<String> allTrue = currTags[0].allTrue();
                             if (allTrue.size() >= 1) {
                                 mFirstChip.setText("#" + allTrue.get(0));
-                                mFirstChip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
+                                mFirstChip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
                                 mFirstChip.setVisibility(View.VISIBLE);
                             }
                             if (allTrue.size() >= 2) {
                                 mSecondChip.setText("#" + allTrue.get(1));
-                                mSecondChip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
+                                mSecondChip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
                                 mSecondChip.setVisibility(View.VISIBLE);
                             }
                             if (allTrue.size() >= 3) {
                                 mThirdChip.setText("#" + allTrue.get(2));
-                                mThirdChip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
+                                mThirdChip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
                                 mThirdChip.setVisibility(View.VISIBLE);
                             }
                         }
@@ -431,7 +430,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             final long likeCount = snapshot.getValue(Long.class);
-                            mLikeCount.setText(String.valueOf(likeCount));
+                            mLikeCount.setText(helperClass.formatLikeCount(likeCount));
                         }
 
                         @Override
