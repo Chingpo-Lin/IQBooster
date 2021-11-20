@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
     android:orientation="vertical">
 
     <TextView
@@ -35,10 +34,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="30sp"
-        android:paddingTop="30sp"
+        android:paddingTop="68sp"
         android:layout_marginHorizontal="16sp"
         android:layout_marginTop="30sp"
-        android:background="@color/purple_700"
         android:scrollbars="none">
 
         <LinearLayout
@@ -72,7 +70,7 @@
                             android:id="@+id/technology_select"
                             android:layout_width="30sp"
                             android:layout_height="30sp"
-                            android:src="@drawable/ic_baseline_check_24"
+                            android:src="@drawable/ic_baseline_done_white_24"
                             app:layout_constraintBottom_toBottomOf="@+id/technology_picker_image"
                             app:layout_constraintEnd_toEndOf="@+id/technology_picker_image"
                             app:layout_constraintStart_toStartOf="@+id/technology_picker_image"
@@ -113,7 +111,7 @@
                             android:layout_width="30sp"
                             android:layout_height="30sp"
                             android:visibility="invisible"
-                            android:src="@drawable/ic_baseline_check_24"
+                            android:src="@drawable/ic_baseline_done_white_24"
                             app:layout_constraintBottom_toBottomOf="@+id/sport_picker_image"
                             app:layout_constraintEnd_toEndOf="@+id/sport_picker_image"
                             app:layout_constraintStart_toStartOf="@+id/sport_picker_image"
@@ -160,7 +158,7 @@
                             android:layout_width="30sp"
                             android:layout_height="30sp"
                             android:visibility="invisible"
-                            android:src="@drawable/ic_baseline_check_24"
+                            android:src="@drawable/ic_baseline_done_white_24"
                             app:layout_constraintBottom_toBottomOf="@+id/travel_picker_image"
                             app:layout_constraintEnd_toEndOf="@+id/travel_picker_image"
                             app:layout_constraintStart_toStartOf="@+id/travel_picker_image"
@@ -200,7 +198,7 @@
                             android:layout_width="30sp"
                             android:layout_height="30sp"
                             android:visibility="invisible"
-                            android:src="@drawable/ic_baseline_check_24"
+                            android:src="@drawable/ic_baseline_done_white_24"
                             app:layout_constraintBottom_toBottomOf="@+id/psychology_picker_image"
                             app:layout_constraintEnd_toEndOf="@+id/psychology_picker_image"
                             app:layout_constraintStart_toStartOf="@+id/psychology_picker_image"
@@ -247,7 +245,7 @@
                             android:layout_width="30sp"
                             android:layout_height="30sp"
                             android:visibility="invisible"
-                            android:src="@drawable/ic_baseline_check_24"
+                            android:src="@drawable/ic_baseline_done_white_24"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="@+id/food_picker_image"
                             app:layout_constraintStart_toStartOf="@+id/food_picker_image"
@@ -286,7 +284,7 @@
                             android:id="@+id/entertainment_select"
                             android:layout_width="30sp"
                             android:layout_height="30sp"
-                            android:src="@drawable/ic_baseline_check_24"
+                            android:src="@drawable/ic_baseline_done_white_24"
                             android:visibility="invisible"
                             app:layout_constraintBottom_toBottomOf="@+id/entertainment_picker_image"
                             app:layout_constraintEnd_toEndOf="@+id/entertainment_picker_image"
