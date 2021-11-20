@@ -135,12 +135,18 @@ public class healthFragment extends Fragment {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
+                Post currPost = snapshot.getValue(Post.class);
+                if (currPost.getTags().isHealth()) {
+                    mAdapter.changeChild(currPost.getRandomID(), currPost);
+                }
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
+                Post currPost = snapshot.getValue(Post.class);
+                if (currPost.getTags().isHealth()) {
+                    mAdapter.remove(currPost.getRandomID());
+                }
             }
 
             @Override

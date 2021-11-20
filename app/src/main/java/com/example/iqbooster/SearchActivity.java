@@ -33,6 +33,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.iqbooster.adapter.NewsFeedAdapter;
 import com.example.iqbooster.adapter.UserSuggestionAdapter;
 import com.example.iqbooster.fragment.PostDetail;
+import com.example.iqbooster.login.LoginActivity;
 import com.example.iqbooster.model.AdapterPost;
 import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.Post;
@@ -503,7 +504,7 @@ public class SearchActivity extends AppCompatActivity {
 
 
                 final Tags[] currTags = new Tags[1];
-                tagRef.addValueEventListener(new ValueEventListener() {
+                tagRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         currTags[0] = snapshot.getValue(Tags.class);
@@ -659,11 +660,17 @@ public class SearchActivity extends AppCompatActivity {
                         @Override
                         public void liked(LikeButton likeButton) {
                             holder.mLikeBtn.setLiked(false);
+                            Intent LoginInActivityIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                            LoginInActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            getApplicationContext().startActivity(LoginInActivityIntent);
                         }
 
                         @Override
                         public void unLiked(LikeButton likeButton) {
                             holder.mLikeBtn.setLiked(false);
+                            Intent LoginInActivityIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                            LoginInActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            getApplicationContext().startActivity(LoginInActivityIntent);
                         }
                     });
                 }
@@ -834,7 +841,7 @@ public class SearchActivity extends AppCompatActivity {
                 }
             });
             holder.mNameTextView.setText(mValue.get(holder.getAbsoluteAdapterPosition()).getName());
-            holder.mUsernameTextView.setText(mValue.get(holder.getAbsoluteAdapterPosition()).getUsername());
+            holder.mUsernameTextView.setText("@" + mValue.get(holder.getAbsoluteAdapterPosition()).getUsername());
 
             DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child(getApplicationContext().getResources().getString(R.string.db_users));
 
@@ -1058,7 +1065,7 @@ public class SearchActivity extends AppCompatActivity {
 
 
             final Tags[] currTags = new Tags[1];
-            tagRef.addValueEventListener(new ValueEventListener() {
+            tagRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     currTags[0] = snapshot.getValue(Tags.class);
@@ -1214,11 +1221,17 @@ public class SearchActivity extends AppCompatActivity {
                     @Override
                     public void liked(LikeButton likeButton) {
                         holder.mLikeBtn.setLiked(false);
+                        Intent LoginInActivityIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                        LoginInActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getApplicationContext().startActivity(LoginInActivityIntent);
                     }
 
                     @Override
                     public void unLiked(LikeButton likeButton) {
                         holder.mLikeBtn.setLiked(false);
+                        Intent LoginInActivityIntent = new Intent(mContext, LoginActivity.class);
+                        LoginInActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getApplicationContext().startActivity(LoginInActivityIntent);
                     }
                 });
             }

@@ -135,12 +135,18 @@ public class psychologyFragment extends Fragment {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
+                Post currPost = snapshot.getValue(Post.class);
+                if (currPost.getTags().isPsychology()) {
+                    mAdapter.changeChild(currPost.getRandomID(), currPost);
+                }
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
+                Post currPost = snapshot.getValue(Post.class);
+                if (currPost.getTags().isPsychology()) {
+                    mAdapter.remove(currPost.getRandomID());
+                }
             }
 
             @Override

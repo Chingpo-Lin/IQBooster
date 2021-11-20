@@ -17,14 +17,14 @@ public class User {
     public String my_posts;
     public String following_users;
     public String followers_users;
-    public String profile_image_url;
+    public String profile_image;
     public String like_posts;
     public String collect_posts;
 
     public User() {
     }
 
-    public User(String username, String name, String email, String uid, String location, String my_posts, String following_users, String followers_users, String profile_image_url) {
+    public User(String username, String name, String email, String uid, String location, String my_posts, String following_users, String followers_users, String profile_image) {
         this.username = username;
         this.name = name;
         this.email = email;
@@ -33,7 +33,7 @@ public class User {
         this.my_posts = my_posts;
         this.following_users = following_users;
         this.followers_users = followers_users;
-        this.profile_image_url = profile_image_url;
+        this.profile_image = profile_image;
         this.like_posts = "";
         this.collect_posts = "";
     }
@@ -102,12 +102,12 @@ public class User {
         this.followers_users = followers_users;
     }
 
-    public String getProfile_image_url() {
-        return profile_image_url;
+    public String getProfile_image() {
+        return profile_image;
     }
 
-    public void setProfile_image_url(String profile_image_url) {
-        this.profile_image_url = profile_image_url;
+    public void setProfile_image(String profile_image) {
+        this.profile_image = profile_image;
     }
 
     public String getLike_posts() {

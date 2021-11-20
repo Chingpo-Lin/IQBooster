@@ -25,6 +25,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 
 import com.example.iqbooster.R;
+import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.User;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.Continuation;
@@ -35,8 +36,11 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
@@ -136,56 +140,17 @@ public class SetUpAccountActivity extends AppCompatActivity {
                 if (!TextUtils.isEmpty(userinput_username.trim()) && !TextUtils.isEmpty(useriput_prefreame.trim())
                         && !TextUtils.isEmpty(userinput_location.trim())) {
                     FirebaseUser mUser = mAuth.getCurrentUser();
-                    if (mUser != null) {
-                        mContinueBtn.setVisibility(View.INVISIBLE);
-                        mProgressBar.setVisibility(View.VISIBLE);
-                        UserProfileChangeRequest addusername = new UserProfileChangeRequest.Builder()
-                                .setDisplayName(useriput_prefreame).build();
-                        mUser.updateProfile(addusername).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    if (profileUri != null) {
-                                        final StorageReference fileRef = firebaseStorageProfileImageRef
-                                                .child(mAuth.getCurrentUser().getUid() + ".jpg");
-                                        uploadTask = fileRef.putFile(profileUri);
-                                        uploadTask.continueWithTask(new Continuation() {
-                                            @Override
-                                            public Object then(@NonNull Task task) throws Exception {
-                                                if (!task.isSuccessful()) {
-                                                    throw task.getException();
-                                                }
-                                                return fileRef.getDownloadUrl();
-                                            }
-                                        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Uri> task) {
-                                                if (task.isSuccessful()) {
-                                                    Uri downloadUrl = task.getResult();
-                                                    profileLink = downloadUrl.toString();
-                                                } else {
-                                                    mContinueBtn.setVisibility(View.VISIBLE);
-                                                    mProgressBar.setVisibility(View.INVISIBLE);
-                                                }
-                                            }
-                                        }).addOnCompleteListener(new OnCompleteListener() {
-                                            @Override
-                                            public void onComplete(@NonNull Task task) {
-                                                if (task.isSuccessful()) {
-                                                    addUserInfotoDatabase(userinput_username, useriput_prefreame, userinput_location);
-                                                    goToTagPickerActivity();
-                                                } else {
-                                                    mContinueBtn.setVisibility(View.VISIBLE);
-                                                    mProgressBar.setVisibility(View.INVISIBLE);
-                                                }
-                                            }
-                                        });
-                                    }
-                                } else {
-                                    mContinueBtn.setVisibility(View.VISIBLE);
-                                    mProgressBar.setVisibility(View.INVISIBLE);
-                                    String errormsg = task.getException().getMessage();
-                                    Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Error: " + errormsg, Snackbar.LENGTH_LONG);
+
+                    FirebaseDatabase.getInstance().getReference().child(getResources().getString(R.string.db_users)).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            boolean conflictFound = false;
+                            for (DataSnapshot ds : snapshot.getChildren()) {
+                                AdapterUser dsUser = ds.getValue(AdapterUser.class);
+                                if (dsUser.getUsername().equalsIgnoreCase(userinput_username)) {
+                                    // username conflict
+                                    conflictFound = true;
+                                    Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "This username has been taken", Snackbar.LENGTH_LONG);
                                     View view = sn.getView();
                                     TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
                                     tv.setTextColor(Color.parseColor("#FFD700"));
@@ -195,10 +160,79 @@ public class SetUpAccountActivity extends AppCompatActivity {
                                         tv.setGravity(Gravity.CENTER_HORIZONTAL);
                                     }
                                     sn.show();
+                                    break;
                                 }
                             }
-                        });
-                    }
+                            if (mUser != null && !conflictFound) {
+                                mContinueBtn.setVisibility(View.INVISIBLE);
+                                mProgressBar.setVisibility(View.VISIBLE);
+                                UserProfileChangeRequest addUsernameRequest = new UserProfileChangeRequest.Builder()
+                                        .setDisplayName(useriput_prefreame).build();
+                                mUser.updateProfile(addUsernameRequest).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            if (profileUri != null) {
+                                                final StorageReference fileRef = firebaseStorageProfileImageRef
+                                                        .child(mAuth.getCurrentUser().getUid() + ".jpg");
+                                                uploadTask = fileRef.putFile(profileUri);
+                                                uploadTask.continueWithTask(new Continuation() {
+                                                    @Override
+                                                    public Object then(@NonNull Task task) throws Exception {
+                                                        if (!task.isSuccessful()) {
+                                                            throw task.getException();
+                                                        }
+                                                        return fileRef.getDownloadUrl();
+                                                    }
+                                                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Uri> task) {
+                                                        if (task.isSuccessful()) {
+                                                            Uri downloadUrl = task.getResult();
+                                                            profileLink = downloadUrl.toString();
+                                                        } else {
+                                                            mContinueBtn.setVisibility(View.VISIBLE);
+                                                            mProgressBar.setVisibility(View.INVISIBLE);
+                                                        }
+                                                    }
+                                                }).addOnCompleteListener(new OnCompleteListener() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task task) {
+                                                        if (task.isSuccessful()) {
+                                                            addUserInfotoDatabase(userinput_username, useriput_prefreame, userinput_location);
+                                                            goToTagPickerActivity();
+                                                        } else {
+                                                            mContinueBtn.setVisibility(View.VISIBLE);
+                                                            mProgressBar.setVisibility(View.INVISIBLE);
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        } else {
+                                            mContinueBtn.setVisibility(View.VISIBLE);
+                                            mProgressBar.setVisibility(View.INVISIBLE);
+                                            String errormsg = task.getException().getMessage();
+                                            Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Error: " + errormsg, Snackbar.LENGTH_LONG);
+                                            View view = sn.getView();
+                                            TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
+                                            tv.setTextColor(Color.parseColor("#FFD700"));
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                                                tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                                            } else {
+                                                tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                                            }
+                                            sn.show();
+                                        }
+                                    }
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
                 }
             }
         });

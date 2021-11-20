@@ -90,8 +90,6 @@
                 app:singleLine="true"
                 />
 
-
-
         </HorizontalScrollView>
 
         <!--        <com.google.android.material.tabs.TabLayout-->

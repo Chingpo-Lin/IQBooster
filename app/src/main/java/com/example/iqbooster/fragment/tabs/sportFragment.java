@@ -134,12 +134,18 @@ public class sportFragment extends Fragment {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
+                Post currPost = snapshot.getValue(Post.class);
+                if (currPost.getTags().isSport()) {
+                    mAdapter.changeChild(currPost.getRandomID(), currPost);
+                }
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
+                Post currPost = snapshot.getValue(Post.class);
+                if (currPost.getTags().isSport()) {
+                    mAdapter.remove(currPost.getRandomID());
+                }
             }
 
             @Override

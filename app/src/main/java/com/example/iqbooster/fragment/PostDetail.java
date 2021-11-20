@@ -1,6 +1,7 @@
 package com.example.iqbooster.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,7 +24,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.iqbooster.R;
+import com.example.iqbooster.UserProfilePage;
+import com.example.iqbooster.login.LoginActivity;
 import com.example.iqbooster.model.AdapterPost;
+import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.Comment;
 import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;
@@ -54,7 +58,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class PostDetail extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -92,7 +95,6 @@ public class PostDetail extends Fragment {
 
     View v;
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -107,7 +109,6 @@ public class PostDetail extends Fragment {
      * @param param1 Parameter 1.
      * @return A new instance of fragment PostDetail.
      */
-    // TODO: Rename and change types and number of parameters
     public static PostDetail newInstance(String param1) {
         PostDetail fragment = new PostDetail();
         Bundle args = new Bundle();
@@ -187,7 +188,27 @@ public class PostDetail extends Fragment {
                     Post currPost = snapshot.getValue(Post.class);
                     mHeadingTitle.setText(currPost.getTitle());
                     postAuthor = currPost.getAuthor();
-                    mInfo.setText(currPost.getAuthor());
+                    DatabaseReference postUserRef = FirebaseDatabase.getInstance().getReference()
+                            .child(getContext().getResources().getString(R.string.db_users))
+                            .child(postAuthor);
+                    postUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            try {
+                                AdapterUser postUser = snapshot.getValue(AdapterUser.class);
+                                String info = postUser.getName()  + " \u22C5 " + currPost.getDate();
+                                mInfo.setText(info);
+                            } catch (Exception e) {
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
                     Tags currTags = currPost.getTags();
                     ArrayList<String> allTrue = currTags.allTrue();
                     if (allTrue.size() >= 1) {
@@ -229,6 +250,16 @@ public class PostDetail extends Fragment {
                                 }
                             });
 
+                    mProfileImage.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent profilePageIntent = new Intent(getContext(), UserProfilePage.class);
+                            profilePageIntent.putExtra(UserProfilePage.EXTRA, currPost.getAuthor());
+                            profilePageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            getContext().startActivity(profilePageIntent);
+                        }
+                    });
+
                     try {
                         String thumbnailUrl = currPost.getThumbnail_image();
                         if (thumbnailUrl != null && !thumbnailUrl.isEmpty()) {
@@ -250,6 +281,7 @@ public class PostDetail extends Fragment {
 
                 }
             });
+
             currPostRef.child(getContext().getResources().getString(R.string.db_like_counts)).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -392,6 +424,24 @@ public class PostDetail extends Fragment {
                             mCommentEditText.requestFocus();
                             showKeyboard();
                         }
+                    }
+                });
+            } else {
+                mLikeButton.setOnLikeListener(new OnLikeListener() {
+                    @Override
+                    public void liked(LikeButton likeButton) {
+                        mLikeButton.setLiked(false);
+                        Intent LoginInActivityIntent = new Intent(getContext(), LoginActivity.class);
+                        LoginInActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getContext().startActivity(LoginInActivityIntent);
+                    }
+
+                    @Override
+                    public void unLiked(LikeButton likeButton) {
+                        mLikeButton.setLiked(false);
+                        Intent LoginInActivityIntent = new Intent(getContext(), LoginActivity.class);
+                        LoginInActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getContext().startActivity(LoginInActivityIntent);
                     }
                 });
             }

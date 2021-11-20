@@ -21,6 +21,7 @@ import com.example.iqbooster.R;
 import com.example.iqbooster.Screen;
 import com.example.iqbooster.UserProfilePage;
 import com.example.iqbooster.fragment.PostDetail;
+import com.example.iqbooster.login.LoginActivity;
 import com.example.iqbooster.model.AdapterPost;
 import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.Post;
@@ -241,7 +242,8 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
 
         if (!hideTag) {
             final Tags[] currTags = new Tags[1];
-            tagRef.addValueEventListener(new ValueEventListener() {
+            // TODO: update tags if editable
+            tagRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     currTags[0] = snapshot.getValue(Tags.class);
@@ -426,11 +428,17 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                 @Override
                 public void liked(LikeButton likeButton) {
                     holder.mLikeBtn.setLiked(false);
+                    Intent LoginInActivityIntent = new Intent(mContext, LoginActivity.class);
+                    LoginInActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContext.startActivity(LoginInActivityIntent);
                 }
 
                 @Override
                 public void unLiked(LikeButton likeButton) {
                     holder.mLikeBtn.setLiked(false);
+                    Intent LoginInActivityIntent = new Intent(mContext, LoginActivity.class);
+                    LoginInActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContext.startActivity(LoginInActivityIntent);
                 }
             });
         }
@@ -457,12 +465,29 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
         notifyItemInserted(0);
     }
 
-    public void notifyIndexChanged(Post post, int at) {
-        this.mValue.set(at, post);
-        notifyItemChanged(at);
+    public void remove(String RID) {
+        int idx = 0;
+        for (Post post : mValue) {
+            if (post.getRandomID().equalsIgnoreCase(RID)) {
+                break;
+            }
+            ++idx;
+        }
+        mValue.remove(idx);
+        notifyItemRemoved(idx);
     }
 
-    // TODO: remove maybe?
+    public void changeChild(String RID, Post changedPost) {
+        int idx = 0;
+        for (Post post : mValue) {
+            if (post.getRandomID().equalsIgnoreCase(RID)) {
+                break;
+            }
+            ++idx;
+        }
+        mValue.set(idx, changedPost);
+        notifyItemChanged(idx);
+    }
 
     public void setActivityInterface(ActivityInterface activityInterface) {
         this.activityInterface = activityInterface;
