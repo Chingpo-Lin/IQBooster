@@ -1,12 +1,18 @@
 package com.example.iqbooster.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,10 +26,12 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.iqbooster.BuildConfig;
 import com.example.iqbooster.R;
 import com.example.iqbooster.UserProfilePage;
 import com.example.iqbooster.helperClass;
@@ -46,6 +54,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -77,6 +87,7 @@ public class PostDetail extends Fragment {
 
     private RecyclerView mAllCommentsRecyclerView;
     private LinearLayoutManager mLayoutManager;
+    private LinearLayout mLinearLayout;
 
     public EditText mCommentEditText;
     private LikeButton mLikeButton;
@@ -176,6 +187,7 @@ public class PostDetail extends Fragment {
             mBody = v.findViewById(R.id.postdetail_article_body);
 
             mAllCommentsRecyclerView = v.findViewById(R.id.postdetail_comments_recyclerView);
+            mLinearLayout = v.findViewById(R.id.detail_linear_layout);
 
             mCommentEditText = v.findViewById(R.id.layout_bottomBar_EditText);
             mLikeButton = v.findViewById(R.id.like_collect_share_likeButton);
@@ -450,6 +462,33 @@ public class PostDetail extends Fragment {
                     }
                 });
             }
+
+            mShareBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bitmap bitmap = getBitMapFromView(mLinearLayout);
+                    try {
+                        File file = new File(getContext().getExternalCacheDir(), File.separator + "office.jpg");
+                        FileOutputStream fOut = new FileOutputStream(file);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+                        fOut.flush();
+                        fOut.close();
+                        file.setReadable(true, false);
+                        Uri photoURI = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", file);
+                        final Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra(Intent.EXTRA_STREAM, photoURI);
+                        intent.putExtra(Intent.EXTRA_TEXT, "Hey, I found this interesting article on IQBooster. Take a look!");
+                        intent.setType("image/jpg");
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        //mContext.startActivity(Intent.createChooser(intent, "Share the article to"));
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
         }
 
         return v;
@@ -592,5 +631,19 @@ public class PostDetail extends Fragment {
             mReplyCommentsRecyclerView = itemView.findViewById(R.id.comment_reply_comment_recyclerView);
             mDivider = itemView.findViewById(R.id.comment_commentdivider);
         }
+    }
+
+    @SuppressLint("ResourceAsColor")
+    private Bitmap getBitMapFromView(View view){
+        Bitmap returnBitMap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(returnBitMap);
+        Drawable bgDrawable = view.getBackground();
+        if(bgDrawable != null){
+            bgDrawable.draw(canvas);
+        } else {
+            canvas.drawColor(android.R.color.white);
+        }
+        view.draw(canvas);
+        return returnBitMap;
     }
 }
