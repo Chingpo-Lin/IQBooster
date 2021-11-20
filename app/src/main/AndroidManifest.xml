@@ -47,13 +47,14 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity
             android:name=".login.SetUpAccountActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".login.ForgetActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".login.LoginActivity"
             android:exported="false" />
