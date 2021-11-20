@@ -11,10 +11,11 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ImageView;
 
+import com.example.iqbooster.MainActivity;
 import com.example.iqbooster.R;
 
 public class SplashActivity extends AppCompatActivity {
-    private static int SPLASH_SCREEN_TIMEOUT = 2000;
+    private static int SPLASH_SCREEN_TIMEOUT = 3000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,19 +26,20 @@ public class SplashActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_splash);
 
-        //Animation fadeOut = new AlphaAnimation(1, 0);
-        //fadeOut.setInterpolator(new AccelerateInterpolator());
-        //fadeOut.setStartOffset(500);
-        //fadeOut.setDuration(1800);
+        Animation fadeOut = new AlphaAnimation(1, 0);
+        fadeOut.setInterpolator(new AccelerateInterpolator());
+        fadeOut.setStartOffset(500);
+        fadeOut.setDuration(SPLASH_SCREEN_TIMEOUT);
 
-        //ImageView imageView = findViewById(R.id.open_page);
+        ImageView imageView = findViewById(R.id.icon);
 
-        //imageView.setAnimation(fadeOut);
+        // fade out
+        imageView.setAnimation(fadeOut);
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             }
