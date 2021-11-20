@@ -1,4 +1,4 @@
-package com.example.iqbooster.login;
+package com.example.iqbooster;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,9 +10,6 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ImageView;
-
-import com.example.iqbooster.MainActivity;
-import com.example.iqbooster.R;
 
 public class SplashActivity extends AppCompatActivity {
     private static int SPLASH_SCREEN_TIMEOUT = 3000;
