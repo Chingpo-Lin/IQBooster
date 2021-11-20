@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -14,9 +16,11 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -25,6 +29,7 @@ import com.example.iqbooster.fragment.MyPost;
 import com.example.iqbooster.fragment.tabs.userPageFollowersFragment;
 import com.example.iqbooster.fragment.tabs.userPageFollowingFragment;
 import com.example.iqbooster.model.AdapterUser;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,7 +48,7 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
 
     public static final String EXTRA = "USER_UID";
 
-    private Toolbar mToolbar;
+    private MaterialToolbar mToolbar;
 
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
@@ -54,8 +59,11 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
     private TextView mUserName;
     private TextView mUserLocation;
     private MaterialButton mFollowBtn;
+    private MaterialButton mFollowBtnToolBar;
+    private NestedScrollView mScrollView;
 
     private String currPageUID;
+    private String currPageUserDisplayName;
 
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
@@ -63,6 +71,8 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
     private MyPost myPost;
     private com.example.iqbooster.fragment.tabs.userPageFollowersFragment userPageFollowersFragment;
     private com.example.iqbooster.fragment.tabs.userPageFollowingFragment userPageFollowingFragment;
+
+    private static final String TAG = "UserProfilePage";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +108,8 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
         mUserName = findViewById(R.id.user_profile_username);
         mUserLocation = findViewById(R.id.user_profile_location);
         mFollowBtn = findViewById(R.id.user_profile_followBtn);
+        mFollowBtnToolBar = findViewById(R.id.user_profile_toolbar_followBtn);
+        mScrollView = findViewById(R.id.user_profile_scrollView);
 
         mTabLayout = findViewById(R.id.user_profile_tabLayout);
         mViewPager = findViewById(R.id.user_profile_viewPager);
@@ -112,6 +124,7 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
         userPageFollowingFragment = userPageFollowingFragment.newInstance(intentUID);
 
         mTabLayout.setupWithViewPager(mViewPager);
+        mTabLayout.setNestedScrollingEnabled(false);
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), 0);
 
@@ -126,6 +139,7 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 AdapterUser currUser = snapshot.getValue(AdapterUser.class);
                 mDisplayName.setText(currUser.getName());
+                currPageUserDisplayName = mDisplayName.getText().toString();
                 mUserName.setText("@"+currUser.getUsername());
                 try {
                     mUserLocation.setText(currUser.getLocation());
@@ -150,6 +164,26 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
         });
 
         getSupportActionBar().setTitle("");
+        final boolean[] hasTitle = {false};
+        mScrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged() {
+                Log.d(TAG, "y:" + mScrollView.getScrollY());
+                if (!hasTitle[0] && mScrollView.getScrollY() >= 400) {
+                    getSupportActionBar().setTitle(currPageUserDisplayName);
+                    if (mAuth.getCurrentUser() != null && !mAuth.getUid().equalsIgnoreCase(intentUID)) {
+                        mFollowBtnToolBar.setVisibility(View.VISIBLE);
+                    }
+                    hasTitle[0] = true;
+                } else if (mScrollView.getScrollY() < 400 && hasTitle[0]) {
+                    getSupportActionBar().setTitle("");
+                    if (mAuth.getCurrentUser() != null && !mAuth.getUid().equalsIgnoreCase(intentUID)) {
+                        mFollowBtnToolBar.setVisibility(View.INVISIBLE);
+                    }
+                    hasTitle[0] = false;
+                }
+            }
+        });
 
         if (mAuth.getCurrentUser() != null && !mAuth.getUid().equalsIgnoreCase(intentUID)) {
             mFollowBtn.setVisibility(View.VISIBLE);
@@ -163,6 +197,9 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
                     for (DataSnapshot ds : snapshot.getChildren()) {
                         AdapterUser dsUser = ds.getValue(AdapterUser.class);
                         if (dsUser.getUid().equalsIgnoreCase(intentUID)) {
+//                            mFollowBtnToolBar.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_baseline_done_white_24, 0,0,0);
+                            mFollowBtnToolBar.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_baseline_done_white_24));
+                            mFollowBtnToolBar.setContentDescription(getResources().getString(R.string.following));
                             mFollowBtn.setText(getResources().getString(R.string.following));
                         }
                     }
@@ -207,6 +244,8 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
 
                     if (mb.getText().toString().equalsIgnoreCase(getResources().getString(R.string.follow))) {
                         mb.setText(getResources().getString(R.string.following));
+                        mFollowBtnToolBar.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_baseline_done_white_24));
+                        mFollowBtnToolBar.setContentDescription(getResources().getString(R.string.following));
                         if (intentUserProfile[0] != null) {
                             followingRef.child(intentUID).setValue(intentUserProfile[0]);
                         }
@@ -214,7 +253,34 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
                             otherFollowerRef.child(mAuth.getUid()).setValue(myProfile[0]);
                         }
                     } else if (mb.getText().toString().equalsIgnoreCase(getResources().getString(R.string.following))) {
+                        mFollowBtnToolBar.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.outline_add_24));
+
+                        mFollowBtnToolBar.setContentDescription(getResources().getString(R.string.follow));
                         mb.setText(getResources().getString(R.string.follow));
+                        followingRef.child(intentUID).removeValue();
+                        otherFollowerRef.child(mAuth.getUid()).removeValue();
+                    }
+                }
+            });
+
+            mFollowBtnToolBar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MaterialButton mb = (MaterialButton) v;
+                    if (mb.getContentDescription() == getResources().getString(R.string.follow)) {
+                        mFollowBtn.setText(getResources().getString(R.string.following));
+                        mb.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_baseline_done_white_24));
+                        mb.setContentDescription(getResources().getString(R.string.following));
+                        if (intentUserProfile[0] != null) {
+                            followingRef.child(intentUID).setValue(intentUserProfile[0]);
+                        }
+                        if (myProfile[0] != null) {
+                            otherFollowerRef.child(mAuth.getUid()).setValue(myProfile[0]);
+                        }
+                    } else if (mb.getContentDescription() == getResources().getString(R.string.following)) {
+                        mFollowBtn.setText(getResources().getString(R.string.follow));
+                        mb.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.outline_add_24));
+                        mb.setContentDescription(getResources().getString(R.string.follow));
                         followingRef.child(intentUID).removeValue();
                         otherFollowerRef.child(mAuth.getUid()).removeValue();
                     }

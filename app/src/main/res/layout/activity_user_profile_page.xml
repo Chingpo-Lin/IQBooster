@@ -13,10 +13,26 @@
             android:background="@android:color/transparent"
             android:elevation="0dp"
             app:elevation="0dp">
-            <androidx.appcompat.widget.Toolbar
+            <com.google.android.material.appbar.MaterialToolbar
+                app:titleCentered="true"
                 android:id="@+id/user_profile_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"/>
+                android:layout_height="?attr/actionBarSize">
+
+                <com.google.android.material.button.MaterialButton
+                    android:visibility="invisible"
+                    android:id="@+id/user_profile_toolbar_followBtn"
+                    style="@style/Widget.MaterialComponents.Button.Icon"
+                    app:iconPadding="0dp"
+                    app:iconGravity="textStart"
+                    app:icon="@drawable/add_icon"
+                    android:contentDescription="@string/follow"
+                    android:layout_width="48sp"
+                    android:layout_height="48sp"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="8sp" />
+
+            </com.google.android.material.appbar.MaterialToolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
         <FrameLayout
@@ -26,14 +42,16 @@
             android:layout_height="match_parent">
 
             <androidx.core.widget.NestedScrollView
+                android:id="@+id/user_profile_scrollView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbars="vertical"
+                android:scrollbars="none"
+                android:descendantFocusability="blocksDescendants"
                 android:fillViewport="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <de.hdodenhof.circleimageview.CircleImageView
@@ -115,7 +133,7 @@
                     <androidx.viewpager.widget.ViewPager
                         android:id="@+id/user_profile_viewPager"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="680sp"
                         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"></androidx.viewpager.widget.ViewPager>
 
                 </LinearLayout>

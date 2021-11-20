@@ -25,6 +25,7 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.core.widget.NestedScrollView
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_below="@id/suggestion_appbar"
             android:scrollbars="vertical"
             android:layout_width="match_parent"
