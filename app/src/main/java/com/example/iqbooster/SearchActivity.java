@@ -3,13 +3,19 @@ package com.example.iqbooster;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -53,6 +59,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -687,7 +695,31 @@ public class SearchActivity extends AppCompatActivity {
                     });
                 }
 
-                // TODO: implement Share Btn, last edit
+                holder.mShare.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Bitmap bitmap = getBitMapFromView(holder.cardView);
+                        try {
+                            File file = new File(getApplicationContext().getExternalCacheDir(), File.separator + "office.jpg");
+                            FileOutputStream fOut = new FileOutputStream(file);
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+                            fOut.flush();
+                            fOut.close();
+                            file.setReadable(true, false);
+                            Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), BuildConfig.APPLICATION_ID + ".provider", file);
+                            final Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.putExtra(Intent.EXTRA_STREAM, photoURI);
+                            intent.putExtra(Intent.EXTRA_TEXT, "Hey, I found this interesting article on IQBooster. Take a look!");
+                            intent.setType("image/jpg");
+                            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                            //mContext.startActivity(Intent.createChooser(intent, "Share the article to"));
+                            startActivity(intent);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
             }
 
             @NonNull
@@ -1262,7 +1294,31 @@ public class SearchActivity extends AppCompatActivity {
                 });
             }
 
-            // TODO: implement Share Btn, last edit
+            holder.mShare.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bitmap bitmap = getBitMapFromView(holder.cardView);
+                    try {
+                        File file = new File(mContext.getApplicationContext().getExternalCacheDir(), File.separator + "office.jpg");
+                        FileOutputStream fOut = new FileOutputStream(file);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+                        fOut.flush();
+                        fOut.close();
+                        file.setReadable(true, false);
+                        Uri photoURI = FileProvider.getUriForFile(mContext.getApplicationContext(), BuildConfig.APPLICATION_ID + ".provider", file);
+                        final Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra(Intent.EXTRA_STREAM, photoURI);
+                        intent.putExtra(Intent.EXTRA_TEXT, "Hey, I found this interesting article on IQBooster. Take a look!");
+                        intent.setType("image/jpg");
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        //mContext.startActivity(Intent.createChooser(intent, "Share the article to"));
+                        mContext.startActivity(intent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
 
         @NonNull
@@ -1282,6 +1338,20 @@ public class SearchActivity extends AppCompatActivity {
             this.mValue = posts;
             notifyDataSetChanged();
         }
+    }
+
+    @SuppressLint("ResourceAsColor")
+    private Bitmap getBitMapFromView(View view){
+        Bitmap returnBitMap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(returnBitMap);
+        Drawable bgDrawable = view.getBackground();
+        if(bgDrawable != null){
+            bgDrawable.draw(canvas);
+        } else {
+            canvas.drawColor(android.R.color.white);
+        }
+        view.draw(canvas);
+        return returnBitMap;
     }
 
     @Override
