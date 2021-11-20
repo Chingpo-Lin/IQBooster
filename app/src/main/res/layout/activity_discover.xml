@@ -33,10 +33,8 @@
         android:id="@+id/horizontalView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="30sp"
-        android:paddingTop="68sp"
         android:layout_marginHorizontal="16sp"
-        android:layout_marginTop="30sp"
+        android:layout_marginTop="68sp"
         android:scrollbars="none">
 
         <LinearLayout
@@ -49,6 +47,7 @@
                 android:layout_marginLeft="10sp"
                 android:orientation="horizontal">
                 <com.google.android.material.card.MaterialCardView
+                    style="@style/custom_picker_card"
                     android:id="@+id/technology_picker"
                     android:clickable="true"
                     android:layout_width="180sp"
@@ -89,6 +88,7 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
+                    style="@style/custom_picker_card"
                     android:id="@+id/sport_picker"
                     android:clickable="true"
                     android:layout_width="180sp"
@@ -137,6 +137,7 @@
                 android:layout_marginTop="10sp"
                 android:orientation="horizontal">
                 <com.google.android.material.card.MaterialCardView
+                    style="@style/custom_picker_card"
                     android:id="@+id/travel_picker"
                     android:clickable="true"
                     android:layout_width="180sp"
@@ -176,9 +177,10 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
+                    style="@style/custom_picker_card"
                     android:id="@+id/psychology_picker"
                     android:clickable="true"
-                    android:layout_width="180sp"
+                    android:layout_width="210sp"
                     android:layout_height="70sp"
                     android:layout_marginLeft="15sp">
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -204,7 +206,7 @@
                             app:layout_constraintStart_toStartOf="@+id/psychology_picker_image"
                             app:layout_constraintTop_toTopOf="@+id/psychology_picker_image" />
                         <TextView
-                            android:layout_width="110sp"
+                            android:layout_width="130sp"
                             android:layout_height="70sp"
                             android:text="@string/hash_psychology"
                             app:layout_constraintTop_toTopOf="parent"
@@ -224,6 +226,7 @@
                 android:layout_marginTop="10sp"
                 android:orientation="horizontal">
                 <com.google.android.material.card.MaterialCardView
+                    style="@style/custom_picker_card"
                     android:id="@+id/food_picker"
                     android:clickable="true"
                     android:layout_width="180sp"
@@ -263,9 +266,10 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
+                    style="@style/custom_picker_card"
                     android:id="@+id/entertainment_picker"
                     android:clickable="true"
-                    android:layout_width="180sp"
+                    android:layout_width="210sp"
                     android:layout_height="70sp"
                     android:layout_marginLeft="15sp">
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -291,7 +295,7 @@
                             app:layout_constraintStart_toStartOf="@+id/entertainment_picker_image"
                             app:layout_constraintTop_toTopOf="@+id/entertainment_picker_image" />
                         <TextView
-                            android:layout_width="110sp"
+                            android:layout_width="140sp"
                             android:layout_height="70sp"
                             android:text="@string/hash_entertainment"
                             app:layout_constraintTop_toTopOf="parent"
@@ -312,9 +316,8 @@
         android:layout_width="match_parent"
         style="@style/custom_bottom"
         android:background="@drawable/roundedbutton_style"
-        android:layout_marginBottom="5dp"
         android:layout_gravity="center"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="100dp"
         android:text="@string/next" />
 
 </LinearLayout>

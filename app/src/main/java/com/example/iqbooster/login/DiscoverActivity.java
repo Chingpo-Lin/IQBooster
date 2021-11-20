@@ -5,11 +5,15 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 
+import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.os.Bundle;
 
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -46,6 +50,7 @@ public class DiscoverActivity extends AppCompatActivity {
     private final String[] mList = {"technology", "sport", "travel", "psychology", "food", "entertainment"};
     private int[] mSelect;
     private int mNumber;
+    private float mRadius = 300;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +75,6 @@ public class DiscoverActivity extends AppCompatActivity {
         mPsych_select = findViewById(R.id.psychology_select);
         mFood_select = findViewById(R.id.food_select);
         mEntertain_select = findViewById(R.id.entertainment_select);
-
-
 
         mSelect = new int[6];
         mNumber = 0;
@@ -125,21 +128,21 @@ public class DiscoverActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (mNumber == 0) {
                     String error = "Please Select At Least One Category";
-                    Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Error: " + error, Snackbar.LENGTH_LONG);
+                    Snackbar sn = Snackbar.make(findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
                     sn.show();
                 } else {
-                    String seletedCategory = "";
+                    String selectedTags = "";
                     for (int i = 0; i < mList.length; i++) {
                         if (mSelect[i] == 1) {
-                            seletedCategory += mList[i] + ",";
+                            selectedTags += mList[i] + ",";
                         }
                     }
 
-                    if (!seletedCategory.isEmpty()) {
-                        seletedCategory = seletedCategory.substring(0, seletedCategory.lastIndexOf(","));
+                    if (!selectedTags.isEmpty()) {
+                        selectedTags = selectedTags.substring(0, selectedTags.lastIndexOf(","));
                     }
                     Intent goToSuggestionList = new Intent(getApplicationContext(), SuggestionActivity.class);
-                    goToSuggestionList.putExtra(SuggestionActivity.EXTRA, seletedCategory);
+                    goToSuggestionList.putExtra(SuggestionActivity.EXTRA, selectedTags);
                     startActivity(goToSuggestionList);
                     finish();
                 }
@@ -152,25 +155,40 @@ public class DiscoverActivity extends AppCompatActivity {
         if (mNumber <= 3) {
             if (mSelect[num] == 0) {
                 if (mNumber == 3) {
-                    String error = "Error: You can choose maximum 3 categories";
+                    String error = "You can only choose maximum of 3 tags";
                     Snackbar sn = Snackbar.make(findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
+                    View view = sn.getView();
+                    TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
+                    tv.setTextColor(Color.parseColor("#FFD700"));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                        tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                    } else {
+                        tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                    }
                     sn.show();
+                    return;
                 } else {
                     select.setVisibility(View.VISIBLE);
                     image.setColorFilter(Color.RED, PorterDuff.Mode.LIGHTEN);
-                    image.setBackgroundResource(R.drawable.select_rounded);
                     mNumber++;
                 }
             } else {
-                image.setBackgroundResource(0);
                 select.setVisibility(View.INVISIBLE);
                 image.clearColorFilter();
                 mNumber--;
             }
             mSelect[num] = 1 - mSelect[num]; // 0 -> 1, 1 -> 0
         } else {
-            String error = "Error: You can choose maximum 3 categories";
+            String error = "You can choose maximum 3 tags";
             Snackbar sn = Snackbar.make(findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
+            View view = sn.getView();
+            TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
+            tv.setTextColor(Color.parseColor("#FFD700"));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            } else {
+                tv.setGravity(Gravity.CENTER_HORIZONTAL);
+            }
             sn.show();
         }
     }

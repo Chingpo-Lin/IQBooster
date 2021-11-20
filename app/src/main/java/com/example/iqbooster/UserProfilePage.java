@@ -4,11 +4,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -67,6 +71,17 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
 
         mToolbar = findViewById(R.id.user_profile_toolbar);
         setSupportActionBar(mToolbar);
+
+        final Drawable upArrow = ResourcesCompat.getDrawable(getResources(), R.drawable.abc_ic_ab_back_material ,null);
+        upArrow.setColorFilter(Color.parseColor("#212121"), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+
+        Drawable overflowIcon = mToolbar.getOverflowIcon();
+        if (overflowIcon != null) {
+            Drawable newIcon = overflowIcon.mutate();
+            newIcon.setColorFilter(Color.parseColor("#212121"), PorterDuff.Mode.MULTIPLY);
+            mToolbar.setOverflowIcon(newIcon);
+        }
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
