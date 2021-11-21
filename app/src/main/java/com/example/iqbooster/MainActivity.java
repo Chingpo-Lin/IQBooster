@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,6 +44,7 @@ import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -62,6 +64,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ActivityInterface, SensorEventListener {
 
     private static final String TAG = "MainActivity: ";
+    private static final String BUILD_VERSION = "Current Build Version: 1.2.124";
 
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
@@ -220,6 +223,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             });
         }
+        mUsername.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  BUILD_VERSION, Snackbar.LENGTH_LONG);
+                View view = sn.getView();
+                TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
+                tv.setTextColor(Color.parseColor("#FFD700"));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                } else {
+                    tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                }
+                sn.show();
+                return true;
+            }
+        });
         super.onStart();
     }
 
