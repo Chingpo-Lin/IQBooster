@@ -21,7 +21,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -128,7 +127,7 @@ public class userPageFollowingFragment extends Fragment {
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
                 AdapterUser currUser = snapshot.getValue(AdapterUser.class);
-                mAdapter.remove(currUser.getUid());
+                mAdapter.removeChild(currUser.getUid());
             }
 
             @Override

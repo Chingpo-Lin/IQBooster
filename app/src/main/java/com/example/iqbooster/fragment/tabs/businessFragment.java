@@ -17,14 +17,12 @@ import com.example.iqbooster.R;
 import com.example.iqbooster.Screen;
 import com.example.iqbooster.adapter.NewsFeedAdapter;
 import com.example.iqbooster.model.Post;
-import com.example.iqbooster.model.Tags;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -145,7 +143,7 @@ public class businessFragment extends Fragment {
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
                 Post currPost = snapshot.getValue(Post.class);
                 if (currPost.getTags().isBusiness()) {
-                    mAdapter.remove(currPost.getRandomID());
+                    mAdapter.removeChild(currPost.getRandomID());
                 }
             }
 

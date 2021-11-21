@@ -74,6 +74,7 @@ public class SuggestionActivity extends AppCompatActivity {
         mUsersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                potentialUsers.clear();
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     AdapterUser currUser = ds.getValue(AdapterUser.class);
                     Log.d(TAG, "checking user: " + currUser.getUid());

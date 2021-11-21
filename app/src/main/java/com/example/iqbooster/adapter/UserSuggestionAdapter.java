@@ -171,14 +171,21 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
 
     public void updateList(ArrayList<AdapterUser> newList) {
         this.mValue = newList;
+        notifyDataSetChanged();
     }
 
     public void push_back(AdapterUser adapterUser) {
+        String newUserID = adapterUser.getUid();
+        for (AdapterUser f_user : mValue) {
+            if (f_user.getUid().equalsIgnoreCase(newUserID)) {
+                return;
+            }
+        }
         this.mValue.add(adapterUser);
         notifyItemInserted(this.mValue.size()-1);
     }
 
-    public void remove(String UID) {
+    public void removeChild(String UID) {
         int idx = 0;
         for (AdapterUser user : mValue) {
             if (user.getUid().equalsIgnoreCase(UID)) {
@@ -186,7 +193,8 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
             }
             ++idx;
         }
-        mValue.remove(idx);
+        if (idx == mValue.size()) return;
+        this.mValue.remove(idx);
         notifyItemRemoved(idx);
     }
 
@@ -198,7 +206,8 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
             }
             ++idx;
         }
-        mValue.set(idx, changedUser);
+        if (idx == this.mValue.size()) return;
+        this.mValue.set(idx, changedUser);
         notifyItemChanged(idx);
     }
 }

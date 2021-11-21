@@ -508,19 +508,26 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
 
     public void updateList(ArrayList<Post> posts) {
         this.mValue = posts;
+        notifyDataSetChanged();
+    }
+
+    public void clearList() {
+        this.mValue.clear();
+        notifyDataSetChanged();
     }
 
     public void push_back(Post post) {
+        String newPostID = post.getRandomID();
+        for (Post f_post : mValue) {
+            if (f_post.getRandomID().equalsIgnoreCase(newPostID)) {
+                return;
+            }
+        }
         this.mValue.add(post);
         notifyItemInserted(mValue.size()-1);
     }
 
-    public void push_front(Post post) {
-        this.mValue.add(0, post);
-        notifyItemInserted(0);
-    }
-
-    public void remove(String RID) {
+    public void removeChild(String RID) {
         int idx = 0;
         for (Post post : mValue) {
             if (post.getRandomID().equalsIgnoreCase(RID)) {
@@ -528,6 +535,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             }
             ++idx;
         }
+        if (idx == mValue.size()) return;
         mValue.remove(idx);
         notifyItemRemoved(idx);
     }
@@ -540,6 +548,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             }
             ++idx;
         }
+        if (idx == mValue.size()) return;
         mValue.set(idx, changedPost);
         notifyItemChanged(idx);
     }
