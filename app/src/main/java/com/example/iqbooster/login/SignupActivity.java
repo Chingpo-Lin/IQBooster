@@ -21,7 +21,6 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.iqbooster.MainActivity;
 import com.example.iqbooster.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -204,7 +203,14 @@ public class SignupActivity extends AppCompatActivity {
      * in the Action Bar of Android
      */
     @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
+    @Override
     public void onBackPressed() {
+        super.onBackPressed();
+        finish();
         goToLoginInActivityHelper();
     }
 
@@ -237,6 +243,7 @@ public class SignupActivity extends AppCompatActivity {
      */
     private void goToSetUpAccountActivityHelper() {
         startActivity(new Intent(getApplicationContext(), SetUpAccountActivity.class));
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         finish();
     }
 }

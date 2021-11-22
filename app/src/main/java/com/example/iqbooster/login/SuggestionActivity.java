@@ -40,7 +40,6 @@ public class SuggestionActivity extends AppCompatActivity {
     ArrayList<AdapterUser> potentialUsers;
     RecyclerView mRecyclerView;
     UserSuggestionAdapter mAdapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,6 +122,16 @@ public class SuggestionActivity extends AppCompatActivity {
             finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }
 

@@ -216,9 +216,15 @@ public class SetUpAccountActivity extends AppCompatActivity {
         }
 
     }
-
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
+        finish();
         // NO GO BACK
     }
 
@@ -228,6 +234,7 @@ public class SetUpAccountActivity extends AppCompatActivity {
     private void goToTagPickerActivity() {
         Intent goToDiscoverActivity = new Intent(this, DiscoverActivity.class);
         startActivity(goToDiscoverActivity);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         finish();
     }
 

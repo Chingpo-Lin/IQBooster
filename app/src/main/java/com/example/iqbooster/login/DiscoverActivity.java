@@ -126,15 +126,22 @@ public class DiscoverActivity extends AppCompatActivity {
                     Intent goToSuggestionList = new Intent(getApplicationContext(), SuggestionActivity.class);
                     goToSuggestionList.putExtra(SuggestionActivity.EXTRA, seletedCategory);
                     startActivity(goToSuggestionList);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                     finish();
                 }
             }
         });
 
     }
-
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
+        finish();
         // NO GO BACK IS ALLOWED!
     }
 
