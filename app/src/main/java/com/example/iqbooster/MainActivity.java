@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -113,7 +115,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mNewsFeedItem.setChecked(true);
         getSupportActionBar().setTitle("News Feed");
-
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        FragmentTransaction.setCustomAnimations();
         mNewsFeedFragment = new NewsFeed();
         mNewsFeedFragment.setActivityInterface(this);
         setFragment(mNewsFeedFragment);
@@ -266,8 +270,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (item.getItemId() == R.id.action_search) {
             Intent SearchPage = new Intent(getApplicationContext(), SearchActivity.class);
-            Log.d(TAG, "Going into Search Page");
+            Bundle options = ActivityOptionsCompat.makeScaleUpAnimation(
+                    mheaderView, mheaderView.getWidth()*12, 0,0,0
+            ).toBundle();
+            Log.d(TAG, "Going into Search Page"+mheaderView.getWidth());
             startActivity(SearchPage);
+//            ActivityCompat.startActivity(this, SearchPage, options);
         }
 
         return super.onOptionsItemSelected(item);
@@ -296,8 +304,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     private void setFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.main_container, fragment);
-        fragmentTransaction.commit();
+        fragmentTransaction.replace(R.id.main_container, fragment).commit();
+//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//        fragmentTransaction.setCustomAnimations(
+//                R.anim.fade_in,  // enter
+//                R.anim.slide_out,  // exit
+//                R.anim.fade_in,   // popEnter
+//                R.anim.slide_out  // popExit
+//        )
+//                .commit();
     }
 
     @Override

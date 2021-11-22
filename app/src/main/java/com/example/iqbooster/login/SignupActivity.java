@@ -45,7 +45,7 @@ public class SignupActivity extends AppCompatActivity {
     private TextView mHaveAccountAlready;
     private ProgressBar mProgressBar;
     private MaterialButton mSignupBtn;
-
+    final String transitionToRight = "NEXT";
     // Firebase stuff
     private FirebaseAuth mAuth;
 
@@ -202,15 +202,16 @@ public class SignupActivity extends AppCompatActivity {
      * Override system method onBackPress() which defines the "back" button behaviour
      * in the Action Bar of Android
      */
-    @Override
-    public void finish() {
+    public void finish(String str) {
         super.finish();
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        if (str.equals(transitionToRight)) { overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left); }
+        else { overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right); }
+
     }
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
+        finish("");
         goToLoginInActivityHelper();
     }
 
@@ -243,7 +244,7 @@ public class SignupActivity extends AppCompatActivity {
      */
     private void goToSetUpAccountActivityHelper() {
         startActivity(new Intent(getApplicationContext(), SetUpAccountActivity.class));
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-        finish();
+
+        finish(transitionToRight);
     }
 }

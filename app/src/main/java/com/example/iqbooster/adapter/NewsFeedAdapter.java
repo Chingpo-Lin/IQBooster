@@ -55,6 +55,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public View mView;
+        public View mHeading;
         public CircleImageView mCircleImageView; // post_heading_circleImageView
         public TextView mTitle; // post_heading_title
         public TextView mInfo; // post_heading_info
@@ -71,6 +72,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             mView = itemView;
+            mHeading = itemView.findViewById(R.id.post_heading);
             mCircleImageView = itemView.findViewById(R.id.post_heading_circleImageView);
             mTitle = itemView.findViewById(R.id.post_heading_title);
             mInfo = itemView.findViewById(R.id.post_heading_info);
@@ -83,6 +85,8 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             mLikeCount = itemView.findViewById(R.id.like_collect_share_likeCount);
             mCollectBtn = itemView.findViewById(R.id.like_collect_share_collect);
             mShare = itemView.findViewById(R.id.like_collect_share_share);
+
+            ViewCompat.setTransitionName(mHeading, "testT");
         }
     }
 
@@ -217,8 +221,19 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                     case PROFILE_PAGE:
                         container_id = R.id.user_profile_container;
                 }
+                Log.i("msubtitle", "onClick: msubtitle");
                 activityInterface.getActivityFragmentManger()
-                        .beginTransaction().add(container_id, postDetail.newInstance(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID())).addToBackStack(null).commit();
+                        .beginTransaction()
+                        .setCustomAnimations(
+                                R.anim.slide_in_right,  // enter
+                                R.anim.fade_out,  // exit
+                                R.anim.slide_in_right,   // popEnter
+                                R.anim.slide_out_right  // back
+                        )
+                        .addSharedElement(holder.mTitle, "testT")
+                        .add(container_id, postDetail.newInstance(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID()))
+                        .addToBackStack(null)
+                        .commit();
             }
         });
         // TODO: update subtitle if editable

@@ -25,5 +25,4 @@
             android:layout_height="match_parent">
         </FrameLayout>
 
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
