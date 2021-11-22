@@ -41,7 +41,8 @@
                         android:layout_height="80sp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="28sp"
-                        android:src="@drawable/avatar" />
+                        android:src="@drawable/avatar"
+                        android:transitionName="circleImageTransition"/>
 
                     <TextView
                         android:id="@+id/user_profile_displayName"

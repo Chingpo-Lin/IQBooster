@@ -1,6 +1,8 @@
 package com.example.iqbooster.adapter;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
@@ -131,14 +133,14 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
 
                     }
                 });
-
         holder.mCircleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent profilePageIntent = new Intent(mContext, UserProfilePage.class);
                 profilePageIntent.putExtra(UserProfilePage.EXTRA, mValue.get(holder.getBindingAdapterPosition()).getAuthor());
                 profilePageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                mContext.startActivity(profilePageIntent);
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext, holder.mCircleImageView, ViewCompat.getTransitionName(holder.mCircleImageView));
+                mContext.startActivity(profilePageIntent, options.toBundle());
             }
         });
 

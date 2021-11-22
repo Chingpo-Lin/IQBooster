@@ -10,8 +10,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -61,16 +60,26 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
     private com.example.iqbooster.fragment.tabs.userPageFollowingFragment userPageFollowingFragment;
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        Log.i("TAG", "onBackPressed: ");
+        finish();
+    }
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.user_profile_enter, R.anim.user_profile_exit);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile_page);
-
         mToolbar = findViewById(R.id.user_profile_toolbar);
         setSupportActionBar(mToolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
         final String intentUID = getIntent().getStringExtra(EXTRA);
         currPageUID = intentUID;
 

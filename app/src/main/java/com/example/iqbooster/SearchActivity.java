@@ -3,6 +3,8 @@ package com.example.iqbooster;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -285,10 +287,13 @@ public class SearchActivity extends AppCompatActivity {
                 holder.mCircleImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent profilePageIntent = new Intent(getApplicationContext(), UserProfilePage.class);
+                        Intent profilePageIntent = new Intent(SearchActivity.this, UserProfilePage.class);
+                        Log.i(TAG, "onClick-0: "+ViewCompat.getTransitionName(holder.mCircleImageView));
                         profilePageIntent.putExtra(UserProfilePage.EXTRA, model.getUid());
                         profilePageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        getApplicationContext().startActivity(profilePageIntent);
+                        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(SearchActivity.this, holder.mCircleImageView, ViewCompat.getTransitionName(holder.mCircleImageView));
+                        SearchActivity.this.startActivity(profilePageIntent, options.toBundle());
+//                        SearchActivity.this.startActivity(profilePageIntent);
                     }
                 });
                 holder.mNameTextView.setText(model.getName());
@@ -403,10 +408,11 @@ public class SearchActivity extends AppCompatActivity {
                 holder.mCircleImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent profilePageIntent = new Intent(getApplicationContext(), UserProfilePage.class);
+                        Log.i(TAG, "onClick-1: "+ViewCompat.getTransitionName(holder.mCircleImageView));
+                        Intent profilePageIntent = new Intent(SearchActivity.this, UserProfilePage.class);
                         profilePageIntent.putExtra(UserProfilePage.EXTRA, model.getAuthor());
-                        profilePageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        getApplicationContext().startActivity(profilePageIntent);
+                        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(SearchActivity.this, holder.mCircleImageView, ViewCompat.getTransitionName(holder.mCircleImageView));
+                        SearchActivity.this.startActivity(profilePageIntent, options.toBundle());
                     }
                 });
 
@@ -827,10 +833,12 @@ public class SearchActivity extends AppCompatActivity {
             holder.mCircleImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent profilePageIntent = new Intent(getApplicationContext(), UserProfilePage.class);
+                    Log.i(TAG, "onClick-2: "+ViewCompat.getTransitionName(holder.mCircleImageView));
+                    Intent profilePageIntent = new Intent(mContext, UserProfilePage.class);
                     profilePageIntent.putExtra(UserProfilePage.EXTRA, mValue.get(holder.getAbsoluteAdapterPosition()).getUid());
                     profilePageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    getApplicationContext().startActivity(profilePageIntent);
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext, holder.mCircleImageView, ViewCompat.getTransitionName(holder.mCircleImageView));
+                    mContext.startActivity(profilePageIntent, options.toBundle());
                 }
             });
             holder.mNameTextView.setText(mValue.get(holder.getAbsoluteAdapterPosition()).getName());
@@ -958,10 +966,12 @@ public class SearchActivity extends AppCompatActivity {
             holder.mCircleImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent profilePageIntent = new Intent(getApplicationContext(), UserProfilePage.class);
+                    Log.i(TAG, "onClick-3: "+ViewCompat.getTransitionName(holder.mCircleImageView));
+                    Intent profilePageIntent = new Intent(mContext, UserProfilePage.class);
                     profilePageIntent.putExtra(UserProfilePage.EXTRA, mValue.get(holder.getAbsoluteAdapterPosition()).getAuthor());
                     profilePageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    getApplicationContext().startActivity(profilePageIntent);
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext, holder.mCircleImageView, ViewCompat.getTransitionName(holder.mCircleImageView));
+                    mContext.startActivity(profilePageIntent, options.toBundle());
                 }
             });
 

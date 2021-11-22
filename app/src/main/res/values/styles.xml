@@ -3,7 +3,15 @@
 
     <style name="AppTextField_transparent" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
         <item name="boxBackgroundColor">#00000000</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowActivityTransitions">true</item>
     </style>
+    <!--        <item name="android:windowEnterTransition">@transition/shared</item>-->
+    <!--        <item name="android:windowExitTransition">@transition/fade_transition</item>-->
+    <!--        <item name="android:windowSharedElementEnterTransition">-->
+    <!--            @transition/shared</item>-->
+    <!--        <item name="android:windowSharedElementExitTransition">-->
+    <!--            @transition/fade_transition</item>-->
 
     <style name="title_primary" parent="Widget.AppCompat.TextView">
         <item name="android:textAllCaps">true</item>
