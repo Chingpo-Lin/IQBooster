@@ -88,11 +88,23 @@ public class SearchActivity extends AppCompatActivity {
     ArrayList<Post> tagSearchPotentialPosts = new ArrayList<>();
     firebaseTagSearchRecyclerAdapter4Users mTagSearch4UsersAdapter;
     firebaseTagSearchRecyclerAdapter4Posts mTagSearch4PostsAdapter;
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
 
+        Log.i("TAG", "onBackPressed: ");
+        finish();
+    }
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.fade_in, R.anim.search_exit);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        overridePendingTransition(R.anim.search_enter, R.anim.fade_out);
 
         mMarquee = (TextView) findViewById(R.id.search_activity_marquee);
         mAutoComplete = (AppCompatAutoCompleteTextView) findViewById(R.id.search_activity_autoCompleteTextView);
