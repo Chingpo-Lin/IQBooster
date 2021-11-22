@@ -76,6 +76,7 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile_page);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         mToolbar = findViewById(R.id.user_profile_toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
