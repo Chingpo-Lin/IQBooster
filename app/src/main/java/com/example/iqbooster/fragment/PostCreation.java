@@ -393,7 +393,16 @@ public class PostCreation extends Fragment {
                     } else {
                         activityInterface.getActivityFragmentManger().popBackStack();
                         activityInterface.getActivityFragmentManger()
-                                .beginTransaction().replace(R.id.main_container, postDetail.newInstance(newPostID)).addToBackStack(null).commit();
+                                .beginTransaction()
+                                .setCustomAnimations(
+                                        R.anim.hyperspace,  // enter
+                                        R.anim.fade_out,  // exit
+                                        R.anim.fade_in,   // popEnter
+                                        R.anim.slide_out_right  // back
+                                )
+                                .replace(R.id.main_container, postDetail.newInstance(newPostID))
+                                .addToBackStack(null)
+                                .commit();
                     }
                 }
             }

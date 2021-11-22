@@ -69,6 +69,7 @@ public class NewsFeed extends Fragment {
 
     public NewsFeed() {
         // Required empty public constructor
+
     }
 
     /**
@@ -102,7 +103,6 @@ public class NewsFeed extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_newsfeed, container, false);
-
         mAuth = FirebaseAuth.getInstance();
 
         mTabLayout = v.findViewById(R.id.newsfeed_tabLayout);
@@ -122,7 +122,16 @@ public class NewsFeed extends Fragment {
                 mComposeFragment = new PostCreation();
                 mComposeFragment.setActivityInterface(activityInterface);
                 FragmentManager fragmentManager = activityInterface.getActivityFragmentManger();
-                fragmentManager.beginTransaction().add(R.id.main_container, mComposeFragment).addToBackStack(null).commit();
+                fragmentManager.beginTransaction()
+                        .setCustomAnimations(
+                                R.anim.new_post_enter,  // enter
+                                R.anim.fade_out,  // exit
+                                R.anim.fade_in,   // popEnter
+                                R.anim.new_post_exit  // back
+                        )
+                        .add(R.id.main_container, mComposeFragment)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
 
@@ -162,7 +171,7 @@ public class NewsFeed extends Fragment {
         viewPagerAdapter.addFragment(mTravelFragment, getResources().getString(R.string.hash_travel));
 
         mViewPager.setAdapter(viewPagerAdapter);
-
+        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 //        mNestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
 //            @Override
 //            public void onScrollChange(NestedScrollView nestedScrollView, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -184,13 +193,20 @@ public class NewsFeed extends Fragment {
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private List<Fragment> fragments = new ArrayList<>();
         private List<String> fragmentsTitle = new ArrayList<>();
-
+//
 
         public ViewPagerAdapter(@NonNull FragmentManager fm, int behavior) {
             super(fm, behavior);
         }
 
         public void addFragment(Fragment fragment, String title) {
+            FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+            fragmentTransaction.setCustomAnimations(
+                    R.anim.fade_in,  // enter
+                    R.anim.slide_out_left,  // exit
+                    R.anim.fade_in,   // popEnter
+                    R.anim.slide_out_left  // popExit
+            ).commit();
             fragments.add(fragment);
             fragmentsTitle.add(title);
         }
