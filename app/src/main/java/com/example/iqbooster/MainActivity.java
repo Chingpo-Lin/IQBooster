@@ -40,6 +40,7 @@ import com.example.iqbooster.fragment.MyPost;
 import com.example.iqbooster.fragment.NewsFeed;
 import com.example.iqbooster.fragment.PostDetail;
 import com.example.iqbooster.login.LoginActivity;
+import com.example.iqbooster.login.MapsActivity;
 import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;

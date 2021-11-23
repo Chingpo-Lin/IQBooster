@@ -40,11 +40,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.karumi.dexter.listener.multi.SnackbarOnAnyDeniedMultiplePermissionsListener;
 import com.karumi.dexter.listener.single.PermissionListener;
+import com.karumi.dexter.listener.single.SnackbarOnDeniedPermissionListener;
 
 import java.io.IOException;
 import java.util.List;
@@ -73,37 +77,58 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         getSupportFragmentManager().beginTransaction().add(R.id.container, mapFragment).commit();
         mapFragment.getMapAsync(this);
         mGetMyLocation = findViewById(R.id.get_my_location);
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.ACCESS_COARSE_LOCATION};
 
         mGetMyLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                MultiplePermissionsListener snackbarMultiplePermissionsListener =
+                        SnackbarOnAnyDeniedMultiplePermissionsListener.Builder
+                                .with(view, "Location access is needed")
+                                .withOpenSettingsButton("Settings")
+                                .withCallback(new Snackbar.Callback() {
+                                    @Override
+                                    public void onShown(Snackbar snackbar) {
+                                        // Event handler for when the given Snackbar is visible
+                                    }
+                                    @Override
+                                    public void onDismissed(Snackbar snackbar, int event) {
+                                        // Event handler for when the given Snackbar has been dismissed
+                                    }
+                                })
+                                .build();
                 Dexter.withContext(getApplicationContext())
-                        .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-                        .withListener(new PermissionListener() {
-                            @Override
-                            public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
-                                getLocation();
-                            }
+                        .withPermissions(permissions)
+                        .withListener(snackbarMultiplePermissionsListener).check();
 
-                            @Override
-                            public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
-                                Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Permission Denied", Snackbar.LENGTH_LONG);
-                                View view = sn.getView();
-                                TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
-                                tv.setTextColor(Color.parseColor("#FFD700"));
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                                    tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                                } else {
-                                    tv.setGravity(Gravity.CENTER_HORIZONTAL);
-                                }
-                                sn.show();
-                            }
-
-                            @Override
-                            public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest, PermissionToken permissionToken) {
-                                permissionToken.continuePermissionRequest();
-                            }
-                        }).check();
+//
+//
+//                        (new PermissionListener() {
+//                            @Override
+//                            public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
+//                                getLocation();
+//                            }
+//
+//                            @Override
+//                            public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
+//                                Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Permission Denied", Snackbar.LENGTH_LONG);
+//                                View view = sn.getView();
+//                                TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
+//                                tv.setTextColor(Color.parseColor("#FFD700"));
+//                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+//                                    tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+//                                } else {
+//                                    tv.setGravity(Gravity.CENTER_HORIZONTAL);
+//                                }
+//                                sn.show();
+//                            }
+//
+//                            @Override
+//                            public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest, PermissionToken permissionToken) {
+//                                permissionToken.continuePermissionRequest();
+//                            }
+//                        }).check();
             }
         });
 
