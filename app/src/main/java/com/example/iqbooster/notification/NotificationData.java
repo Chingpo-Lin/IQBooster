@@ -1,11 +1,11 @@
 package com.example.iqbooster.notification;
 
-public class NotificationModel {
+public class NotificationData {
     private String title;
-    private String message;
+    private String body;
 
-    public NotificationModel(String title, String message) {
+    public NotificationData(String title, String body) {
         this.title = title;
-        this.message = message;
+        this.body = body;
     }
 }

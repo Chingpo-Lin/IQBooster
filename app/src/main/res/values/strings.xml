@@ -115,4 +115,10 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="title_activity_maps">MapsActivity</string>
 
+    <!-- Firebase messaging -->
+    <string name="msg_token">token %s</string>
+    <string name="msg_tile">IQBooster</string>
+    <string name="msg_body_like">Your post got %d like(s).</string>
+    <string name="msg_body_follow">%s started to follow you.</string>
+
 </resources>

@@ -4,7 +4,7 @@ import static com.example.iqbooster.notification.FirebaseConstants.BASE_URL;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class NotificationAPIClient {
+public class NotificationClient {
     private static Retrofit retrofit = null;
 
     public static Retrofit getClient() {

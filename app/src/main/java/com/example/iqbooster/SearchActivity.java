@@ -37,6 +37,7 @@ import com.example.iqbooster.model.AdapterPost;
 import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;
+import com.example.iqbooster.notification.FirebaseUtil;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.button.MaterialButton;
@@ -884,7 +885,7 @@ public class SearchActivity extends AppCompatActivity {
                             mb.setText(getApplicationContext().getResources().getString(R.string.following));
                             currUserFollowingRef.child(mValue.get(holder.getAbsoluteAdapterPosition()).getUid()).setValue(mValue.get(holder.getAbsoluteAdapterPosition()));
                             otherFollowerRef.child(mAuth.getUid()).setValue(adapteruser[0]);
-
+//                            FirebaseUtil.sendSingleNotification(mContext.getApplicationContext(), mValue.get(holder.getAbsoluteAdapterPosition()).getUid(), "IQBooster", "You have 1 more follower.", "search");
                         } else if (mb.getText().toString().equalsIgnoreCase(getApplicationContext().getResources().getString(R.string.following))) {
                             mb.setText(getApplicationContext().getResources().getString(R.string.follow));
                             currUserFollowingRef.child(mValue.get(holder.getAbsoluteAdapterPosition()).getUid()).removeValue();

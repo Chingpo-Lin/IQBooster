@@ -33,6 +33,7 @@ import com.example.iqbooster.login.LoginActivity;
 import com.example.iqbooster.login.SuggestionActivity;
 import com.example.iqbooster.model.Tags;
 import com.example.iqbooster.model.User;
+import com.example.iqbooster.notification.FirebaseUtil;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -117,6 +118,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mNewsFeedFragment = new NewsFeed();
         mNewsFeedFragment.setActivityInterface(this);
         setFragment(mNewsFeedFragment);
+
+        // Update database with device id for FCM
+        if (mAuth.getCurrentUser() != null) {
+            FirebaseUtil.updateDeviceId(this, TAG);
+        }
     }
 
     @Override

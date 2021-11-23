@@ -26,6 +26,7 @@ import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;
 import com.example.iqbooster.getRandom;
+import com.example.iqbooster.notification.FirebaseUtil;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -314,6 +315,8 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             long likeCount = snapshot.getValue(Long.class) + 1;
+                            // send notification to intent user
+                            FirebaseUtil.sendSingleNotification(mContext, mValue.get(holder.getAbsoluteAdapterPosition()).getAuthor(), "IQBooster", mContext.getResources().getString(R.string.msg_body_like, likeCount), "postDetail");
                             if (mContext != null) {
                                 currPostRef.child(mContext.getResources().getString(R.string.db_like_counts)).setValue(likeCount);
                                 if (holder.getAbsoluteAdapterPosition() != -1) {

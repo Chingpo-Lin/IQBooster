@@ -16,6 +16,7 @@ import com.example.iqbooster.R;
 import com.example.iqbooster.UserProfilePage;
 import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.Post;
+import com.example.iqbooster.notification.FirebaseUtil;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -151,7 +152,7 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
                         mb.setText(mContext.getResources().getString(R.string.following));
                         currUserFollowingRef.child(mValue.get(holder.getAbsoluteAdapterPosition()).getUid()).setValue(mValue.get(holder.getAbsoluteAdapterPosition()));
                         otherFollowerRef.child(mAuth.getUid()).setValue(adapteruser[0]);
-
+//                        FirebaseUtil.sendSingleNotification(mContext.getApplicationContext(), mValue.get(holder.getAbsoluteAdapterPosition()).getUid(), "IQBooster", "You have 1 more follower.", "userSuggest");
                     } else if (mb.getText().toString().equalsIgnoreCase(mContext.getResources().getString(R.string.following))) {
                         mb.setText(mContext.getResources().getString(R.string.follow));
                         currUserFollowingRef.child(mValue.get(holder.getAbsoluteAdapterPosition()).getUid()).removeValue();

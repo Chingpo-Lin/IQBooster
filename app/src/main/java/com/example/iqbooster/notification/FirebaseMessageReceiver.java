@@ -1,25 +1,33 @@
-package com.example.iqbooster;
+package com.example.iqbooster.notification;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
-import android.os.IBinder;
 import android.util.Log;
 import android.widget.RemoteViews;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
+import com.example.iqbooster.MainActivity;
+import com.example.iqbooster.R;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 public class FirebaseMessageReceiver extends FirebaseMessagingService {
 
     private static final String TAG = "FirebaseMessageReceiver";
+
+    @Override
+    public void onNewToken(@NonNull String s) {
+        Log.d(TAG, "new token");
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            FirebaseUtil.updateDeviceId(this, TAG);
+        }
+    }
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -48,7 +56,7 @@ public class FirebaseMessageReceiver extends FirebaseMessagingService {
     // Display received notification
     public void showNotification(String title,
                                  String message) {
-        Log.d(TAG, "Show Notification");
+        Log.d(TAG, "show Notification");
 
         // Pass the intent to switch to the MainActivity
         Intent intent

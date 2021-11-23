@@ -21,6 +21,7 @@ import com.example.iqbooster.fragment.MyPost;
 import com.example.iqbooster.fragment.tabs.userPageFollowersFragment;
 import com.example.iqbooster.fragment.tabs.userPageFollowingFragment;
 import com.example.iqbooster.model.AdapterUser;
+import com.example.iqbooster.notification.FirebaseUtil;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -198,6 +199,8 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
                         if (myProfile[0] != null) {
                             otherFollowerRef.child(mAuth.getUid()).setValue(myProfile[0]);
                         }
+                        // send notification to intent user
+                        FirebaseUtil.sendSingleNotification(getApplicationContext(), intentUID, "IQBooster", getResources().getString(R.string.msg_body_follow, myProfile[0].getName()), "userProfilePage");
                     } else if (mb.getText().toString().equalsIgnoreCase(getResources().getString(R.string.following))) {
                         mb.setText(getResources().getString(R.string.follow));
                         followingRef.child(intentUID).removeValue();
