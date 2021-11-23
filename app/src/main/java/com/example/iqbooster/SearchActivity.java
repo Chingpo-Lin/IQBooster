@@ -542,8 +542,7 @@ public class SearchActivity extends AppCompatActivity {
                     }
                 });
 
-
-                holder.mLikeCount.setText(String.valueOf(model.getLike_counts()));
+                holder.mLikeCount.setText(helperClass.formatLikeCount(model.getLike_counts()));
                 currPostRef.child(getApplicationContext().getResources().getString(R.string.db_like_counts)).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -1142,8 +1141,7 @@ public class SearchActivity extends AppCompatActivity {
                 }
             });
 
-
-            holder.mLikeCount.setText(String.valueOf(mValue.get(holder.getAbsoluteAdapterPosition()).getLike_counts()));
+            holder.mLikeCount.setText(helperClass.formatLikeCount(mValue.get(holder.getAbsoluteAdapterPosition()).getLike_counts()));
             currPostRef.child(getApplicationContext().getResources().getString(R.string.db_like_counts)).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
