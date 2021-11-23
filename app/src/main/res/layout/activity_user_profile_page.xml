@@ -91,6 +91,21 @@
                         android:textAppearance="?attr/textAppearanceBody2"
                         android:textColor="?android:attr/textColorSecondary" />
 
+                    <HorizontalScrollView
+                        android:layout_width="200sp"
+                        android:layout_height="wrap_content"
+                        android:scrollbars="none"
+                        android:layout_marginTop="2sp"
+                        android:layout_gravity="center_horizontal"
+                        >
+
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/user_profile_chipGroup"
+                            app:singleLine="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </HorizontalScrollView>
+
                     <com.google.android.material.button.MaterialButton
                         android:visibility="gone"
                         android:id="@+id/user_profile_followBtn"

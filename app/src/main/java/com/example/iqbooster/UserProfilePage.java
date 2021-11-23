@@ -29,8 +29,11 @@ import com.example.iqbooster.fragment.MyPost;
 import com.example.iqbooster.fragment.tabs.userPageFollowersFragment;
 import com.example.iqbooster.fragment.tabs.userPageFollowingFragment;
 import com.example.iqbooster.model.AdapterUser;
+import com.example.iqbooster.model.Tags;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -58,6 +61,7 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
     private TextView mDisplayName;
     private TextView mUserName;
     private TextView mUserLocation;
+    private ChipGroup mChipGroup;
     private MaterialButton mFollowBtn;
     private MaterialButton mFollowBtnToolBar;
     private NestedScrollView mScrollView;
@@ -107,6 +111,7 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
         mDisplayName = findViewById(R.id.user_profile_displayName);
         mUserName = findViewById(R.id.user_profile_username);
         mUserLocation = findViewById(R.id.user_profile_location);
+        mChipGroup = findViewById(R.id.user_profile_chipGroup);
         mFollowBtn = findViewById(R.id.user_profile_followBtn);
         mFollowBtnToolBar = findViewById(R.id.user_profile_toolbar_followBtn);
         mScrollView = findViewById(R.id.user_profile_scrollView);
@@ -154,6 +159,21 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
                     }
                 } catch (Exception e) {
 
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        mUsers.child(intentUID).child(getResources().getString(R.string.db_tags)).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    Tags tags = snapshot.getValue(Tags.class);
+                    addChipToGroup(tags);
                 }
             }
 
@@ -286,6 +306,18 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
                     }
                 }
             });
+        }
+    }
+
+    private void addChipToGroup(Tags tags) {
+        mChipGroup.removeAllViews();
+        for (String tag : tags.allTrue()) {
+            final Chip chip = new Chip(this);
+            chip.setText("#" + tag);
+            chip.setClickable(false);
+            chip.setCloseIconVisible(false);
+            chip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
+            mChipGroup.addView(chip);
         }
     }
 
