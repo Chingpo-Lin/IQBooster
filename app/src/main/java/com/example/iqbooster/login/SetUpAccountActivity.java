@@ -145,7 +145,7 @@ public class SetUpAccountActivity extends AppCompatActivity {
                     FirebaseUser mUser = mAuth.getCurrentUser();
 
                     if (userinput_username.contains(" ")) {
-                        Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "no space in between username", Snackbar.LENGTH_LONG);
+                        Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "no space in username is allowed", Snackbar.LENGTH_LONG);
                         View view = sn.getView();
                         TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
                         tv.setTextColor(Color.parseColor("#FFD700"));
