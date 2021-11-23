@@ -124,6 +124,7 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
             if (mValue.get(holder.getAbsoluteAdapterPosition()).getUid().equals(mAuth.getUid())) {
                 holder.mFollowBtn.setVisibility(View.INVISIBLE);
             }
+            holder.mFollowBtn.setText(mContext.getResources().getString(R.string.follow));
             currUserFollowingRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {

@@ -322,6 +322,7 @@ public class SearchActivity extends AppCompatActivity {
                     if (model.getUid().equals(mAuth.getUid())) {
                         holder.mFollowBtn.setVisibility(View.INVISIBLE);
                     }
+                    holder.mFollowBtn.setText(getApplicationContext().getResources().getString(R.string.follow));
                     currUserFollowingRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -908,6 +909,7 @@ public class SearchActivity extends AppCompatActivity {
                 if (mValue.get(holder.getAbsoluteAdapterPosition()).getUid().equals(mAuth.getUid())) {
                     holder.mFollowBtn.setVisibility(View.INVISIBLE);
                 }
+                holder.mFollowBtn.setText(getApplicationContext().getResources().getString(R.string.follow));
                 currUserFollowingRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
