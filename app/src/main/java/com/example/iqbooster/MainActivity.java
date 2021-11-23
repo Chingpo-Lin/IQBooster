@@ -64,7 +64,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ActivityInterface, SensorEventListener {
 
     private static final String TAG = "MainActivity: ";
-    private static final String BUILD_VERSION = "Current Build Version: 1.2.125";
+    private static final String BUILD_VERSION = "Current Build Version: 1.2.126";
 
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
