@@ -27,5 +27,8 @@
     <color name="color_tag_h">#11c612</color>
   
     <color name="gold">#FFD700</color>
-    <color name="gray">#D8D8D8</color>
+    <color name="theme_gray_300">#E0E0E0</color>
+    <color name="theme_gray_500">#9E9E9E</color>
+    <color name="theme_black_900">#212121</color>
+    <color name="theme_black_700">#5F5F5F</color>
 </resources>

@@ -10,12 +10,29 @@
             android:id="@+id/user_profile_appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-            <androidx.appcompat.widget.Toolbar
+            android:background="@android:color/transparent"
+            android:elevation="0dp"
+            app:elevation="0dp">
+            <com.google.android.material.appbar.MaterialToolbar
+                app:titleCentered="true"
                 android:id="@+id/user_profile_toolbar"
                 android:layout_width="match_parent"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                android:layout_height="?attr/actionBarSize"/>
+                android:layout_height="?attr/actionBarSize">
+
+                <com.google.android.material.button.MaterialButton
+                    android:visibility="invisible"
+                    android:id="@+id/user_profile_toolbar_followBtn"
+                    style="@style/Widget.MaterialComponents.Button.Icon"
+                    app:iconPadding="0dp"
+                    app:iconGravity="textStart"
+                    app:icon="@drawable/add_icon"
+                    android:contentDescription="@string/follow"
+                    android:layout_width="48sp"
+                    android:layout_height="48sp"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="8sp" />
+
+            </com.google.android.material.appbar.MaterialToolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
         <FrameLayout
@@ -25,14 +42,16 @@
             android:layout_height="match_parent">
 
             <androidx.core.widget.NestedScrollView
+                android:id="@+id/user_profile_scrollView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbars="vertical"
+                android:scrollbars="none"
+                android:descendantFocusability="blocksDescendants"
                 android:fillViewport="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <de.hdodenhof.circleimageview.CircleImageView
@@ -84,6 +103,9 @@
                         android:text="@string/follow" />
 
                     <com.google.android.material.tabs.TabLayout
+                        app:tabSelectedTextColor="@color/purple_500"
+                        app:tabIndicatorColor="@color/purple_500"
+                        app:tabRippleColor="@color/purple_200"
                         android:id="@+id/user_profile_tabLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -112,7 +134,7 @@
                     <androidx.viewpager.widget.ViewPager
                         android:id="@+id/user_profile_viewPager"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="680sp"
                         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"></androidx.viewpager.widget.ViewPager>
 
                 </LinearLayout>

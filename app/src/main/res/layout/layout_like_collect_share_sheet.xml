@@ -36,7 +36,7 @@
             android:layout_width="18sp"
             android:layout_height="18sp"
             app:icon_size="12sp"
-            android:layout_marginStart="8sp"
+            android:layout_marginStart="10sp"
             android:layout_gravity="center_vertical"
             app:icon_type="star" />
 
@@ -46,7 +46,7 @@
             android:layout_width="18sp"
             android:layout_height="18sp"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="8sp"
+            android:layout_marginStart="10sp"
             android:src="@drawable/ic_baseline_share_24"
             />
 </LinearLayout>

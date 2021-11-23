@@ -5,15 +5,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.view.ViewCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -35,6 +40,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.iqbooster.adapter.NewsFeedAdapter;
 import com.example.iqbooster.adapter.UserSuggestionAdapter;
 import com.example.iqbooster.fragment.PostDetail;
+import com.example.iqbooster.login.LoginActivity;
 import com.example.iqbooster.model.AdapterPost;
 import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.Post;
@@ -56,6 +62,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -88,10 +96,10 @@ public class SearchActivity extends AppCompatActivity {
     ArrayList<Post> tagSearchPotentialPosts = new ArrayList<>();
     firebaseTagSearchRecyclerAdapter4Users mTagSearch4UsersAdapter;
     firebaseTagSearchRecyclerAdapter4Posts mTagSearch4PostsAdapter;
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
         Log.i("TAG", "onBackPressed: ");
         finish();
     }
@@ -100,6 +108,7 @@ public class SearchActivity extends AppCompatActivity {
         super.finish();
         overridePendingTransition(R.anim.fade_in, R.anim.search_exit);
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -228,7 +237,7 @@ public class SearchActivity extends AppCompatActivity {
             chip.setText(tagsName);
             chip.setClickable(true);
             chip.setCloseIconVisible(true);
-            chip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
+            chip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
             chipGroup.addView(chip);
             chip.setOnCloseIconClickListener(new View.OnClickListener() {
                 @Override
@@ -474,6 +483,7 @@ public class SearchActivity extends AppCompatActivity {
                 });
 
                 // TODO: update thumbnail if editable
+                holder.mThumbnail.setVisibility(View.GONE);
                 try {
                     String thumbnailUrl = model.getThumbnail_image();
                     if (thumbnailUrl != null && !thumbnailUrl.isEmpty()) {
@@ -519,16 +529,29 @@ public class SearchActivity extends AppCompatActivity {
 //                    }
 //                });
 
-
+                holder.mFirstChip.setVisibility(View.GONE);
+                holder.mSecondChip.setVisibility(View.GONE);
+                holder.mThirdChip.setVisibility(View.GONE);
                 final Tags[] currTags = new Tags[1];
-                tagRef.addValueEventListener(new ValueEventListener() {
+                tagRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         currTags[0] = snapshot.getValue(Tags.class);
                         ArrayList<String> allTrue = currTags[0].allTrue();
-                        if (!allTrue.isEmpty()) {
+                        if (allTrue.size() >= 1) {
                             holder.mFirstChip.setText("#" + allTrue.get(0));
-                            holder.mFirstChip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
+                            holder.mFirstChip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
+                            holder.mFirstChip.setVisibility(View.VISIBLE);
+                        }
+                        if (allTrue.size() >= 2) {
+                            holder.mSecondChip.setText("#" + allTrue.get(1));
+                            holder.mSecondChip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
+                            holder.mSecondChip.setVisibility(View.VISIBLE);
+                        }
+                        if (allTrue.size() >= 3) {
+                            holder.mThirdChip.setText("#" + allTrue.get(2));
+                            holder.mThirdChip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
+                            holder.mThirdChip.setVisibility(View.VISIBLE);
                         }
                     }
 
@@ -547,7 +570,7 @@ public class SearchActivity extends AppCompatActivity {
                             final long likeCount = snapshot.getValue(Long.class);
                             if (holder.getAbsoluteAdapterPosition() != -1) {
                                 model.setLike_counts(likeCount);
-                                holder.mLikeCount.setText(String.valueOf(model.getLike_counts()));
+                                holder.mLikeCount.setText(helperClass.formatLikeCount(model.getLike_counts()));
 //                        notifyItemChanged(holder.getAbsoluteAdapterPosition());
                             }
                         }
@@ -677,16 +700,46 @@ public class SearchActivity extends AppCompatActivity {
                         @Override
                         public void liked(LikeButton likeButton) {
                             holder.mLikeBtn.setLiked(false);
+                            Intent LoginInActivityIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                            LoginInActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            getApplicationContext().startActivity(LoginInActivityIntent);
                         }
 
                         @Override
                         public void unLiked(LikeButton likeButton) {
                             holder.mLikeBtn.setLiked(false);
+                            Intent LoginInActivityIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                            LoginInActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            getApplicationContext().startActivity(LoginInActivityIntent);
                         }
                     });
                 }
 
-                // TODO: implement Share Btn, last edit
+                holder.mShare.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Bitmap bitmap = getBitMapFromView(holder.cardView);
+                        try {
+                            File file = new File(getApplicationContext().getExternalCacheDir(), File.separator + "office.jpg");
+                            FileOutputStream fOut = new FileOutputStream(file);
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+                            fOut.flush();
+                            fOut.close();
+                            file.setReadable(true, false);
+                            Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), BuildConfig.APPLICATION_ID + ".provider", file);
+                            final Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.putExtra(Intent.EXTRA_STREAM, photoURI);
+                            intent.putExtra(Intent.EXTRA_TEXT, "Hey, I found this interesting article on IQBooster. Take a look!");
+                            intent.setType("image/jpg");
+                            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                            //mContext.startActivity(Intent.createChooser(intent, "Share the article to"));
+                            startActivity(intent);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
             }
 
             @NonNull
@@ -1033,6 +1086,7 @@ public class SearchActivity extends AppCompatActivity {
             });
 
             // TODO: update thumbnail if editable
+            holder.mThumbnail.setVisibility(View.GONE);
             try {
                 String thumbnailUrl = mValue.get(holder.getAbsoluteAdapterPosition()).getThumbnail_image();
                 if (thumbnailUrl != null && !thumbnailUrl.isEmpty()) {
@@ -1078,16 +1132,29 @@ public class SearchActivity extends AppCompatActivity {
 //                    }
 //                });
 
-
+            holder.mFirstChip.setVisibility(View.GONE);
+            holder.mSecondChip.setVisibility(View.GONE);
+            holder.mThirdChip.setVisibility(View.GONE);
             final Tags[] currTags = new Tags[1];
-            tagRef.addValueEventListener(new ValueEventListener() {
+            tagRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     currTags[0] = snapshot.getValue(Tags.class);
                     ArrayList<String> allTrue = currTags[0].allTrue();
-                    if (!allTrue.isEmpty()) {
+                    if (allTrue.size() >= 1) {
                         holder.mFirstChip.setText("#" + allTrue.get(0));
-                        holder.mFirstChip.setTextColor(Color.parseColor(getRandom.getRandomColor()));
+                        holder.mFirstChip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
+                        holder.mFirstChip.setVisibility(View.VISIBLE);
+                    }
+                    if (allTrue.size() >= 2) {
+                        holder.mSecondChip.setText("#" + allTrue.get(1));
+                        holder.mSecondChip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
+                        holder.mSecondChip.setVisibility(View.VISIBLE);
+                    }
+                    if (allTrue.size() >= 3) {
+                        holder.mThirdChip.setText("#" + allTrue.get(2));
+                        holder.mThirdChip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
+                        holder.mThirdChip.setVisibility(View.VISIBLE);
                     }
                 }
 
@@ -1106,7 +1173,7 @@ public class SearchActivity extends AppCompatActivity {
                         final long likeCount = snapshot.getValue(Long.class);
                         if (holder.getAbsoluteAdapterPosition() != -1) {
                             mValue.get(holder.getAbsoluteAdapterPosition()).setLike_counts(likeCount);
-                            holder.mLikeCount.setText(String.valueOf(mValue.get(holder.getAbsoluteAdapterPosition()).getLike_counts()));
+                            holder.mLikeCount.setText(helperClass.formatLikeCount(mValue.get(holder.getAbsoluteAdapterPosition()).getLike_counts()));
 //                        notifyItemChanged(holder.getAbsoluteAdapterPosition());
                         }
                     }
@@ -1236,16 +1303,46 @@ public class SearchActivity extends AppCompatActivity {
                     @Override
                     public void liked(LikeButton likeButton) {
                         holder.mLikeBtn.setLiked(false);
+                        Intent LoginInActivityIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                        LoginInActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getApplicationContext().startActivity(LoginInActivityIntent);
                     }
 
                     @Override
                     public void unLiked(LikeButton likeButton) {
                         holder.mLikeBtn.setLiked(false);
+                        Intent LoginInActivityIntent = new Intent(mContext, LoginActivity.class);
+                        LoginInActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getApplicationContext().startActivity(LoginInActivityIntent);
                     }
                 });
             }
 
-            // TODO: implement Share Btn, last edit
+            holder.mShare.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bitmap bitmap = getBitMapFromView(holder.cardView);
+                    try {
+                        File file = new File(mContext.getApplicationContext().getExternalCacheDir(), File.separator + "office.jpg");
+                        FileOutputStream fOut = new FileOutputStream(file);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+                        fOut.flush();
+                        fOut.close();
+                        file.setReadable(true, false);
+                        Uri photoURI = FileProvider.getUriForFile(mContext.getApplicationContext(), BuildConfig.APPLICATION_ID + ".provider", file);
+                        final Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra(Intent.EXTRA_STREAM, photoURI);
+                        intent.putExtra(Intent.EXTRA_TEXT, "Hey, I found this interesting article on IQBooster. Take a look!");
+                        intent.setType("image/jpg");
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        //mContext.startActivity(Intent.createChooser(intent, "Share the article to"));
+                        mContext.startActivity(intent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
 
         @NonNull
@@ -1265,6 +1362,20 @@ public class SearchActivity extends AppCompatActivity {
             this.mValue = posts;
             notifyDataSetChanged();
         }
+    }
+
+    @SuppressLint("ResourceAsColor")
+    private Bitmap getBitMapFromView(View view){
+        Bitmap returnBitMap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(returnBitMap);
+        Drawable bgDrawable = view.getBackground();
+        if(bgDrawable != null){
+            bgDrawable.draw(canvas);
+        } else {
+            canvas.drawColor(android.R.color.white);
+        }
+        view.draw(canvas);
+        return returnBitMap;
     }
 
     @Override

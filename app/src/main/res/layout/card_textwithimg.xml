@@ -29,13 +29,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16sp">
+            android:padding="22sp">
 
             <TextView
                 android:id="@+id/card_textwithimg_subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16sp"
                 android:text="subtitle"
                 android:textAppearance="?attr/textAppearanceBody2"
                 android:textColor="?android:attr/textColorSecondary"
@@ -45,25 +44,55 @@
 
         <LinearLayout
             android:orientation="horizontal"
+            android:layout_marginHorizontal="12sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/post_heading_tagChip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="8sp"
-                android:clickable="false"
-                android:text="" />
-
-            <include
+            <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                layout="@layout/layout_like_collect_share_sheet"/>
+                android:scrollbars="none">
+
+                <com.google.android.material.chip.ChipGroup
+                    app:singleLine="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/post_heading_tagChip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:text="" />
+
+                    <com.google.android.material.chip.Chip
+                        android:visibility="gone"
+                        android:id="@+id/post_heading_tagChip2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:text="" />
+
+                    <com.google.android.material.chip.Chip
+                        android:visibility="gone"
+                        android:id="@+id/post_heading_tagChip3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:text="" />
+
+                </com.google.android.material.chip.ChipGroup>
+
+            </HorizontalScrollView>
 
         </LinearLayout>
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            layout="@layout/layout_like_collect_share_sheet"/>
 
     </LinearLayout>
 

@@ -99,6 +99,16 @@ public class NewsFeed extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        if (mAuth.getCurrentUser() == null) {
+            mFloatingBtn.setVisibility(View.GONE);
+        } else {
+            mFloatingBtn.setVisibility(View.VISIBLE);
+        }
+        super.onStart();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -109,12 +119,6 @@ public class NewsFeed extends Fragment {
         mViewPager = v.findViewById(R.id.newsfeed_viewpager);
         mFloatingBtn = v.findViewById(R.id.newsfeed_make_post_btn);
         mNestedScrollView = v.findViewById(R.id.newsfeed_nestedScrollView);
-
-        if (mAuth.getCurrentUser() == null) {
-            mFloatingBtn.setVisibility(View.GONE);
-        } else {
-            mFloatingBtn.setVisibility(View.VISIBLE);
-        }
 
         mFloatingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
