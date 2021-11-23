@@ -19,6 +19,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
@@ -64,7 +65,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ActivityInterface, SensorEventListener {
 
     private static final String TAG = "MainActivity: ";
-    private static final String BUILD_VERSION = "Current Build Version: 1.2.126";
+    private static final String BUILD_VERSION = "Current Build Version: 1.2.128";
 
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
@@ -209,11 +210,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
                         String url = snapshot.getValue(String.class);
-                        RequestOptions requestoptions = new RequestOptions();
-                        Glide.with(getApplicationContext())
-                                .load(url)
-                                .apply(requestoptions.fitCenter())
-                                .into(mProfilePic);
+                        if (url != null && !url.isEmpty()) {
+                            RequestOptions requestoptions = new RequestOptions();
+                            Glide.with(getApplicationContext())
+                                    .load(url)
+                                    .apply(requestoptions.fitCenter())
+                                    .into(mProfilePic);
+                        }
                     }
                 }
 

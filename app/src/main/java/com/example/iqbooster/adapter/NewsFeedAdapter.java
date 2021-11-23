@@ -126,6 +126,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
         DatabaseReference currPostRef = FirebaseDatabase.getInstance().getReference().child(mContext.getResources().getString(R.string.db_posts)).child(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID());
         DatabaseReference tagRef = currPostRef.child(mContext.getResources().getString(R.string.db_tags));
 
+        holder.mCircleImageView.setImageResource(R.drawable.avatar);
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference
                 .child(mContext.getResources().getString(R.string.db_users))
@@ -136,11 +137,13 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()) {
                             String url = snapshot.getValue(String.class);
-                            RequestOptions requestoptions = new RequestOptions();
-                            Glide.with(mContext)
-                                    .load(url)
-                                    .apply(requestoptions.fitCenter())
-                                    .into(holder.mCircleImageView);
+                            if (url != null && !url.isEmpty()) {
+                                RequestOptions requestoptions = new RequestOptions();
+                                Glide.with(mContext)
+                                        .load(url)
+                                        .apply(requestoptions.fitCenter())
+                                        .into(holder.mCircleImageView);
+                            }
                         }
                     }
 

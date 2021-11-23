@@ -66,6 +66,7 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.mCircleImageView.setImageResource(R.drawable.avatar);
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference
                 .child(mContext.getResources().getString(R.string.db_users))
@@ -76,11 +77,13 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     String url = snapshot.getValue(String.class);
-                    RequestOptions requestoptions = new RequestOptions();
-                    Glide.with(mContext)
-                            .load(url)
-                            .apply(requestoptions.fitCenter())
-                            .into(holder.mCircleImageView);
+                    if (url != null && !url.isEmpty()) {
+                        RequestOptions requestoptions = new RequestOptions();
+                        Glide.with(mContext)
+                                .load(url)
+                                .apply(requestoptions.fitCenter())
+                                .into(holder.mCircleImageView);
+                    }
                 }
             }
 

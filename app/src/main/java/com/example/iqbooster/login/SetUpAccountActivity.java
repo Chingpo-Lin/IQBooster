@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
@@ -74,6 +75,7 @@ public class SetUpAccountActivity extends AppCompatActivity {
     private StorageTask uploadTask;
     String profileLink = "";
     Uri profileUri;
+    Uri defaultUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +86,8 @@ public class SetUpAccountActivity extends AppCompatActivity {
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         firebaseStorageProfileImageRef = FirebaseStorage.getInstance().getReference().child(getResources().getString(R.string.db_profile_image));
         profileUri = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/drawable/" +
+                R.drawable.avatar);
+        defaultUri = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/drawable/" +
                 R.drawable.avatar);
 
         mcurrentSelect = 0;
@@ -171,7 +175,7 @@ public class SetUpAccountActivity extends AppCompatActivity {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
-                                            if (profileUri != null) {
+                                            if (profileUri != null && !profileUri.toString().equalsIgnoreCase(defaultUri.toString())) {
                                                 final StorageReference fileRef = firebaseStorageProfileImageRef
                                                         .child(mAuth.getCurrentUser().getUid() + ".jpg");
                                                 uploadTask = fileRef.putFile(profileUri);
@@ -206,6 +210,9 @@ public class SetUpAccountActivity extends AppCompatActivity {
                                                         }
                                                     }
                                                 });
+                                            } else {
+                                                addUserInfotoDatabase(userinput_username, useriput_prefreame, userinput_location);
+                                                goToTagPickerActivity();
                                             }
                                         } else {
                                             mContinueBtn.setVisibility(View.VISIBLE);
@@ -232,6 +239,18 @@ public class SetUpAccountActivity extends AppCompatActivity {
 
                         }
                     });
+                } else {
+                    String errormsg = "please make sure all fields are filled";
+                    Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  errormsg, Snackbar.LENGTH_LONG);
+                    View view = sn.getView();
+                    TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
+                    tv.setTextColor(Color.parseColor("#FFD700"));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                        tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                    } else {
+                        tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                    }
+                    sn.show();
                 }
             }
         });

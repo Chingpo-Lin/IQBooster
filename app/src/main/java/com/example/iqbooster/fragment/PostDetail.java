@@ -253,11 +253,13 @@ public class PostDetail extends Fragment {
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     if (snapshot.exists()) {
                                         String url = snapshot.getValue(String.class);
-                                        RequestOptions requestoptions = new RequestOptions();
-                                        Glide.with(getContext())
-                                                .load(url)
-                                                .apply(requestoptions.fitCenter())
-                                                .into(mProfileImage);
+                                        if (url != null && !url.isEmpty()) {
+                                            RequestOptions requestoptions = new RequestOptions();
+                                            Glide.with(getContext())
+                                                    .load(url)
+                                                    .apply(requestoptions.fitCenter())
+                                                    .into(mProfileImage);
+                                        }
                                     }
                                 }
 
@@ -546,6 +548,7 @@ public class PostDetail extends Fragment {
 
             @Override
             protected void onBindViewHolder(@NonNull CommentsViewHolder holder, int position, @NonNull Comment model) {
+                holder.mCircleImage.setImageResource(R.drawable.avatar);
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
                 databaseReference
                         .child(getContext().getResources().getString(R.string.db_users))
@@ -556,11 +559,13 @@ public class PostDetail extends Fragment {
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if (snapshot.exists()) {
                                     String url = snapshot.getValue(String.class);
-                                    RequestOptions requestoptions = new RequestOptions();
-                                    Glide.with(getContext())
-                                            .load(url)
-                                            .apply(requestoptions.fitCenter())
-                                            .into(holder.mCircleImage);
+                                    if (url != null && !url.isEmpty()) {
+                                        RequestOptions requestoptions = new RequestOptions();
+                                        Glide.with(getContext())
+                                                .load(url)
+                                                .apply(requestoptions.fitCenter())
+                                                .into(holder.mCircleImage);
+                                    }
                                 }
                             }
 
@@ -599,6 +604,7 @@ public class PostDetail extends Fragment {
                 replyAdapter = new FirebaseRecyclerAdapter<Comment, CommentsViewHolder>(replyOption) {
                     @Override
                     protected void onBindViewHolder(@NonNull CommentsViewHolder holder, int position, @NonNull Comment model) {
+                        holder.mCircleImage.setImageResource(R.drawable.avatar);
                         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
                         databaseReference
                                 .child(getContext().getResources().getString(R.string.db_users))

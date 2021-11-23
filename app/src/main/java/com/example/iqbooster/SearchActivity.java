@@ -266,6 +266,7 @@ public class SearchActivity extends AppCompatActivity {
         firebaseRecyclerAdapter4Users = new FirebaseRecyclerAdapter<AdapterUser, UserSuggestionAdapter.ViewHolder>(searchOption4Users) {
             @Override
             protected void onBindViewHolder(@NonNull UserSuggestionAdapter.ViewHolder holder, int position, @NonNull AdapterUser model) {
+                holder.mCircleImageView.setImageResource(R.drawable.avatar);
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
                 databaseReference
                         .child(getResources().getString(R.string.db_users))
@@ -276,11 +277,13 @@ public class SearchActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()) {
                             String url = snapshot.getValue(String.class);
-                            RequestOptions requestoptions = new RequestOptions();
-                            Glide.with(getApplicationContext())
-                                    .load(url)
-                                    .apply(requestoptions.fitCenter())
-                                    .into(holder.mCircleImageView);
+                            if (url != null && !url.isEmpty()) {
+                                RequestOptions requestoptions = new RequestOptions();
+                                Glide.with(getApplicationContext())
+                                        .load(url)
+                                        .apply(requestoptions.fitCenter())
+                                        .into(holder.mCircleImageView);
+                            }
                         }
                     }
 
@@ -384,6 +387,7 @@ public class SearchActivity extends AppCompatActivity {
                 DatabaseReference currPostRef = FirebaseDatabase.getInstance().getReference().child(getApplicationContext().getResources().getString(R.string.db_posts)).child(model.getRandomID());
                 DatabaseReference tagRef = currPostRef.child(getApplicationContext().getResources().getString(R.string.db_tags));
 
+                holder.mCircleImageView.setImageResource(R.drawable.avatar);
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
                 databaseReference
                         .child(getResources().getString(R.string.db_users))
@@ -394,11 +398,13 @@ public class SearchActivity extends AppCompatActivity {
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if (snapshot.exists()) {
                                     String url = snapshot.getValue(String.class);
-                                    RequestOptions requestoptions = new RequestOptions();
-                                    Glide.with(getApplicationContext())
-                                            .load(url)
-                                            .apply(requestoptions.fitCenter())
-                                            .into(holder.mCircleImageView);
+                                    if (url != null && !url.isEmpty()) {
+                                        RequestOptions requestoptions = new RequestOptions();
+                                        Glide.with(getApplicationContext())
+                                                .load(url)
+                                                .apply(requestoptions.fitCenter())
+                                                .into(holder.mCircleImageView);
+                                    }
                                 }
                             }
 
@@ -852,6 +858,7 @@ public class SearchActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull UserSuggestionAdapter.ViewHolder holder, int position) {
+            holder.mCircleImageView.setImageResource(R.drawable.avatar);
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
             databaseReference
                     .child(getResources().getString(R.string.db_users))
@@ -862,11 +869,13 @@ public class SearchActivity extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (snapshot.exists()) {
                                 String url = snapshot.getValue(String.class);
-                                RequestOptions requestoptions = new RequestOptions();
-                                Glide.with(getApplicationContext())
-                                        .load(url)
-                                        .apply(requestoptions.fitCenter())
-                                        .into(holder.mCircleImageView);
+                                if (url != null && !url.isEmpty()) {
+                                    RequestOptions requestoptions = new RequestOptions();
+                                    Glide.with(getApplicationContext())
+                                            .load(url)
+                                            .apply(requestoptions.fitCenter())
+                                            .into(holder.mCircleImageView);
+                                }
                             }
                         }
 
@@ -983,6 +992,7 @@ public class SearchActivity extends AppCompatActivity {
             DatabaseReference currPostRef = FirebaseDatabase.getInstance().getReference().child(getApplicationContext().getResources().getString(R.string.db_posts)).child(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID());
             DatabaseReference tagRef = currPostRef.child(getApplicationContext().getResources().getString(R.string.db_tags));
 
+            holder.mCircleImageView.setImageResource(R.drawable.avatar);
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
             databaseReference
                     .child(getResources().getString(R.string.db_users))
@@ -993,11 +1003,13 @@ public class SearchActivity extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (snapshot.exists()) {
                                 String url = snapshot.getValue(String.class);
-                                RequestOptions requestoptions = new RequestOptions();
-                                Glide.with(getApplicationContext())
-                                        .load(url)
-                                        .apply(requestoptions.fitCenter())
-                                        .into(holder.mCircleImageView);
+                                if (url != null && !url.isEmpty()) {
+                                    RequestOptions requestoptions = new RequestOptions();
+                                    Glide.with(getApplicationContext())
+                                            .load(url)
+                                            .apply(requestoptions.fitCenter())
+                                            .into(holder.mCircleImageView);
+                                }
                             }
                         }
 
