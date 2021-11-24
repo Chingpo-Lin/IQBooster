@@ -33,6 +33,7 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
     FirebaseAuth mAuth;
     Context mContext;
     private ArrayList<AdapterUser> mValue;
+    final String TAG = "UserSuggestionAdapter";
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public View mView;
@@ -67,6 +68,7 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.mCircleImageView.setImageResource(R.drawable.avatar);
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference
                 .child(mContext.getResources().getString(R.string.db_users))
@@ -77,11 +79,13 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     String url = snapshot.getValue(String.class);
-                    RequestOptions requestoptions = new RequestOptions();
-                    Glide.with(mContext)
-                            .load(url)
-                            .apply(requestoptions.fitCenter())
-                            .into(holder.mCircleImageView);
+                    if (url != null && !url.isEmpty()) {
+                        RequestOptions requestoptions = new RequestOptions();
+                        Glide.with(mContext)
+                                .load(url)
+                                .apply(requestoptions.fitCenter())
+                                .into(holder.mCircleImageView);
+                    }
                 }
             }
 
@@ -109,11 +113,11 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
         if (mAuth.getCurrentUser() != null) {
             DatabaseReference currUserFollowingRef = userRef.child(mAuth.getUid()).child(mContext.getResources().getString(R.string.db_following_users));
             DatabaseReference otherFollowerRef = userRef.child(mValue.get(holder.getAbsoluteAdapterPosition()).getUid()).child(mContext.getResources().getString(R.string.db_followers_users));
-            final AdapterUser[] adapteruser = new AdapterUser[1];
+            final AdapterUser[] myProfile = new AdapterUser[1];
             userRef.child(mAuth.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    adapteruser[0] = snapshot.getValue(AdapterUser.class);
+                    myProfile[0] = snapshot.getValue(AdapterUser.class);
                 }
 
                 @Override
@@ -125,6 +129,7 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
             if (mValue.get(holder.getAbsoluteAdapterPosition()).getUid().equals(mAuth.getUid())) {
                 holder.mFollowBtn.setVisibility(View.INVISIBLE);
             }
+            holder.mFollowBtn.setText(mContext.getResources().getString(R.string.follow));
             currUserFollowingRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -151,8 +156,8 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
                     if (mb.getText().toString().equalsIgnoreCase(mContext.getResources().getString(R.string.follow))) {
                         mb.setText(mContext.getResources().getString(R.string.following));
                         currUserFollowingRef.child(mValue.get(holder.getAbsoluteAdapterPosition()).getUid()).setValue(mValue.get(holder.getAbsoluteAdapterPosition()));
-                        otherFollowerRef.child(mAuth.getUid()).setValue(adapteruser[0]);
-//                        FirebaseUtil.sendSingleNotification(mContext.getApplicationContext(), mValue.get(holder.getAbsoluteAdapterPosition()).getUid(), "IQBooster", "You have 1 more follower.", "userSuggest");
+                        otherFollowerRef.child(mAuth.getUid()).setValue(myProfile[0]);
+                        FirebaseUtil.sendSingleNotification(mContext, mValue.get(holder.getAbsoluteAdapterPosition()).getUid(), mContext.getResources().getString(R.string.msg_tile), mContext.getResources().getString(R.string.msg_body_follow, myProfile[0].getName()), TAG);
                     } else if (mb.getText().toString().equalsIgnoreCase(mContext.getResources().getString(R.string.following))) {
                         mb.setText(mContext.getResources().getString(R.string.follow));
                         currUserFollowingRef.child(mValue.get(holder.getAbsoluteAdapterPosition()).getUid()).removeValue();
@@ -172,14 +177,21 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
 
     public void updateList(ArrayList<AdapterUser> newList) {
         this.mValue = newList;
+        notifyDataSetChanged();
     }
 
     public void push_back(AdapterUser adapterUser) {
+        String newUserID = adapterUser.getUid();
+        for (AdapterUser f_user : mValue) {
+            if (f_user.getUid().equalsIgnoreCase(newUserID)) {
+                return;
+            }
+        }
         this.mValue.add(adapterUser);
         notifyItemInserted(this.mValue.size()-1);
     }
 
-    public void remove(String UID) {
+    public void removeChild(String UID) {
         int idx = 0;
         for (AdapterUser user : mValue) {
             if (user.getUid().equalsIgnoreCase(UID)) {
@@ -187,7 +199,8 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
             }
             ++idx;
         }
-        mValue.remove(idx);
+        if (idx == mValue.size()) return;
+        this.mValue.remove(idx);
         notifyItemRemoved(idx);
     }
 
@@ -199,7 +212,8 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
             }
             ++idx;
         }
-        mValue.set(idx, changedUser);
+        if (idx == this.mValue.size()) return;
+        this.mValue.set(idx, changedUser);
         notifyItemChanged(idx);
     }
 }

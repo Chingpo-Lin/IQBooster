@@ -13,18 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.iqbooster.R;
-import com.example.iqbooster.adapter.NewsFeedAdapter;
 import com.example.iqbooster.adapter.UserSuggestionAdapter;
 import com.example.iqbooster.model.AdapterUser;
-import com.example.iqbooster.model.Post;
-import com.example.iqbooster.model.Tags;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -49,7 +45,6 @@ public class userPageFollowersFragment extends Fragment {
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabaseRef;
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -132,7 +127,7 @@ public class userPageFollowersFragment extends Fragment {
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
                 AdapterUser currUser = snapshot.getValue(AdapterUser.class);
-                mAdapter.remove(currUser.getUid());
+                mAdapter.removeChild(currUser.getUid());
             }
 
             @Override

@@ -66,7 +66,7 @@ public class SuggestionActivity extends AppCompatActivity {
         }
 
         Toolbar toolbar = findViewById(R.id.suggestion_toolbar);
-        toolbar.setTitle("People you may follow");
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
 
         mAdapter = new UserSuggestionAdapter(getApplicationContext(), potentialUsers, mAuth);
@@ -74,6 +74,7 @@ public class SuggestionActivity extends AppCompatActivity {
         mUsersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                potentialUsers.clear();
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     AdapterUser currUser = ds.getValue(AdapterUser.class);
                     Log.d(TAG, "checking user: " + currUser.getUid());
@@ -118,11 +119,13 @@ public class SuggestionActivity extends AppCompatActivity {
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.suggestion_done) {
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-            finish();
+        switch (item.getItemId()) {
+            case R.id.suggestion_done:
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                finish();
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 }
 

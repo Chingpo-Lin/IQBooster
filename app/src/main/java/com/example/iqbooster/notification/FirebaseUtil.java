@@ -46,7 +46,7 @@ public class FirebaseUtil {
     }
 
     private static void sendSingleNotification(String device_id, String title, String body, String TAG) {
-        Log.d(TAG,device_id);
+        Log.d(TAG, device_id);
 
         PushNotification notification = new PushNotification(device_id, new NotificationData(title, body));
 
@@ -65,7 +65,7 @@ public class FirebaseUtil {
         });
     }
 
-    public static void sendSingleNotification(Context context, String destUID,  String title, String body, String TAG) {
+    public static void sendSingleNotification(Context context, String destUID, String title, String body, String TAG) {
         Log.d(TAG, "sending notification");
         Log.d(TAG, context.getResources().getString(R.string.db_users));
         Log.d(TAG, context.getResources().getString(R.string.db_device_id));
@@ -74,11 +74,15 @@ public class FirebaseUtil {
         mUsers.child(destUID).child(context.getString(R.string.db_device_id)).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String destDeviceId = snapshot.getValue(String.class);
-                if (destDeviceId != null) {
-                    sendSingleNotification(destDeviceId, title, body, TAG);
+                if (snapshot.exists()) {
+                    String destDeviceId = snapshot.getValue(String.class);
+                    if (destDeviceId != null) {
+                        sendSingleNotification(destDeviceId, title, body, TAG);
+                    } else {
+                        Log.d(TAG, "no destination device id");
+                    }
                 } else {
-                    Log.d(TAG, "no destination device id");
+                    Log.d(TAG, "device id does not exist");
                 }
             }
 

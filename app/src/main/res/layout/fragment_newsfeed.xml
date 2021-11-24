@@ -18,6 +18,9 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.tabs.TabLayout
+                app:tabSelectedTextColor="@color/purple_500"
+                app:tabIndicatorColor="@color/purple_500"
+                app:tabRippleColor="@color/purple_200"
                 android:id="@+id/newsfeed_tabLayout"
                 android:layout_width="match_parent"
                 app:tabMode="scrollable"
@@ -84,13 +87,14 @@
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:contentDescription="Make a Post"
         android:visibility="gone"
         android:id="@+id/newsfeed_make_post_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginHorizontal="16sp"
-        android:layout_marginVertical="52sp"
+        android:layout_marginVertical="64sp"
         android:src="@drawable/outline_add_24"
         />
 

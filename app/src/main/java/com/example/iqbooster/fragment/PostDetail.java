@@ -1,10 +1,18 @@
 package com.example.iqbooster.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,11 +26,16 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.iqbooster.BuildConfig;
 import com.example.iqbooster.R;
+import com.example.iqbooster.UserProfilePage;
+import com.example.iqbooster.helperClass;
+import com.example.iqbooster.login.LoginActivity;
 import com.example.iqbooster.model.AdapterPost;
 import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.Comment;
@@ -42,6 +55,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -56,7 +71,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class PostDetail extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -74,6 +88,7 @@ public class PostDetail extends Fragment {
 
     private RecyclerView mAllCommentsRecyclerView;
     private LinearLayoutManager mLayoutManager;
+    private LinearLayout mLinearLayout;
 
     public EditText mCommentEditText;
     private LikeButton mLikeButton;
@@ -94,7 +109,6 @@ public class PostDetail extends Fragment {
 
     View v;
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -109,7 +123,6 @@ public class PostDetail extends Fragment {
      * @param param1 Parameter 1.
      * @return A new instance of fragment PostDetail.
      */
-    // TODO: Rename and change types and number of parameters
     public static PostDetail newInstance(String param1) {
         PostDetail fragment = new PostDetail();
         Bundle args = new Bundle();
@@ -175,6 +188,7 @@ public class PostDetail extends Fragment {
             mBody = v.findViewById(R.id.postdetail_article_body);
 
             mAllCommentsRecyclerView = v.findViewById(R.id.postdetail_comments_recyclerView);
+            mLinearLayout = v.findViewById(R.id.detail_linear_layout);
 
             mCommentEditText = v.findViewById(R.id.layout_bottomBar_EditText);
             mLikeButton = v.findViewById(R.id.like_collect_share_likeButton);
@@ -214,14 +228,17 @@ public class PostDetail extends Fragment {
                     ArrayList<String> allTrue = currTags.allTrue();
                     if (allTrue.size() >= 1) {
                         mFirstChip.setText("#" + allTrue.get(0));
+                        mFirstChip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
                         mFirstChip.setVisibility(View.VISIBLE);
                     }
                     if (allTrue.size() >= 2) {
                         mSecondChip.setText("#" + allTrue.get(1));
+                        mSecondChip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
                         mSecondChip.setVisibility(View.VISIBLE);
                     }
                     if (allTrue.size() >= 3) {
                         mThirdChip.setText("#" + allTrue.get(2));
+                        mThirdChip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
                         mThirdChip.setVisibility(View.VISIBLE);
                     }
 
@@ -237,11 +254,13 @@ public class PostDetail extends Fragment {
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     if (snapshot.exists()) {
                                         String url = snapshot.getValue(String.class);
-                                        RequestOptions requestoptions = new RequestOptions();
-                                        Glide.with(getContext())
-                                                .load(url)
-                                                .apply(requestoptions.fitCenter())
-                                                .into(mProfileImage);
+                                        if (url != null && !url.isEmpty()) {
+                                            RequestOptions requestoptions = new RequestOptions();
+                                            Glide.with(getContext())
+                                                    .load(url)
+                                                    .apply(requestoptions.fitCenter())
+                                                    .into(mProfileImage);
+                                        }
                                     }
                                 }
 
@@ -250,6 +269,16 @@ public class PostDetail extends Fragment {
 
                                 }
                             });
+
+                    mProfileImage.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent profilePageIntent = new Intent(getContext(), UserProfilePage.class);
+                            profilePageIntent.putExtra(UserProfilePage.EXTRA, currPost.getAuthor());
+                            profilePageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            getContext().startActivity(profilePageIntent);
+                        }
+                    });
 
                     try {
                         String thumbnailUrl = currPost.getThumbnail_image();
@@ -272,11 +301,12 @@ public class PostDetail extends Fragment {
 
                 }
             });
+
             currPostRef.child(getContext().getResources().getString(R.string.db_like_counts)).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     Long newCount = snapshot.getValue(Long.class);
-                    mLikeCountTextView.setText(String.valueOf(newCount));
+                    mLikeCountTextView.setText(helperClass.formatLikeCount(newCount));
                 }
 
                 @Override
@@ -344,9 +374,9 @@ public class PostDetail extends Fragment {
                                 if (getContext() != null) {
                                     currPostRef.child(getContext().getResources().getString(R.string.db_like_counts)).setValue(likeCount);
                                     currUserRef.child(getContext().getResources().getString(R.string.db_like_posts)).child(mParam1).setValue(new AdapterPost(mParam1, postAuthor));
+                                    // send notification to intent user
+                                    FirebaseUtil.sendSingleNotification(getContext(), postAuthor, getContext().getResources().getString(R.string.msg_tile), getContext().getResources().getString(R.string.msg_body_like, likeCount), TAG);
                                 }
-                                // send notification to intent user
-                                FirebaseUtil.sendSingleNotification(getContext(), postAuthor, "IQBooster", getContext().getResources().getString(R.string.msg_body_like, likeCount), "postDetail");
                             }
 
                             @Override
@@ -418,7 +448,52 @@ public class PostDetail extends Fragment {
                         }
                     }
                 });
+            } else {
+                mLikeButton.setOnLikeListener(new OnLikeListener() {
+                    @Override
+                    public void liked(LikeButton likeButton) {
+                        mLikeButton.setLiked(false);
+                        Intent LoginInActivityIntent = new Intent(getContext(), LoginActivity.class);
+                        LoginInActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getContext().startActivity(LoginInActivityIntent);
+                    }
+
+                    @Override
+                    public void unLiked(LikeButton likeButton) {
+                        mLikeButton.setLiked(false);
+                        Intent LoginInActivityIntent = new Intent(getContext(), LoginActivity.class);
+                        LoginInActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getContext().startActivity(LoginInActivityIntent);
+                    }
+                });
             }
+
+            mShareBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bitmap bitmap = getBitMapFromView(mLinearLayout);
+                    try {
+                        File file = new File(getContext().getExternalCacheDir(), File.separator + "office.jpg");
+                        FileOutputStream fOut = new FileOutputStream(file);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+                        fOut.flush();
+                        fOut.close();
+                        file.setReadable(true, false);
+                        Uri photoURI = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", file);
+                        final Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra(Intent.EXTRA_STREAM, photoURI);
+                        intent.putExtra(Intent.EXTRA_TEXT, "Hey, I found this interesting article on IQBooster. Take a look!");
+                        intent.setType("image/jpg");
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        //mContext.startActivity(Intent.createChooser(intent, "Share the article to"));
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
         }
 
         return v;
@@ -476,7 +551,32 @@ public class PostDetail extends Fragment {
 
             @Override
             protected void onBindViewHolder(@NonNull CommentsViewHolder holder, int position, @NonNull Comment model) {
-                // TODO: load profile page
+                holder.mCircleImage.setImageResource(R.drawable.avatar);
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                databaseReference
+                        .child(getContext().getResources().getString(R.string.db_users))
+                        .child(model.getAuthorID())
+                        .child(getContext().getResources().getString(R.string.db_profile_image))
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists()) {
+                                    String url = snapshot.getValue(String.class);
+                                    if (url != null && !url.isEmpty()) {
+                                        RequestOptions requestoptions = new RequestOptions();
+                                        Glide.with(getContext())
+                                                .load(url)
+                                                .apply(requestoptions.fitCenter())
+                                                .into(holder.mCircleImage);
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
                 holder.mUsername.setText(model.getAuthorDisplayName());
                 holder.mInfo.setText(model.getDate());
                 holder.mCommentBody.setText(model.getCommentBody());
@@ -507,6 +607,30 @@ public class PostDetail extends Fragment {
                 replyAdapter = new FirebaseRecyclerAdapter<Comment, CommentsViewHolder>(replyOption) {
                     @Override
                     protected void onBindViewHolder(@NonNull CommentsViewHolder holder, int position, @NonNull Comment model) {
+                        holder.mCircleImage.setImageResource(R.drawable.avatar);
+                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                        databaseReference
+                                .child(getContext().getResources().getString(R.string.db_users))
+                                .child(model.getAuthorID())
+                                .child(getContext().getResources().getString(R.string.db_profile_image))
+                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        if (snapshot.exists()) {
+                                            String url = snapshot.getValue(String.class);
+                                            RequestOptions requestoptions = new RequestOptions();
+                                            Glide.with(getContext())
+                                                    .load(url)
+                                                    .apply(requestoptions.fitCenter())
+                                                    .into(holder.mCircleImage);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
                         holder.mUsername.setText(model.getAuthorDisplayName());
                         holder.mInfo.setText(model.getDate());
                         holder.mCommentBody.setText(model.getCommentBody());
@@ -561,5 +685,19 @@ public class PostDetail extends Fragment {
             mReplyCommentsRecyclerView = itemView.findViewById(R.id.comment_reply_comment_recyclerView);
             mDivider = itemView.findViewById(R.id.comment_commentdivider);
         }
+    }
+
+    @SuppressLint("ResourceAsColor")
+    private Bitmap getBitMapFromView(View view){
+        Bitmap returnBitMap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(returnBitMap);
+        Drawable bgDrawable = view.getBackground();
+        if(bgDrawable != null){
+            bgDrawable.draw(canvas);
+        } else {
+            canvas.drawColor(android.R.color.white);
+        }
+        view.draw(canvas);
+        return returnBitMap;
     }
 }

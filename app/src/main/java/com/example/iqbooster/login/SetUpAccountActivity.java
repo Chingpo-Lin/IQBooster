@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
@@ -25,6 +26,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 
 import com.example.iqbooster.R;
+import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.User;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.Continuation;
@@ -35,13 +37,16 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 
-import java.util.HashMap;
+import java.util.Locale;
 
 
 public class SetUpAccountActivity extends AppCompatActivity {
@@ -71,6 +76,7 @@ public class SetUpAccountActivity extends AppCompatActivity {
     private StorageTask uploadTask;
     String profileLink = "";
     Uri profileUri;
+    Uri defaultUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +87,8 @@ public class SetUpAccountActivity extends AppCompatActivity {
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         firebaseStorageProfileImageRef = FirebaseStorage.getInstance().getReference().child(getResources().getString(R.string.db_profile_image));
         profileUri = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/drawable/" +
+                R.drawable.avatar);
+        defaultUri = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/drawable/" +
                 R.drawable.avatar);
 
         mcurrentSelect = 0;
@@ -130,75 +138,133 @@ public class SetUpAccountActivity extends AppCompatActivity {
         mContinueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String userinput_username = mUsername.getText().toString();
-                String useriput_prefreame = mPreferName.getText().toString();
+                String useriput_prefreame = mPreferName.getText().toString().trim();
+                String userinput_username = mUsername.getText().toString().trim().toLowerCase();
                 String userinput_location = mLocation.getText().toString();
                 if (!TextUtils.isEmpty(userinput_username.trim()) && !TextUtils.isEmpty(useriput_prefreame.trim())
                         && !TextUtils.isEmpty(userinput_location.trim())) {
                     FirebaseUser mUser = mAuth.getCurrentUser();
-                    if (mUser != null) {
-                        mContinueBtn.setVisibility(View.INVISIBLE);
-                        mProgressBar.setVisibility(View.VISIBLE);
-                        UserProfileChangeRequest addusername = new UserProfileChangeRequest.Builder()
-                                .setDisplayName(useriput_prefreame).build();
-                        mUser.updateProfile(addusername).addOnCompleteListener(new OnCompleteListener<Void>() {
+
+                    if (userinput_username.contains(" ")) {
+                        Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "no space in username is allowed", Snackbar.LENGTH_LONG);
+                        View view = sn.getView();
+                        TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
+                        tv.setTextColor(Color.parseColor("#FFD700"));
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                            tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                        } else {
+                            tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                        }
+                        sn.show();
+                    } else {
+                        FirebaseDatabase.getInstance().getReference().child(getResources().getString(R.string.db_users)).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    if (profileUri != null) {
-                                        final StorageReference fileRef = firebaseStorageProfileImageRef
-                                                .child(mAuth.getCurrentUser().getUid() + ".jpg");
-                                        uploadTask = fileRef.putFile(profileUri);
-                                        uploadTask.continueWithTask(new Continuation() {
-                                            @Override
-                                            public Object then(@NonNull Task task) throws Exception {
-                                                if (!task.isSuccessful()) {
-                                                    throw task.getException();
-                                                }
-                                                return fileRef.getDownloadUrl();
-                                            }
-                                        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Uri> task) {
-                                                if (task.isSuccessful()) {
-                                                    Uri downloadUrl = task.getResult();
-                                                    profileLink = downloadUrl.toString();
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                boolean conflictFound = false;
+                                for (DataSnapshot ds : snapshot.getChildren()) {
+                                    AdapterUser dsUser = ds.getValue(AdapterUser.class);
+                                    if (dsUser.getUsername().equalsIgnoreCase(userinput_username)) {
+                                        // username conflict
+                                        conflictFound = true;
+                                        Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "this username has been taken", Snackbar.LENGTH_LONG);
+                                        View view = sn.getView();
+                                        TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
+                                        tv.setTextColor(Color.parseColor("#FFD700"));
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                                            tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                                        } else {
+                                            tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                                        }
+                                        sn.show();
+                                        break;
+                                    }
+                                }
+                                if (mUser != null && !conflictFound) {
+                                    mContinueBtn.setVisibility(View.INVISIBLE);
+                                    mProgressBar.setVisibility(View.VISIBLE);
+                                    UserProfileChangeRequest addUsernameRequest = new UserProfileChangeRequest.Builder()
+                                            .setDisplayName(useriput_prefreame).build();
+                                    mUser.updateProfile(addUsernameRequest).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                if (profileUri != null && !profileUri.toString().equalsIgnoreCase(defaultUri.toString())) {
+                                                    final StorageReference fileRef = firebaseStorageProfileImageRef
+                                                            .child(mAuth.getCurrentUser().getUid() + ".jpg");
+                                                    uploadTask = fileRef.putFile(profileUri);
+                                                    uploadTask.continueWithTask(new Continuation() {
+                                                        @Override
+                                                        public Object then(@NonNull Task task) throws Exception {
+                                                            if (!task.isSuccessful()) {
+                                                                throw task.getException();
+                                                            }
+                                                            return fileRef.getDownloadUrl();
+                                                        }
+                                                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Uri> task) {
+                                                            if (task.isSuccessful()) {
+                                                                Uri downloadUrl = task.getResult();
+                                                                profileLink = downloadUrl.toString();
+                                                            } else {
+                                                                mContinueBtn.setVisibility(View.VISIBLE);
+                                                                mProgressBar.setVisibility(View.INVISIBLE);
+                                                            }
+                                                        }
+                                                    }).addOnCompleteListener(new OnCompleteListener() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task task) {
+                                                            if (task.isSuccessful()) {
+                                                                addUserInfotoDatabase(userinput_username, useriput_prefreame, userinput_location);
+                                                                goToTagPickerActivity();
+                                                            } else {
+                                                                mContinueBtn.setVisibility(View.VISIBLE);
+                                                                mProgressBar.setVisibility(View.INVISIBLE);
+                                                            }
+                                                        }
+                                                    });
                                                 } else {
-                                                    mContinueBtn.setVisibility(View.VISIBLE);
-                                                    mProgressBar.setVisibility(View.INVISIBLE);
-                                                }
-                                            }
-                                        }).addOnCompleteListener(new OnCompleteListener() {
-                                            @Override
-                                            public void onComplete(@NonNull Task task) {
-                                                if (task.isSuccessful()) {
                                                     addUserInfotoDatabase(userinput_username, useriput_prefreame, userinput_location);
                                                     goToTagPickerActivity();
-                                                } else {
-                                                    mContinueBtn.setVisibility(View.VISIBLE);
-                                                    mProgressBar.setVisibility(View.INVISIBLE);
                                                 }
+                                            } else {
+                                                mContinueBtn.setVisibility(View.VISIBLE);
+                                                mProgressBar.setVisibility(View.INVISIBLE);
+                                                String errormsg = task.getException().getMessage();
+                                                Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Error: " + errormsg, Snackbar.LENGTH_LONG);
+                                                View view = sn.getView();
+                                                TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
+                                                tv.setTextColor(Color.parseColor("#FFD700"));
+                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                                                    tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                                                } else {
+                                                    tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                                                }
+                                                sn.show();
                                             }
-                                        });
-                                    }
-                                } else {
-                                    mContinueBtn.setVisibility(View.VISIBLE);
-                                    mProgressBar.setVisibility(View.INVISIBLE);
-                                    String errormsg = task.getException().getMessage();
-                                    Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Error: " + errormsg, Snackbar.LENGTH_LONG);
-                                    View view = sn.getView();
-                                    TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
-                                    tv.setTextColor(Color.parseColor("#FFD700"));
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                                        tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                                    } else {
-                                        tv.setGravity(Gravity.CENTER_HORIZONTAL);
-                                    }
-                                    sn.show();
+                                        }
+                                    });
                                 }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
                             }
                         });
                     }
+                } else {
+                    String errormsg = "please make sure all fields are filled";
+                    Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  errormsg, Snackbar.LENGTH_LONG);
+                    View view = sn.getView();
+                    TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
+                    tv.setTextColor(Color.parseColor("#FFD700"));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                        tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                    } else {
+                        tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                    }
+                    sn.show();
                 }
             }
         });
@@ -263,9 +329,9 @@ public class SetUpAccountActivity extends AppCompatActivity {
                 mFirstRecommend.setPadding(mpl, mpl, mpl, mpl);
                 mSecondRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
                 mThirdRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
-                mainPhoto.setImageResource(R.drawable.food);
+                mainPhoto.setImageResource(R.drawable.pig);
                 profileUri = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/drawable/" +
-                        R.drawable.food);
+                        R.drawable.pig);
                 mcurrentSelect = 1;
             }
         } else if (value.equals("rec2")) {
@@ -280,9 +346,9 @@ public class SetUpAccountActivity extends AppCompatActivity {
                 mFirstRecommend.setPadding(mnpl, mnpl, mnpl, mnpl);
                 mSecondRecommend.setPadding(mpl,mpl,mpl,mpl);
                 mThirdRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
-                mainPhoto.setImageResource(R.drawable.sport);
+                mainPhoto.setImageResource(R.drawable.lion);
                 profileUri = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/drawable/" +
-                        R.drawable.sport);
+                        R.drawable.lion);
                 mcurrentSelect = 2;
             }
         } else {
@@ -296,9 +362,9 @@ public class SetUpAccountActivity extends AppCompatActivity {
                 mFirstRecommend.setPadding(mnpl, mnpl, mnpl, mnpl);
                 mSecondRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
                 mThirdRecommend.setPadding(mpl,mpl,mpl,mpl);
-                mainPhoto.setImageResource(R.drawable.entertainment);
+                mainPhoto.setImageResource(R.drawable.panda);
                 profileUri = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/drawable/" +
-                        R.drawable.entertainment);
+                        R.drawable.panda);
                 mcurrentSelect = 3;
             }
         }

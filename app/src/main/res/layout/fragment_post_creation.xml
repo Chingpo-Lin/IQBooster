@@ -55,7 +55,7 @@
                     android:id="@+id/post_creation_add_image"
                     android:layout_width="match_parent"
                     android:layout_height="260sp"
-                    android:background="@color/gray">
+                    android:background="@color/theme_gray_300">
 
                     <ImageView
                         android:id="@+id/post_creation_thumbnail"
@@ -133,7 +133,7 @@
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/post_creation_technology"
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            style="@style/custom_chip_choices"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checkable="true"
@@ -141,7 +141,7 @@
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/post_creation_sport"
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            style="@style/custom_chip_choices"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checkable="true"
@@ -149,7 +149,7 @@
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/post_creation_travel"
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            style="@style/custom_chip_choices"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checkable="true"
@@ -157,7 +157,7 @@
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/post_creation_food"
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            style="@style/custom_chip_choices"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checkable="true"
@@ -173,7 +173,7 @@
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/post_creation_health"
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            style="@style/custom_chip_choices"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checkable="true"
@@ -181,7 +181,7 @@
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/post_creation_business"
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            style="@style/custom_chip_choices"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checkable="true"
@@ -189,7 +189,7 @@
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/post_creation_entertainment"
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            style="@style/custom_chip_choices"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checkable="true"
