@@ -85,7 +85,7 @@ public class SuggestionActivity extends AppCompatActivity {
                             Log.d(TAG, "checking: " + t);
                             if (found) break;
                             if (tagsHashSet.contains(t)) {
-                                Log.d(TAG, "adding tags" );
+                                Log.d(TAG, "adding tags");
                                 potentialUsers.add(currUser);
                                 Log.d(TAG, "adding to potential users current size: " + potentialUsers.size());
                                 found = true;

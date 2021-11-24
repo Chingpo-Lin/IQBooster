@@ -48,7 +48,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class UserProfilePage extends AppCompatActivity implements ActivityInterface{
+public class UserProfilePage extends AppCompatActivity implements ActivityInterface {
 
     public static final String EXTRA = "USER_UID";
 
@@ -87,7 +87,7 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
         mToolbar = findViewById(R.id.user_profile_toolbar);
         setSupportActionBar(mToolbar);
 
-        final Drawable upArrow = ResourcesCompat.getDrawable(getResources(), R.drawable.abc_ic_ab_back_material ,null);
+        final Drawable upArrow = ResourcesCompat.getDrawable(getResources(), R.drawable.abc_ic_ab_back_material, null);
         upArrow.setColorFilter(Color.parseColor("#212121"), PorterDuff.Mode.SRC_ATOP);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
 
@@ -146,7 +146,7 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
                 AdapterUser currUser = snapshot.getValue(AdapterUser.class);
                 mDisplayName.setText(currUser.getName());
                 currPageUserDisplayName = mDisplayName.getText().toString();
-                mUserName.setText("@"+currUser.getUsername());
+                mUserName.setText("@" + currUser.getUsername());
                 try {
                     mUserLocation.setText(currUser.getLocation());
                     DataSnapshot profileSnapshot = snapshot.child(getResources().getString(R.string.db_profile_image));

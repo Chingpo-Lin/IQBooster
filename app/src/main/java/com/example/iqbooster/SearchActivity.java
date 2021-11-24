@@ -191,7 +191,7 @@ public class SearchActivity extends AppCompatActivity {
         mTagSearch4PostsAdapter = new firebaseTagSearchRecyclerAdapter4Posts(getApplicationContext(), tagSearchPotentialPosts);
         setUpFirebaseTagSearch();
 
-        final String [] testing = getApplicationContext().getResources().getStringArray(R.array.all_tags_with_hash);
+        final String[] testing = getApplicationContext().getResources().getStringArray(R.array.all_tags_with_hash);
         final ArrayAdapter<String> autoFillAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, testing);
         mAutoComplete.setAdapter(autoFillAdapter);
         mAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -274,25 +274,25 @@ public class SearchActivity extends AppCompatActivity {
                         .child(model.getUid())
                         .child(getResources().getString(R.string.db_profile_image))
                         .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()) {
-                            String url = snapshot.getValue(String.class);
-                            if (url != null && !url.isEmpty()) {
-                                RequestOptions requestoptions = new RequestOptions();
-                                Glide.with(getApplicationContext())
-                                        .load(url)
-                                        .apply(requestoptions.fitCenter())
-                                        .into(holder.mCircleImageView);
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists()) {
+                                    String url = snapshot.getValue(String.class);
+                                    if (url != null && !url.isEmpty()) {
+                                        RequestOptions requestoptions = new RequestOptions();
+                                        Glide.with(getApplicationContext())
+                                                .load(url)
+                                                .apply(requestoptions.fitCenter())
+                                                .into(holder.mCircleImageView);
+                                    }
+                                }
                             }
-                        }
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
 
-                    }
-                });
+                            }
+                        });
                 holder.mCircleImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -457,7 +457,7 @@ public class SearchActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         try {
                             AdapterUser postUser = snapshot.getValue(AdapterUser.class);
-                            String info = postUser.getName()  + " \u22C5 " + model.getDate();
+                            String info = postUser.getName() + " \u22C5 " + model.getDate();
                             holder.mInfo.setText(info);
                         } catch (Exception e) {
 
@@ -1063,7 +1063,7 @@ public class SearchActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     try {
                         AdapterUser postUser = snapshot.getValue(AdapterUser.class);
-                        String info = postUser.getName()  + " \u22C5 " + mValue.get(holder.getAbsoluteAdapterPosition()).getDate();
+                        String info = postUser.getName() + " \u22C5 " + mValue.get(holder.getAbsoluteAdapterPosition()).getDate();
                         holder.mInfo.setText(info);
                     } catch (Exception e) {
 
@@ -1356,11 +1356,11 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     @SuppressLint("ResourceAsColor")
-    private Bitmap getBitMapFromView(View view){
+    private Bitmap getBitMapFromView(View view) {
         Bitmap returnBitMap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(returnBitMap);
         Drawable bgDrawable = view.getBackground();
-        if(bgDrawable != null){
+        if (bgDrawable != null) {
             bgDrawable.draw(canvas);
         } else {
             canvas.drawColor(android.R.color.white);

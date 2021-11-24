@@ -50,13 +50,13 @@ public class FirebaseUtil {
 
         PushNotification notification = new PushNotification(device_id, new NotificationData(title, body));
 
-        NotificationAPI apiService =  NotificationClient.getClient().create(NotificationAPI.class);
+        NotificationAPI apiService = NotificationClient.getClient().create(NotificationAPI.class);
         retrofit2.Call<ResponseBody> responseBodyCall = apiService.sendNotification(notification);
 
         responseBodyCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
-                Log.d(TAG,"Successfully sent notification using retrofit.");
+                Log.d(TAG, "Successfully sent notification using retrofit.");
             }
 
             @Override

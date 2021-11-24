@@ -50,7 +50,6 @@ import com.like.OnLikeListener;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.net.URI;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -196,7 +195,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 try {
                     AdapterUser postUser = snapshot.getValue(AdapterUser.class);
-                    String info = postUser.getName()  + " \u22C5 " + mValue.get(holder.getAbsoluteAdapterPosition()).getDate();
+                    String info = postUser.getName() + " \u22C5 " + mValue.get(holder.getAbsoluteAdapterPosition()).getDate();
                     holder.mInfo.setText(info);
                 } catch (Exception e) {
 
@@ -443,7 +442,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                             notifyItemRemoved(currPosition);
 
                             Activity activity = (Activity) mContext;
-                            Snackbar snackbar = Snackbar.make(activity.findViewById(android.R.id.content),  "\"" + titleName + "\" has removed from your Collect", Snackbar.LENGTH_LONG);
+                            Snackbar snackbar = Snackbar.make(activity.findViewById(android.R.id.content), "\"" + titleName + "\" has removed from your Collect", Snackbar.LENGTH_LONG);
                             snackbar.setAction("UNDO", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -531,7 +530,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             }
         }
         this.mValue.add(post);
-        notifyItemInserted(mValue.size()-1);
+        notifyItemInserted(mValue.size() - 1);
     }
 
     public void removeChild(String RID) {
@@ -565,11 +564,11 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
     }
 
     @SuppressLint("ResourceAsColor")
-    private Bitmap getBitMapFromView(View view){
+    private Bitmap getBitMapFromView(View view) {
         Bitmap returnBitMap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(returnBitMap);
         Drawable bgDrawable = view.getBackground();
-        if(bgDrawable != null){
+        if (bgDrawable != null) {
             bgDrawable.draw(canvas);
         } else {
             canvas.drawColor(android.R.color.white);

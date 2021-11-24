@@ -13,7 +13,6 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
@@ -31,7 +30,6 @@ import android.widget.TextView;
 
 import com.example.iqbooster.ActivityInterface;
 import com.example.iqbooster.R;
-import com.example.iqbooster.login.SetUpAccountActivity;
 import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;
 import com.github.dhaval2404.imagepicker.ImagePicker;
@@ -118,13 +116,13 @@ public class PostCreation extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        ((AppCompatActivity)getActivity()).getSupportActionBar().show();
+        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
     }
 
     /**
@@ -193,9 +191,9 @@ public class PostCreation extends Fragment {
             @Override
             public void onClick(View v) {
                 ImagePicker.with((Activity) getContext())
-                        .crop()	    			//Crop image(Optional), Check Customization for more option
-                        .compress(1024)			//Final image size will be less than 1 MB(Optional)
-                        .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
+                        .crop()                    //Crop image(Optional), Check Customization for more option
+                        .compress(1024)            //Final image size will be less than 1 MB(Optional)
+                        .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
                         .createIntent(new Function1<Intent, Unit>() {
                             @Override
                             public Unit invoke(Intent intent) {
@@ -249,7 +247,7 @@ public class PostCreation extends Fragment {
                     View view = snackbar.getView();
                     TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
                     tv.setTextColor(Color.parseColor("#FFD700"));
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                     } else {
                         tv.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -263,7 +261,7 @@ public class PostCreation extends Fragment {
                     View view = snackbar.getView();
                     TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
                     tv.setTextColor(Color.parseColor("#FFD700"));
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                     } else {
                         tv.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -277,7 +275,7 @@ public class PostCreation extends Fragment {
                     View view = snackbar.getView();
                     TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
                     tv.setTextColor(Color.parseColor("#FFD700"));
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                     } else {
                         tv.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -287,11 +285,11 @@ public class PostCreation extends Fragment {
                 }
                 if (checkCount == 0) {
                     //Toast.makeText(getApplicationContext(), "Please Select At Least One Tag.", Toast.LENGTH_LONG).show();
-                    Snackbar sn = Snackbar.make(getActivity().findViewById(android.R.id.content),  "Please Select At Least One Tag", Snackbar.LENGTH_LONG);
+                    Snackbar sn = Snackbar.make(getActivity().findViewById(android.R.id.content), "Please Select At Least One Tag", Snackbar.LENGTH_LONG);
                     View view = sn.getView();
                     TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
                     tv.setTextColor(Color.parseColor("#FFD700"));
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                     } else {
                         tv.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -411,7 +409,7 @@ public class PostCreation extends Fragment {
                         View view = snackbar.getView();
                         TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
                         tv.setTextColor(Color.parseColor("#FFD700"));
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                         } else {
                             tv.setGravity(Gravity.CENTER_HORIZONTAL);

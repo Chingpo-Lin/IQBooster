@@ -12,7 +12,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
@@ -45,9 +44,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
-
-import java.util.Locale;
-
 
 public class SetUpAccountActivity extends AppCompatActivity {
 
@@ -104,9 +100,9 @@ public class SetUpAccountActivity extends AppCompatActivity {
         mSecondRecommend = findViewById(R.id.setup_photo_recommend_2);
         mThirdRecommend = findViewById(R.id.setup_photo_recommend_3);
 
-        mFirstRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
-        mSecondRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
-        mThirdRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
+        mFirstRecommend.setPadding(mnpl, mnpl, mnpl, mnpl);
+        mSecondRecommend.setPadding(mnpl, mnpl, mnpl, mnpl);
+        mThirdRecommend.setPadding(mnpl, mnpl, mnpl, mnpl);
 
         LocationResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -123,14 +119,13 @@ public class SetUpAccountActivity extends AppCompatActivity {
                 });
 
 
-
         mUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ImagePicker.with(SetUpAccountActivity.this)
-                        .crop()	    			//Crop image(Optional), Check Customization for more option
-                        .compress(1024)			//Final image size will be less than 1 MB(Optional)
-                        .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
+                        .crop()                    //Crop image(Optional), Check Customization for more option
+                        .compress(1024)            //Final image size will be less than 1 MB(Optional)
+                        .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
                         .start(10);
             }
         });
@@ -146,11 +141,11 @@ public class SetUpAccountActivity extends AppCompatActivity {
                     FirebaseUser mUser = mAuth.getCurrentUser();
 
                     if (userinput_username.contains(" ")) {
-                        Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "no space in username is allowed", Snackbar.LENGTH_LONG);
+                        Snackbar sn = Snackbar.make(findViewById(android.R.id.content), "no space in username is allowed", Snackbar.LENGTH_LONG);
                         View view = sn.getView();
                         TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
                         tv.setTextColor(Color.parseColor("#FFD700"));
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                         } else {
                             tv.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -166,11 +161,11 @@ public class SetUpAccountActivity extends AppCompatActivity {
                                     if (dsUser.getUsername().equalsIgnoreCase(userinput_username)) {
                                         // username conflict
                                         conflictFound = true;
-                                        Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "this username has been taken", Snackbar.LENGTH_LONG);
+                                        Snackbar sn = Snackbar.make(findViewById(android.R.id.content), "this username has been taken", Snackbar.LENGTH_LONG);
                                         View view = sn.getView();
                                         TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
                                         tv.setTextColor(Color.parseColor("#FFD700"));
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                             tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                                         } else {
                                             tv.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -231,11 +226,11 @@ public class SetUpAccountActivity extends AppCompatActivity {
                                                 mContinueBtn.setVisibility(View.VISIBLE);
                                                 mProgressBar.setVisibility(View.INVISIBLE);
                                                 String errormsg = task.getException().getMessage();
-                                                Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Error: " + errormsg, Snackbar.LENGTH_LONG);
+                                                Snackbar sn = Snackbar.make(findViewById(android.R.id.content), "Error: " + errormsg, Snackbar.LENGTH_LONG);
                                                 View view = sn.getView();
                                                 TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
                                                 tv.setTextColor(Color.parseColor("#FFD700"));
-                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                                     tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                                                 } else {
                                                     tv.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -255,11 +250,11 @@ public class SetUpAccountActivity extends AppCompatActivity {
                     }
                 } else {
                     String errormsg = "please make sure all fields are filled";
-                    Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  errormsg, Snackbar.LENGTH_LONG);
+                    Snackbar sn = Snackbar.make(findViewById(android.R.id.content), errormsg, Snackbar.LENGTH_LONG);
                     View view = sn.getView();
                     TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
                     tv.setTextColor(Color.parseColor("#FFD700"));
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                     } else {
                         tv.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -327,8 +322,8 @@ public class SetUpAccountActivity extends AppCompatActivity {
                 mcurrentSelect = 0;
             } else {
                 mFirstRecommend.setPadding(mpl, mpl, mpl, mpl);
-                mSecondRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
-                mThirdRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
+                mSecondRecommend.setPadding(mnpl, mnpl, mnpl, mnpl);
+                mThirdRecommend.setPadding(mnpl, mnpl, mnpl, mnpl);
                 mainPhoto.setImageResource(R.drawable.pig);
                 profileUri = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/drawable/" +
                         R.drawable.pig);
@@ -336,7 +331,7 @@ public class SetUpAccountActivity extends AppCompatActivity {
             }
         } else if (value.equals("rec2")) {
             if (mcurrentSelect == 2) {
-                mSecondRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
+                mSecondRecommend.setPadding(mnpl, mnpl, mnpl, mnpl);
                 mSecondRecommend.clearColorFilter();
                 mainPhoto.setImageResource(R.drawable.avatar);
                 profileUri = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/drawable/" +
@@ -344,8 +339,8 @@ public class SetUpAccountActivity extends AppCompatActivity {
                 mcurrentSelect = 0;
             } else {
                 mFirstRecommend.setPadding(mnpl, mnpl, mnpl, mnpl);
-                mSecondRecommend.setPadding(mpl,mpl,mpl,mpl);
-                mThirdRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
+                mSecondRecommend.setPadding(mpl, mpl, mpl, mpl);
+                mThirdRecommend.setPadding(mnpl, mnpl, mnpl, mnpl);
                 mainPhoto.setImageResource(R.drawable.lion);
                 profileUri = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/drawable/" +
                         R.drawable.lion);
@@ -353,15 +348,15 @@ public class SetUpAccountActivity extends AppCompatActivity {
             }
         } else {
             if (mcurrentSelect == 3) {
-                mThirdRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
+                mThirdRecommend.setPadding(mnpl, mnpl, mnpl, mnpl);
                 mainPhoto.setImageResource(R.drawable.avatar);
                 profileUri = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/drawable/" +
                         R.drawable.avatar);
                 mcurrentSelect = 0;
             } else {
                 mFirstRecommend.setPadding(mnpl, mnpl, mnpl, mnpl);
-                mSecondRecommend.setPadding(mnpl,mnpl,mnpl,mnpl);
-                mThirdRecommend.setPadding(mpl,mpl,mpl,mpl);
+                mSecondRecommend.setPadding(mnpl, mnpl, mnpl, mnpl);
+                mThirdRecommend.setPadding(mpl, mpl, mpl, mpl);
                 mainPhoto.setImageResource(R.drawable.panda);
                 profileUri = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/drawable/" +
                         R.drawable.panda);

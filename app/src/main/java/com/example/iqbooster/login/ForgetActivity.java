@@ -70,11 +70,11 @@ public class ForgetActivity extends AppCompatActivity {
                                 Toast.makeText(ForgetActivity.this, "Reset Password Email Sent", Toast.LENGTH_LONG).show();
                             } else {
                                 String ErrorMsg = task.getException().getMessage();
-                                Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Error: " + ErrorMsg, Snackbar.LENGTH_LONG);
+                                Snackbar sn = Snackbar.make(findViewById(android.R.id.content), "Error: " + ErrorMsg, Snackbar.LENGTH_LONG);
                                 View view = sn.getView();
                                 TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
                                 tv.setTextColor(Color.parseColor("#FFD700"));
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                     tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                                 } else {
                                     tv.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -88,11 +88,11 @@ public class ForgetActivity extends AppCompatActivity {
                         }
                     });
                 } else {
-                    Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Please Enter an Email", Snackbar.LENGTH_LONG);
+                    Snackbar sn = Snackbar.make(findViewById(android.R.id.content), "Please Enter an Email", Snackbar.LENGTH_LONG);
                     View view = sn.getView();
                     TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
                     tv.setTextColor(Color.parseColor("#FFD700"));
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                     } else {
                         tv.setGravity(Gravity.CENTER_HORIZONTAL);

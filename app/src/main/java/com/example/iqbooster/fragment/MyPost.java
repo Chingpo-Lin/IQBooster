@@ -145,12 +145,12 @@ public class MyPost extends Fragment {
                 String currPostID = snapshot.getValue(String.class);
 
                 postRef.child(currPostID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DataSnapshot> task) {
-                            Post post = task.getResult().getValue(Post.class);
-                            mAdapter.push_back(post);
-                        }
-                    });
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        Post post = task.getResult().getValue(Post.class);
+                        mAdapter.push_back(post);
+                    }
+                });
             }
 
             @Override

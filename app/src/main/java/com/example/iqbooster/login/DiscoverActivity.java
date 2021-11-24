@@ -22,7 +22,6 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.snackbar.Snackbar;
 
 
-
 public class DiscoverActivity extends AppCompatActivity {
 
     private static final String TAG = "DiscoverActivity";
@@ -103,7 +102,7 @@ public class DiscoverActivity extends AppCompatActivity {
         mSport_card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectTag(1,mSport_image, mSport_select);
+                selectTag(1, mSport_image, mSport_select);
             }
         });
 
@@ -158,7 +157,7 @@ public class DiscoverActivity extends AppCompatActivity {
                     View view = sn.getView();
                     TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
                     tv.setTextColor(Color.parseColor("#FFD700"));
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                     } else {
                         tv.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -195,7 +194,7 @@ public class DiscoverActivity extends AppCompatActivity {
                     View view = sn.getView();
                     TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
                     tv.setTextColor(Color.parseColor("#FFD700"));
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                     } else {
                         tv.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -219,7 +218,7 @@ public class DiscoverActivity extends AppCompatActivity {
             View view = sn.getView();
             TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
             tv.setTextColor(Color.parseColor("#FFD700"));
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             } else {
                 tv.setGravity(Gravity.CENTER_HORIZONTAL);

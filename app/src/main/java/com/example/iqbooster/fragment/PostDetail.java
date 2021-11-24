@@ -145,18 +145,18 @@ public class PostDetail extends Fragment {
     public void onResume() {
         super.onResume();
         try {
-            ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+            ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
         } catch (Exception e) {
 
         }
-        
+
     }
 
     @Override
     public void onStop() {
         super.onStop();
         try {
-            ((AppCompatActivity)getActivity()).getSupportActionBar().show();
+            ((AppCompatActivity) getActivity()).getSupportActionBar().show();
         } catch (Exception e) {
 
         }
@@ -211,7 +211,7 @@ public class PostDetail extends Fragment {
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             try {
                                 AdapterUser postUser = snapshot.getValue(AdapterUser.class);
-                                String info = postUser.getName()  + " \u22C5 " + currPost.getDate();
+                                String info = postUser.getName() + " \u22C5 " + currPost.getDate();
                                 mInfo.setText(info);
                             } catch (Exception e) {
 
@@ -421,7 +421,7 @@ public class PostDetail extends Fragment {
                 mCommentEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                     @Override
                     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        if ((actionId == EditorInfo.IME_NULL && event.getAction() == KeyEvent.ACTION_DOWN)|| (actionId == EditorInfo.IME_ACTION_DONE)){
+                        if ((actionId == EditorInfo.IME_NULL && event.getAction() == KeyEvent.ACTION_DOWN) || (actionId == EditorInfo.IME_ACTION_DONE)) {
                             hideKeyboard();
                             if (mCommentEditText.getHint().charAt(0) == 'R') {
                                 Log.d(TAG, "replying to.,,");
@@ -688,11 +688,11 @@ public class PostDetail extends Fragment {
     }
 
     @SuppressLint("ResourceAsColor")
-    private Bitmap getBitMapFromView(View view){
+    private Bitmap getBitMapFromView(View view) {
         Bitmap returnBitMap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(returnBitMap);
         Drawable bgDrawable = view.getBackground();
-        if(bgDrawable != null){
+        if (bgDrawable != null) {
             bgDrawable.draw(canvas);
         } else {
             canvas.drawColor(android.R.color.white);

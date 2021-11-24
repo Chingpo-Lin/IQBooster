@@ -15,7 +15,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.iqbooster.R;
 import com.example.iqbooster.UserProfilePage;
 import com.example.iqbooster.model.AdapterUser;
-import com.example.iqbooster.model.Post;
 import com.example.iqbooster.notification.FirebaseUtil;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -75,25 +74,25 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
                 .child(mValue.get(holder.getAbsoluteAdapterPosition()).getUid())
                 .child(mContext.getResources().getString(R.string.db_profile_image))
                 .addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    String url = snapshot.getValue(String.class);
-                    if (url != null && !url.isEmpty()) {
-                        RequestOptions requestoptions = new RequestOptions();
-                        Glide.with(mContext)
-                                .load(url)
-                                .apply(requestoptions.fitCenter())
-                                .into(holder.mCircleImageView);
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            String url = snapshot.getValue(String.class);
+                            if (url != null && !url.isEmpty()) {
+                                RequestOptions requestoptions = new RequestOptions();
+                                Glide.with(mContext)
+                                        .load(url)
+                                        .apply(requestoptions.fitCenter())
+                                        .into(holder.mCircleImageView);
+                            }
+                        }
                     }
-                }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
+                    }
+                });
 
         holder.mCircleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -188,7 +187,7 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
             }
         }
         this.mValue.add(adapterUser);
-        notifyItemInserted(this.mValue.size()-1);
+        notifyItemInserted(this.mValue.size() - 1);
     }
 
     public void removeChild(String UID) {

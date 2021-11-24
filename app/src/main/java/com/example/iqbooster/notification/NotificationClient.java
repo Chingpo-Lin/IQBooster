@@ -1,6 +1,7 @@
 package com.example.iqbooster.notification;
 
 import static com.example.iqbooster.notification.FirebaseConstants.BASE_URL;
+
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
