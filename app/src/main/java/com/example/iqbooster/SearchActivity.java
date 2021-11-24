@@ -303,7 +303,7 @@ public class SearchActivity extends AppCompatActivity {
                     }
                 });
                 holder.mNameTextView.setText(model.getName());
-                holder.mUsernameTextView.setText(model.getUsername());
+                holder.mUsernameTextView.setText("@" + model.getUsername());
 
                 DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child(getApplicationContext().getResources().getString(R.string.db_users));
 
