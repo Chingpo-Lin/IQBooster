@@ -40,6 +40,7 @@ import com.example.iqbooster.fragment.MyPost;
 import com.example.iqbooster.fragment.NewsFeed;
 import com.example.iqbooster.fragment.PostDetail;
 import com.example.iqbooster.login.LoginActivity;
+import com.example.iqbooster.login.MapsActivity;
 import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;
@@ -65,7 +66,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ActivityInterface, SensorEventListener {
 
     private static final String TAG = "MainActivity: ";
-    private static final String BUILD_VERSION = "Current Build Version: 1.2.231";
+    private static final String BUILD_VERSION = "Current Build Version: 1.2.232";
 
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
