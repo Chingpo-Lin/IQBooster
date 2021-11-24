@@ -87,6 +87,7 @@
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:contentDescription="Make a Post"
         android:visibility="gone"
         android:id="@+id/newsfeed_make_post_btn"
         android:layout_width="wrap_content"
