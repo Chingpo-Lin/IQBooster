@@ -1,5 +1,6 @@
 package com.example.iqbooster.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -8,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -96,7 +99,8 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
                 Intent profilePageIntent = new Intent(mContext, UserProfilePage.class);
                 profilePageIntent.putExtra(UserProfilePage.EXTRA, mValue.get(holder.getAbsoluteAdapterPosition()).getUid());
                 profilePageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                mContext.startActivity(profilePageIntent);
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext, holder.mCircleImageView, ViewCompat.getTransitionName(holder.mCircleImageView));
+                mContext.startActivity(profilePageIntent, options.toBundle());
             }
         });
 
