@@ -51,6 +51,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.transition.MaterialElevationScale;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -501,11 +502,18 @@ public class SearchActivity extends AppCompatActivity {
 
                 holder.mSubtitle.setText(model.getSubTitle());
                 holder.mSubtitle.setOnClickListener(new View.OnClickListener() {
+
                     @Override
                     public void onClick(View v) {
                         PostDetail postDetail = new PostDetail();
-                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.search_activity_container, postDetail.newInstance(model.getRandomID())).addToBackStack(null).commit();
+                        PostDetail newFrag = postDetail.newInstance(model.getRandomID());
+                        newFrag.setExitTransition(new MaterialElevationScale(true));
+                        newFrag.setEnterTransition(new MaterialElevationScale(true));
+                        getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.search_activity_container, newFrag)
+                                .addToBackStack(null)
+                                .commit();
                     }
                 });
                 // TODO: update subtitle if editable
@@ -1107,8 +1115,14 @@ public class SearchActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     PostDetail postDetail = new PostDetail();
-                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.search_activity_container, postDetail.newInstance(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID())).addToBackStack(null).commit();
+                    PostDetail newFrag = postDetail.newInstance(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID());
+                    newFrag.setExitTransition(new MaterialElevationScale(true));
+                    newFrag.setEnterTransition(new MaterialElevationScale(true));
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .add(R.id.search_activity_container, newFrag)
+                            .addToBackStack(null)
+                            .commit();
                 }
             });
             // TODO: update subtitle if editable

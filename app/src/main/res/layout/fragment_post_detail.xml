@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:id="@+id/post_detail"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:background="@color/theme_gray_300"
     tools:context=".fragment.PostDetail"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:transitionName="post_transition"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
         <androidx.core.widget.NestedScrollView

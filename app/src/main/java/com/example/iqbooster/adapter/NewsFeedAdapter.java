@@ -4,10 +4,15 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.content.FileProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.FragmentNavigator;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -39,6 +44,9 @@ import com.example.iqbooster.helperClass;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.transition.MaterialContainerTransform;
+import com.google.android.material.transition.MaterialElevationScale;
+import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -104,7 +112,6 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             mCollectBtn = itemView.findViewById(R.id.like_collect_share_collect);
             mShare = itemView.findViewById(R.id.like_collect_share_share);
 
-            ViewCompat.setTransitionName(mHeading, "testT");
         }
     }
 
@@ -119,11 +126,11 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_textwithimg, parent, false);
         return new ViewHolder(view);
     }
-
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Log.d("NewsFeedAdapter: ", mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID());
@@ -227,7 +234,6 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
         } catch (Exception e) {
 
         }
-
         holder.mSubtitle.setText(mValue.get(holder.getAbsoluteAdapterPosition()).getSubTitle());
         holder.mSubtitle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -241,17 +247,39 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                     case PROFILE_PAGE:
                         container_id = R.id.user_profile_container;
                 }
+                View view = holder.mView;
                 Log.i("msubtitle", "onClick: msubtitle");
+//                NavHostFragment navHostFragment = (NavHostFragment) activityInterface.getActivityFragmentManger().findFragmentById(view.getId());
+//                NavController navController = navHostFragment.getNavController();
+//                FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
+//                        .addSharedElement(view, "post_transition")
+//                        .build();
+//                Navigation.findNavController(v).navigate(R.id.post_detail,
+//                        null,
+//                        null,
+//                        extras);
+
+                PostDetail newFrag = postDetail.newInstance(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID());
+//                MaterialContainerTransformSharedElementCallback b = new MaterialContainerTransformSharedElementCallback();
+//                newFrag.getActivity().setEnterSharedElementCallback(b);
+//                MaterialContainerTransform t = new MaterialContainerTransform();
+//                t.addTarget(R.id.post_detail);
+//                t.setDuration(3000);
+//                newFrag.setSharedElementEnterTransition(t);
+                newFrag.setExitTransition(new MaterialElevationScale(true));
+                newFrag.setEnterTransition(new MaterialElevationScale(true));
+
+//                newFrag.setEnterSharedElementCallback(t);
                 activityInterface.getActivityFragmentManger()
                         .beginTransaction()
-                        .setCustomAnimations(
-                                R.anim.slide_in_right,  // enter
-                                R.anim.fade_out,  // exit
-                                R.anim.slide_in_right,   // popEnter
-                                R.anim.slide_out_right  // back
-                        )
-                        .addSharedElement(holder.mTitle, "testT")
-                        .add(container_id, postDetail.newInstance(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID()))
+//                        .setCustomAnimations(
+//                                R.anim.slide_in_right,  // enter
+//                                R.anim.slide_out_left,  // exit
+//                                R.anim.slide_in_right,   // popEnter
+//                                R.anim.slide_out_right  // back
+//                        )
+//                        .addSharedElement(view, "post_transition")
+                        .add(container_id, newFrag)
                         .addToBackStack(null)
                         .commit();
             }

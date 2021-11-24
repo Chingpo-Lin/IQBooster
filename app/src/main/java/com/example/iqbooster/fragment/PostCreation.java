@@ -13,7 +13,6 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
@@ -31,7 +30,6 @@ import android.widget.TextView;
 
 import com.example.iqbooster.ActivityInterface;
 import com.example.iqbooster.R;
-import com.example.iqbooster.login.SetUpAccountActivity;
 import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;
 import com.github.dhaval2404.imagepicker.ImagePicker;
@@ -381,7 +379,16 @@ public class PostCreation extends Fragment {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             activityInterface.getActivityFragmentManger().popBackStack();
                                             activityInterface.getActivityFragmentManger()
-                                                    .beginTransaction().replace(R.id.main_container, postDetail.newInstance(newPostID)).addToBackStack(null).commit();
+                                                    .beginTransaction()
+                                                    .setCustomAnimations(
+                                                            R.anim.hyperspace_out,  // enter
+                                                            R.anim.fade_out,  // exit
+                                                            R.anim.fade_in,   // popEnter
+                                                            R.anim.hyperspace_in  // back
+                                                    )
+                                                    .replace(R.id.main_container, postDetail.newInstance(newPostID))
+                                                    .addToBackStack(null)
+                                                    .commit();
                                         }
                                     });
                                 }
@@ -392,10 +399,10 @@ public class PostCreation extends Fragment {
                         activityInterface.getActivityFragmentManger()
                                 .beginTransaction()
                                 .setCustomAnimations(
-                                        R.anim.hyperspace,  // enter
+                                        R.anim.hyperspace_out,  // enter
                                         R.anim.fade_out,  // exit
                                         R.anim.fade_in,   // popEnter
-                                        R.anim.slide_out_right  // back
+                                        R.anim.hyperspace_in  // back
                                 )
                                 .replace(R.id.main_container, postDetail.newInstance(newPostID))
                                 .addToBackStack(null)

@@ -28,6 +28,7 @@ import com.example.iqbooster.fragment.tabs.technologyFragment;
 import com.example.iqbooster.fragment.tabs.travelFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.transition.MaterialElevationScale;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -96,6 +97,8 @@ public class NewsFeed extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        setExitTransition(new MaterialElevationScale(false));
+        setReenterTransition(new MaterialElevationScale(true));
     }
 
     @Override

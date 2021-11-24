@@ -5,7 +5,7 @@
     android:orientation="horizontal"
     android:background="@color/white"
     android:layout_height="72sp"
-    android:transitionName="test_transition3"
+    android:transitionName="post_transition"
     >
 <!--TODO rename transition name-->
     <de.hdodenhof.circleimageview.CircleImageView

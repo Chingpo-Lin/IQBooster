@@ -1,6 +1,7 @@
 package com.example.iqbooster.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.content.FileProvider;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
@@ -49,6 +51,9 @@ import com.example.iqbooster.model.Tags;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.transition.MaterialContainerTransform;
+import com.google.android.material.transition.MaterialElevationScale;
+import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -144,9 +149,16 @@ public class PostDetail extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
 //            mParam2 = getArguments().getString(ARG_PARAM2);
         }
+////        MaterialContainerTransform
+        setExitTransition(new MaterialElevationScale(false));
+        setReenterTransition(new MaterialElevationScale(true));
+//
+////        Transition t = TransitionInflater.from(getContext()).inflateTransition(R.transition.shared);
+//        this.getActivity().setEnterSharedElementCallback(new MaterialContainerTransformSharedElementCallback());
+//        MaterialContainerTransform t = new MaterialContainerTransform();
+//        t.addTarget(R.id.post_detail);
+//        t.setDuration(2000);
 
-        Transition t = TransitionInflater.from(getContext()).inflateTransition(R.transition.shared);
-        setSharedElementEnterTransition(t);
 
     }
 
@@ -284,7 +296,8 @@ public class PostDetail extends Fragment {
                             Intent profilePageIntent = new Intent(getContext(), UserProfilePage.class);
                             profilePageIntent.putExtra(UserProfilePage.EXTRA, currPost.getAuthor());
                             profilePageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            getContext().startActivity(profilePageIntent);
+                            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) getContext(), mProfileImage, "circleImageTransition");
+                            getContext().startActivity(profilePageIntent, options.toBundle());
                         }
                     });
 
