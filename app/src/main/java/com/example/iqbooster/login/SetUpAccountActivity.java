@@ -158,20 +158,25 @@ public class SetUpAccountActivity extends AppCompatActivity {
                                 boolean conflictFound = false;
                                 for (DataSnapshot ds : snapshot.getChildren()) {
                                     AdapterUser dsUser = ds.getValue(AdapterUser.class);
-                                    if (dsUser.getUsername().equalsIgnoreCase(userinput_username)) {
-                                        // username conflict
-                                        conflictFound = true;
-                                        Snackbar sn = Snackbar.make(findViewById(android.R.id.content), "this username has been taken", Snackbar.LENGTH_LONG);
-                                        View view = sn.getView();
-                                        TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
-                                        tv.setTextColor(Color.parseColor("#FFD700"));
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                            tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                                        } else {
-                                            tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                                    if (!ds.exists() || dsUser == null) continue;
+                                    try {
+                                        if (dsUser.getUsername().equalsIgnoreCase(userinput_username)) {
+                                            // username conflict
+                                            conflictFound = true;
+                                            Snackbar sn = Snackbar.make(findViewById(android.R.id.content), "this username has been taken", Snackbar.LENGTH_LONG);
+                                            View view = sn.getView();
+                                            TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
+                                            tv.setTextColor(Color.parseColor("#FFD700"));
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                                tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                                            } else {
+                                                tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                                            }
+                                            sn.show();
+                                            break;
                                         }
-                                        sn.show();
-                                        break;
+                                    } catch (Exception e) {
+
                                     }
                                 }
                                 if (mUser != null && !conflictFound) {

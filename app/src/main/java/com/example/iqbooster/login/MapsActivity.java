@@ -157,7 +157,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 mMap.addMarker(new MarkerOptions()
                                         .position(latLng)
                                         .title("My search location"));
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16.0f));
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10.0f));
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -203,7 +203,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 mConfirmButton.setEnabled(true);
                                 mMap.clear();
                                 mMap.addMarker(markerOptions);
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16.0f));
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10.0f));
                             }
                         } catch (IOException e) {
                             e.printStackTrace();

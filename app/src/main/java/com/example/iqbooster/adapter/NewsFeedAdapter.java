@@ -13,7 +13,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -443,6 +445,15 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
 
                             Activity activity = (Activity) mContext;
                             Snackbar snackbar = Snackbar.make(activity.findViewById(android.R.id.content), "\"" + titleName + "\" has removed from your Collect", Snackbar.LENGTH_LONG);
+                            View view = snackbar.getView();
+                            TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
+                            tv.setTextColor(Color.parseColor("#FFD700"));
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                            } else {
+                                tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                            }
+                            snackbar.show();
                             snackbar.setAction("UNDO", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
