@@ -42,6 +42,7 @@ import com.example.iqbooster.model.AdapterPost;
 import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;
+import com.example.iqbooster.notification.FirebaseUtil;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.button.MaterialButton;
@@ -309,11 +310,11 @@ public class SearchActivity extends AppCompatActivity {
                 if (mAuth.getCurrentUser() != null) {
                     DatabaseReference currUserFollowingRef = userRef.child(mAuth.getUid()).child(getApplicationContext().getResources().getString(R.string.db_following_users));
                     DatabaseReference otherFollowerRef = userRef.child(model.getUid()).child(getApplicationContext().getResources().getString(R.string.db_followers_users));
-                    final AdapterUser[] adapteruser = new AdapterUser[1];
+                    final AdapterUser[] myProfile = new AdapterUser[1];
                     userRef.child(mAuth.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            adapteruser[0] = snapshot.getValue(AdapterUser.class);
+                            myProfile[0] = snapshot.getValue(AdapterUser.class);
                         }
 
                         @Override
@@ -352,8 +353,8 @@ public class SearchActivity extends AppCompatActivity {
                             if (mb.getText().toString().equalsIgnoreCase(getApplicationContext().getResources().getString(R.string.follow))) {
                                 mb.setText(getApplicationContext().getResources().getString(R.string.following));
                                 currUserFollowingRef.child(model.getUid()).setValue(model);
-                                otherFollowerRef.child(mAuth.getUid()).setValue(adapteruser[0]);
-
+                                otherFollowerRef.child(mAuth.getUid()).setValue(myProfile[0]);
+                                FirebaseUtil.sendSingleNotification(getApplicationContext(), model.getUid(), getResources().getString(R.string.msg_tile), getResources().getString(R.string.msg_body_follow, myProfile[0].getName()), TAG);
                             } else if (mb.getText().toString().equalsIgnoreCase(getApplicationContext().getResources().getString(R.string.following))) {
                                 mb.setText(getApplicationContext().getResources().getString(R.string.follow));
                                 currUserFollowingRef.child(model.getUid()).removeValue();
@@ -602,6 +603,7 @@ public class SearchActivity extends AppCompatActivity {
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     long likeCount = snapshot.getValue(Long.class) + 1;
                                     if (getApplicationContext() != null) {
+                                        FirebaseUtil.sendSingleNotification(getApplicationContext(), model.getAuthor(), getResources().getString(R.string.msg_tile), getResources().getString(R.string.msg_body_like, likeCount), TAG);
                                         currPostRef.child(getApplicationContext().getResources().getString(R.string.db_like_counts)).setValue(likeCount);
                                         if (holder.getAbsoluteAdapterPosition() != -1) {
                                             AdapterPost adapterPost = new AdapterPost(model.getRandomID(), model.getAuthor());
@@ -704,7 +706,7 @@ public class SearchActivity extends AppCompatActivity {
                 holder.mShare.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Bitmap bitmap = getBitMapFromView(holder.cardView);
+                        Bitmap bitmap = getBitMapFromView(holder.mMaterialCardView);
                         try {
                             File file = new File(getApplicationContext().getExternalCacheDir(), File.separator + "office.jpg");
                             FileOutputStream fOut = new FileOutputStream(file);
@@ -945,7 +947,7 @@ public class SearchActivity extends AppCompatActivity {
                             mb.setText(getApplicationContext().getResources().getString(R.string.following));
                             currUserFollowingRef.child(mValue.get(holder.getAbsoluteAdapterPosition()).getUid()).setValue(mValue.get(holder.getAbsoluteAdapterPosition()));
                             otherFollowerRef.child(mAuth.getUid()).setValue(adapteruser[0]);
-
+                            FirebaseUtil.sendSingleNotification(getApplicationContext(), mValue.get(holder.getAbsoluteAdapterPosition()).getUid(), getApplicationContext().getResources().getString(R.string.msg_tile), getApplicationContext().getResources().getString(R.string.msg_body_follow), TAG);
                         } else if (mb.getText().toString().equalsIgnoreCase(getApplicationContext().getResources().getString(R.string.following))) {
                             mb.setText(getApplicationContext().getResources().getString(R.string.follow));
                             currUserFollowingRef.child(mValue.get(holder.getAbsoluteAdapterPosition()).getUid()).removeValue();
@@ -1207,6 +1209,7 @@ public class SearchActivity extends AppCompatActivity {
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 long likeCount = snapshot.getValue(Long.class) + 1;
                                 if (getApplicationContext() != null) {
+                                    FirebaseUtil.sendSingleNotification(getApplicationContext(), mValue.get(holder.getAbsoluteAdapterPosition()).getAuthor(), getResources().getString(R.string.msg_tile), getResources().getString(R.string.msg_body_like, likeCount), TAG);
                                     currPostRef.child(getApplicationContext().getResources().getString(R.string.db_like_counts)).setValue(likeCount);
                                     if (holder.getAbsoluteAdapterPosition() != -1) {
                                         AdapterPost adapterPost = new AdapterPost(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID(), mValue.get(holder.getAbsoluteAdapterPosition()).getAuthor());
@@ -1309,7 +1312,7 @@ public class SearchActivity extends AppCompatActivity {
             holder.mShare.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Bitmap bitmap = getBitMapFromView(holder.cardView);
+                    Bitmap bitmap = getBitMapFromView(holder.mMaterialCardView);
                     try {
                         File file = new File(mContext.getApplicationContext().getExternalCacheDir(), File.separator + "office.jpg");
                         FileOutputStream fOut = new FileOutputStream(file);

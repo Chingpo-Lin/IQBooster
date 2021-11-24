@@ -31,6 +31,7 @@ import com.example.iqbooster.fragment.tabs.userPageFollowingFragment;
 import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.Tags;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.example.iqbooster.notification.FirebaseUtil;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -272,6 +273,9 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
                         if (myProfile[0] != null) {
                             otherFollowerRef.child(mAuth.getUid()).setValue(myProfile[0]);
                         }
+                        // send notification to intent user
+                        FirebaseUtil.sendSingleNotification(getApplicationContext(), intentUID, getResources().getString(R.string.msg_tile),
+                                getResources().getString(R.string.msg_body_follow, myProfile[0].getName()), TAG);
                     } else if (mb.getText().toString().equalsIgnoreCase(getResources().getString(R.string.following))) {
                         mFollowBtnToolBar.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.outline_add_24));
 

@@ -46,6 +46,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 
+import java.util.Locale;
 
 
 public class SetUpAccountActivity extends AppCompatActivity {
@@ -137,8 +138,8 @@ public class SetUpAccountActivity extends AppCompatActivity {
         mContinueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String useriput_prefreame = mPreferName.getText().toString();
-                String userinput_username = mUsername.getText().toString();
+                String useriput_prefreame = mPreferName.getText().toString().trim();
+                String userinput_username = mUsername.getText().toString().trim().toLowerCase();
                 String userinput_location = mLocation.getText().toString();
                 if (!TextUtils.isEmpty(userinput_username.trim()) && !TextUtils.isEmpty(useriput_prefreame.trim())
                         && !TextUtils.isEmpty(userinput_location.trim())) {

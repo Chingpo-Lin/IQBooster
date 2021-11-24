@@ -155,6 +155,14 @@ public class DiscoverActivity extends AppCompatActivity {
                 if (mNumber == 0) {
                     String error = "please select at least one tag";
                     Snackbar sn = Snackbar.make(findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
+                    View view = sn.getView();
+                    TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
+                    tv.setTextColor(Color.parseColor("#FFD700"));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                        tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                    } else {
+                        tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                    }
                     sn.show();
                 } else {
                     String selectedTags = "";

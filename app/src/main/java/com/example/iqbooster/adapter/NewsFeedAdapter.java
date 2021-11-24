@@ -35,6 +35,7 @@ import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;
 import com.example.iqbooster.helperClass;
 import com.google.android.material.card.MaterialCardView;
+import com.example.iqbooster.notification.FirebaseUtil;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -60,6 +61,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
     FirebaseAuth mAuth;
     boolean hideTag;
     Screen location;
+    private static final String TAG = "NewsFeedAdapter";
 
     private ActivityInterface activityInterface;
 
@@ -68,7 +70,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
         public CircleImageView mCircleImageView; // post_heading_circleImageView
         public TextView mTitle; // post_heading_title
         public TextView mInfo; // post_heading_info
-        public MaterialCardView cardView;
+        public MaterialCardView mMaterialCardView;
 
         public ImageView mThumbnail;  // card_textwithimg_thumbnail
         public TextView mSubtitle; // card_textwithimg_subtitle
@@ -87,7 +89,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             mCircleImageView = itemView.findViewById(R.id.post_heading_circleImageView);
             mTitle = itemView.findViewById(R.id.post_heading_title);
             mInfo = itemView.findViewById(R.id.post_heading_info);
-            cardView = itemView.findViewById(R.id.card);
+            mMaterialCardView = itemView.findViewById(R.id.card);
 
             mThumbnail = itemView.findViewById(R.id.card_textwithimg_thumbnail);
             mSubtitle = itemView.findViewById(R.id.card_textwithimg_subtitle);
@@ -349,7 +351,9 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             long likeCount = snapshot.getValue(Long.class) + 1;
+                            // send notification to intent user
                             if (mContext != null) {
+                                FirebaseUtil.sendSingleNotification(mContext, mValue.get(holder.getAbsoluteAdapterPosition()).getAuthor(), mContext.getResources().getString(R.string.msg_tile), mContext.getResources().getString(R.string.msg_body_like, likeCount), TAG);
                                 currPostRef.child(mContext.getResources().getString(R.string.db_like_counts)).setValue(likeCount);
                                 if (holder.getAbsoluteAdapterPosition() != -1) {
                                     AdapterPost adapterPost = new AdapterPost(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID(), mValue.get(holder.getAbsoluteAdapterPosition()).getAuthor());
@@ -479,7 +483,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
         holder.mShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bitmap bitmap = getBitMapFromView(holder.cardView);
+                Bitmap bitmap = getBitMapFromView(holder.mMaterialCardView);
                 try {
                     File file = new File(mContext.getApplicationContext().getExternalCacheDir(), File.separator + "office.jpg");
                     FileOutputStream fOut = new FileOutputStream(file);

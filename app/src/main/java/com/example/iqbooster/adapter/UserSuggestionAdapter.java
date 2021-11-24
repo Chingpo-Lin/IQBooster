@@ -16,6 +16,7 @@ import com.example.iqbooster.R;
 import com.example.iqbooster.UserProfilePage;
 import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.Post;
+import com.example.iqbooster.notification.FirebaseUtil;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +33,7 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
     FirebaseAuth mAuth;
     Context mContext;
     private ArrayList<AdapterUser> mValue;
+    final String TAG = "UserSuggestionAdapter";
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public View mView;
@@ -111,11 +113,11 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
         if (mAuth.getCurrentUser() != null) {
             DatabaseReference currUserFollowingRef = userRef.child(mAuth.getUid()).child(mContext.getResources().getString(R.string.db_following_users));
             DatabaseReference otherFollowerRef = userRef.child(mValue.get(holder.getAbsoluteAdapterPosition()).getUid()).child(mContext.getResources().getString(R.string.db_followers_users));
-            final AdapterUser[] adapteruser = new AdapterUser[1];
+            final AdapterUser[] myProfile = new AdapterUser[1];
             userRef.child(mAuth.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    adapteruser[0] = snapshot.getValue(AdapterUser.class);
+                    myProfile[0] = snapshot.getValue(AdapterUser.class);
                 }
 
                 @Override
@@ -154,8 +156,8 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
                     if (mb.getText().toString().equalsIgnoreCase(mContext.getResources().getString(R.string.follow))) {
                         mb.setText(mContext.getResources().getString(R.string.following));
                         currUserFollowingRef.child(mValue.get(holder.getAbsoluteAdapterPosition()).getUid()).setValue(mValue.get(holder.getAbsoluteAdapterPosition()));
-                        otherFollowerRef.child(mAuth.getUid()).setValue(adapteruser[0]);
-
+                        otherFollowerRef.child(mAuth.getUid()).setValue(myProfile[0]);
+                        FirebaseUtil.sendSingleNotification(mContext, mValue.get(holder.getAbsoluteAdapterPosition()).getUid(), mContext.getResources().getString(R.string.msg_tile), mContext.getResources().getString(R.string.msg_body_follow, myProfile[0].getName()), TAG);
                     } else if (mb.getText().toString().equalsIgnoreCase(mContext.getResources().getString(R.string.following))) {
                         mb.setText(mContext.getResources().getString(R.string.follow));
                         currUserFollowingRef.child(mValue.get(holder.getAbsoluteAdapterPosition()).getUid()).removeValue();

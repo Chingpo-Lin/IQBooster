@@ -474,7 +474,7 @@ public class PostCreation extends Fragment {
                     case "health":
                         if (isChecked) {
                             userTags.setHealth(true);
-                            postTags.setHealth(false);
+                            postTags.setHealth(true);
                             ++checkCount;
                         } else {
                             userTags.setHealth(false);

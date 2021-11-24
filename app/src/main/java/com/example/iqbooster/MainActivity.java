@@ -46,6 +46,8 @@ import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.chip.Chip;
+import com.example.iqbooster.model.User;
+import com.example.iqbooster.notification.FirebaseUtil;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -66,8 +68,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ActivityInterface, SensorEventListener {
 
-    private static final String TAG = "MainActivity: ";
-    private static final String BUILD_VERSION = "Current Build Version: 1.2.232";
+    private static final String TAG = "MainActivity";
+    private static final String BUILD_VERSION = "Current Build Version: 1.3.000";
 
     private MaterialToolbar mToolbar;
     private DrawerLayout mDrawerLayout;
@@ -147,6 +149,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mNewsFeedFragment = new NewsFeed();
         mNewsFeedFragment.setActivityInterface(this);
         setFragment(mNewsFeedFragment);
+
+        // Update database with device id for FCM
+        if (mAuth.getCurrentUser() != null) {
+            FirebaseUtil.updateDeviceId(this, TAG);
+        }
     }
 
     private void initShakeSensor() {

@@ -41,6 +41,7 @@ import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.Comment;
 import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;
+import com.example.iqbooster.notification.FirebaseUtil;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.chip.Chip;
@@ -373,6 +374,8 @@ public class PostDetail extends Fragment {
                                 if (getContext() != null) {
                                     currPostRef.child(getContext().getResources().getString(R.string.db_like_counts)).setValue(likeCount);
                                     currUserRef.child(getContext().getResources().getString(R.string.db_like_posts)).child(mParam1).setValue(new AdapterPost(mParam1, postAuthor));
+                                    // send notification to intent user
+                                    FirebaseUtil.sendSingleNotification(getContext(), postAuthor, getContext().getResources().getString(R.string.msg_tile), getContext().getResources().getString(R.string.msg_body_like, likeCount), TAG);
                                 }
                             }
 
