@@ -274,8 +274,10 @@ public class SetUpAccountActivity extends AppCompatActivity {
 
         if (requestCode == 10) {
             assert data != null;
-            profileUri = data.getData();
-            mainPhoto.setImageURI(profileUri);
+            if (data.getData() != null && !data.getData().toString().isEmpty()) {
+                profileUri = data.getData();
+                mainPhoto.setImageURI(profileUri);
+            }
         }
 
     }
