@@ -147,16 +147,20 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
                 mDisplayName.setText(currUser.getName());
                 currPageUserDisplayName = mDisplayName.getText().toString();
                 mUserName.setText("@" + currUser.getUsername());
+
+                mProfileImage.setImageResource(R.drawable.avatar);
                 try {
                     mUserLocation.setText(currUser.getLocation());
                     DataSnapshot profileSnapshot = snapshot.child(getResources().getString(R.string.db_profile_image));
                     if (profileSnapshot.exists()) {
                         String url = profileSnapshot.getValue(String.class);
-                        RequestOptions requestoptions = new RequestOptions();
-                        Glide.with(getApplicationContext())
-                                .load(url)
-                                .apply(requestoptions.fitCenter())
-                                .into(mProfileImage);
+                        if (url != null && !url.isEmpty()) {
+                            RequestOptions requestoptions = new RequestOptions();
+                            Glide.with(getApplicationContext())
+                                    .load(url)
+                                    .apply(requestoptions.fitCenter())
+                                    .into(mProfileImage);
+                        }
                     }
                 } catch (Exception e) {
 

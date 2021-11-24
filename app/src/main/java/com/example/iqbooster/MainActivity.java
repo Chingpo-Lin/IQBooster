@@ -352,6 +352,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     TextView mLikeCount = dialogView.findViewById(R.id.like_collect_share_likeCount);
                     ImageView mShare = dialogView.findViewById(R.id.like_collect_share_share);
 
+                    mCircleImageView.setImageResource(R.drawable.avatar);
                     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
                     databaseReference
                             .child(getResources().getString(R.string.db_users))
@@ -362,11 +363,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     if (snapshot.exists()) {
                                         String url = snapshot.getValue(String.class);
-                                        RequestOptions requestoptions = new RequestOptions();
-                                        Glide.with(MainActivity.this)
-                                                .load(url)
-                                                .apply(requestoptions.fitCenter())
-                                                .into(mCircleImageView);
+                                        if (url != null && !url.isEmpty()) {
+                                            RequestOptions requestoptions = new RequestOptions();
+                                            Glide.with(MainActivity.this)
+                                                    .load(url)
+                                                    .apply(requestoptions.fitCenter())
+                                                    .into(mCircleImageView);
+                                        }
                                     }
                                 }
 
