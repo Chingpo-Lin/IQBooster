@@ -44,6 +44,7 @@ import com.example.iqbooster.login.MapsActivity;
 import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String TAG = "MainActivity: ";
     private static final String BUILD_VERSION = "Current Build Version: 1.2.232";
 
-    private Toolbar mToolbar;
+    private MaterialToolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -109,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.drawer_layout);
         mAuth = FirebaseAuth.getInstance();
 
-        mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        mToolbar = (MaterialToolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(mToolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
