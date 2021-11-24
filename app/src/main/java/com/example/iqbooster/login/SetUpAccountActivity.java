@@ -191,6 +191,8 @@ public class SetUpAccountActivity extends AppCompatActivity {
                                                         @Override
                                                         public Object then(@NonNull Task task) throws Exception {
                                                             if (!task.isSuccessful()) {
+                                                                mContinueBtn.setVisibility(View.VISIBLE);
+                                                                mProgressBar.setVisibility(View.INVISIBLE);
                                                                 throw task.getException();
                                                             }
                                                             return fileRef.getDownloadUrl();

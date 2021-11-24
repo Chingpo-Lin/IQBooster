@@ -297,8 +297,9 @@ public class PostCreation extends Fragment {
                     sn.show();
                     return;
                 }
+                mCancelBtn.setVisibility(View.INVISIBLE);
+                mPostTextView.setVisibility(View.INVISIBLE);
                 createPost();
-
                 hideKeyboard();
             }
         });
@@ -311,7 +312,7 @@ public class PostCreation extends Fragment {
                     public void onActivityResult(ActivityResult result) {
                         Log.d(TAG, "getting a pic");
                         Intent data = result.getData();
-                        if (data != null) {
+                        if (data != null && data.getData() != null && !data.getData().toString().isEmpty()) {
                             mAddPicBtn.setVisibility(View.INVISIBLE);
                             mAddPicText.setVisibility(View.INVISIBLE);
                             thumbnailUri = data.getData();
@@ -362,6 +363,8 @@ public class PostCreation extends Fragment {
                             @Override
                             public Object then(@NonNull Task task) throws Exception {
                                 if (!task.isSuccessful()) {
+                                    mCancelBtn.setVisibility(View.VISIBLE);
+                                    mPostTextView.setVisibility(View.VISIBLE);
                                     throw task.getException();
                                 }
                                 return fileRef.getDownloadUrl();
@@ -382,6 +385,9 @@ public class PostCreation extends Fragment {
                                                     .beginTransaction().replace(R.id.main_container, postDetail.newInstance(newPostID)).addToBackStack(null).commit();
                                         }
                                     });
+                                } else {
+                                    mCancelBtn.setVisibility(View.VISIBLE);
+                                    mPostTextView.setVisibility(View.VISIBLE);
                                 }
                             }
                         });
@@ -390,6 +396,9 @@ public class PostCreation extends Fragment {
                         activityInterface.getActivityFragmentManger()
                                 .beginTransaction().replace(R.id.main_container, postDetail.newInstance(newPostID)).addToBackStack(null).commit();
                     }
+                } else {
+                    mCancelBtn.setVisibility(View.VISIBLE);
+                    mPostTextView.setVisibility(View.VISIBLE);
                 }
             }
         });
