@@ -509,7 +509,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                                     holder.mCollectBtn.setLiked(true);
                                 }
                             });
-                            snackbar.setActionTextColor(Color.parseColor("#FFD700"));
+                            snackbar.setActionTextColor(Color.parseColor("#FF6200EE"));
                             snackbar.show();
                         }
                     }
