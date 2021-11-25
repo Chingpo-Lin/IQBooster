@@ -549,6 +549,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             myCollect.setActivityInterface(this);
             setFragment(myCollect);
         } else if (id == mLogoutItem.getItemId()) {
+            FirebaseUtil.removeDeviceId(getApplicationContext(), mAuth.getUid(), TAG);
             mAuth.signOut();
             recreate();
         }
