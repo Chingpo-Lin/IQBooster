@@ -493,11 +493,11 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                             View view = snackbar.getView();
                             TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
                             tv.setTextColor(Color.parseColor("#FFD700"));
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                            } else {
-                                tv.setGravity(Gravity.CENTER_HORIZONTAL);
-                            }
+//                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                                tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+//                            } else {
+//                                tv.setGravity(Gravity.CENTER_HORIZONTAL);
+//                            }
                             snackbar.show();
                             snackbar.setAction("UNDO", new View.OnClickListener() {
                                 @Override
