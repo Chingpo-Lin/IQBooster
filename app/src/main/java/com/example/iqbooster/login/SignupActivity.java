@@ -153,7 +153,7 @@ public class SignupActivity extends AppCompatActivity {
         mLoginTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToLoginInActivityHelper();
+                onBackPressed();
             }
         });
 
