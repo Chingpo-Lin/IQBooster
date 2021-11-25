@@ -475,7 +475,6 @@ public class SearchActivity extends AppCompatActivity {
 //                    }
 //                });
 
-                // TODO: update info
                 DatabaseReference postUserRef = FirebaseDatabase.getInstance().getReference()
                         .child(getResources().getString(R.string.db_users))
                         .child(model.getAuthor());
@@ -1092,7 +1091,6 @@ public class SearchActivity extends AppCompatActivity {
 //                    }
 //                });
 
-            // TODO: update info
             DatabaseReference postUserRef = FirebaseDatabase.getInstance().getReference()
                     .child(getResources().getString(R.string.db_users))
                     .child(mValue.get(holder.getAbsoluteAdapterPosition()).getAuthor());
