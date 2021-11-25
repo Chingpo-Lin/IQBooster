@@ -3,13 +3,17 @@ package com.example.iqbooster.login;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -53,6 +57,21 @@ public class ForgetActivity extends AppCompatActivity {
             }
         });
 
+        mEditEmail.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((actionId == EditorInfo.IME_NULL && event.getAction() == KeyEvent.ACTION_DOWN) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    View view = getCurrentFocus();
+                    if (view != null) {
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    }
+                    mNextBtr.performClick();
+                }
+                return true;
+            }
+        });
+
         mNextBtr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,11 +90,11 @@ public class ForgetActivity extends AppCompatActivity {
                                 Toast.makeText(ForgetActivity.this, "Reset Password Email Sent", Toast.LENGTH_LONG).show();
                             } else {
                                 String ErrorMsg = task.getException().getMessage();
-                                Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Error: " + ErrorMsg, Snackbar.LENGTH_LONG);
+                                Snackbar sn = Snackbar.make(findViewById(android.R.id.content), "Error: " + ErrorMsg, Snackbar.LENGTH_LONG);
                                 View view = sn.getView();
                                 TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
                                 tv.setTextColor(Color.parseColor("#FFD700"));
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                     tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                                 } else {
                                     tv.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -89,11 +108,11 @@ public class ForgetActivity extends AppCompatActivity {
                         }
                     });
                 } else {
-                    Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Please Enter an Email", Snackbar.LENGTH_LONG);
+                    Snackbar sn = Snackbar.make(findViewById(android.R.id.content), "Please Enter an Email", Snackbar.LENGTH_LONG);
                     View view = sn.getView();
                     TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
                     tv.setTextColor(Color.parseColor("#FFD700"));
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                     } else {
                         tv.setGravity(Gravity.CENTER_HORIZONTAL);

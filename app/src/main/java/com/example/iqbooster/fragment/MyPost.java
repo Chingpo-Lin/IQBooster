@@ -89,15 +89,17 @@ public class MyPost extends Fragment {
 
         mAuth = FirebaseAuth.getInstance();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference myPostRef;
+        DatabaseReference myPostRef = mDatabaseRef;
 
         mRecyclerView = v.findViewById(R.id.fragment_tab_recyclerView);
         potentialPosts = new ArrayList<Post>();
 
         if (mParam1.equalsIgnoreCase(ARG_PARAM1)) {
             // enter from nav drawer
-            myPostRef = mDatabaseRef.child(getContext().getResources().getString(R.string.db_users)).child(mAuth.getUid()).child(getContext().getString(R.string.db_my_posts));
-            mAdapter = new NewsFeedAdapter(getContext(), potentialPosts, mAuth, false, Screen.UN_SPECIFY);
+            if (getContext() != null && mAuth.getUid() != null) {
+                myPostRef = mDatabaseRef.child(getContext().getResources().getString(R.string.db_users)).child(mAuth.getUid()).child(getContext().getString(R.string.db_my_posts));
+                mAdapter = new NewsFeedAdapter(getContext(), potentialPosts, mAuth, false, Screen.UN_SPECIFY);
+            }
         } else {
             // in profile page
             myPostRef = mDatabaseRef.child(getContext().getResources().getString(R.string.db_users)).child(mParam1).child(getContext().getString(R.string.db_my_posts));
@@ -145,12 +147,12 @@ public class MyPost extends Fragment {
                 String currPostID = snapshot.getValue(String.class);
 
                 postRef.child(currPostID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DataSnapshot> task) {
-                            Post post = task.getResult().getValue(Post.class);
-                            mAdapter.push_back(post);
-                        }
-                    });
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        Post post = task.getResult().getValue(Post.class);
+                        mAdapter.push_back(post);
+                    }
+                });
             }
 
             @Override

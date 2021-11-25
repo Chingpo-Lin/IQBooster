@@ -16,10 +16,8 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -78,7 +76,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View view) {
                 Dexter.withContext(getApplicationContext())
-                        .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                        .withPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
                         .withListener(new PermissionListener() {
                             @Override
                             public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
@@ -87,11 +85,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                             @Override
                             public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
-                                Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Permission Denied", Snackbar.LENGTH_LONG);
+                                Snackbar sn = Snackbar.make(findViewById(android.R.id.content), "Permission Denied", Snackbar.LENGTH_LONG);
                                 View view = sn.getView();
                                 TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
                                 tv.setTextColor(Color.parseColor("#FFD700"));
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                     tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                                 } else {
                                     tv.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -120,20 +118,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mInputLocation.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((actionId == EditorInfo.IME_NULL && event.getAction() == KeyEvent.ACTION_DOWN)|| (actionId == EditorInfo.IME_ACTION_DONE)){
+                if ((actionId == EditorInfo.IME_NULL && event.getAction() == KeyEvent.ACTION_DOWN) || (actionId == EditorInfo.IME_ACTION_DONE)) {
                     View view = getCurrentFocus();
                     if (view != null) {
-                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     }
 
                     String location = mInputLocation.getText().toString();
                     if (location.isEmpty()) {
-                        Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Please Input a Location", Snackbar.LENGTH_LONG);
+                        Snackbar sn = Snackbar.make(findViewById(android.R.id.content), "Please Input a Location", Snackbar.LENGTH_LONG);
                         View viewSn = sn.getView();
                         TextView tv = (TextView) viewSn.findViewById(com.google.android.material.R.id.snackbar_text);
                         tv.setTextColor(Color.parseColor("#FFD700"));
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                         } else {
                             tv.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -159,7 +157,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 mMap.addMarker(new MarkerOptions()
                                         .position(latLng)
                                         .title("My search location"));
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16.0f));
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10.0f));
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -205,7 +203,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 mConfirmButton.setEnabled(true);
                                 mMap.clear();
                                 mMap.addMarker(markerOptions);
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16.0f));
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10.0f));
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -215,12 +213,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
     }
+
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
      * This is where we can add markers or lines, add listeners or move the camera. In this case,
      * we just add a marker near Sydney, Australia.
-     *
+     * <p>
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
@@ -230,7 +229,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap = googleMap;
         UiSettings uiSettings = mMap.getUiSettings();
         uiSettings.setZoomControlsEnabled(true);
-        mMap.setPadding(0,0,0,mConfirmButton.getHeight());
+        mMap.setPadding(0, 0, 0, mConfirmButton.getHeight());
         // Add a marker in Sydney and move the camera
     }
 }

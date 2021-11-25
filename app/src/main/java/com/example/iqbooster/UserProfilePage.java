@@ -29,8 +29,12 @@ import com.example.iqbooster.fragment.MyPost;
 import com.example.iqbooster.fragment.tabs.userPageFollowersFragment;
 import com.example.iqbooster.fragment.tabs.userPageFollowingFragment;
 import com.example.iqbooster.model.AdapterUser;
+import com.example.iqbooster.model.Tags;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.example.iqbooster.notification.FirebaseUtil;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -44,7 +48,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class UserProfilePage extends AppCompatActivity implements ActivityInterface{
+public class UserProfilePage extends AppCompatActivity implements ActivityInterface {
 
     public static final String EXTRA = "USER_UID";
 
@@ -58,6 +62,7 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
     private TextView mDisplayName;
     private TextView mUserName;
     private TextView mUserLocation;
+    private ChipGroup mChipGroup;
     private MaterialButton mFollowBtn;
     private MaterialButton mFollowBtnToolBar;
     private NestedScrollView mScrollView;
@@ -81,7 +86,7 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
         mToolbar = findViewById(R.id.user_profile_toolbar);
         setSupportActionBar(mToolbar);
 
-        final Drawable upArrow = ResourcesCompat.getDrawable(getResources(), R.drawable.abc_ic_ab_back_material ,null);
+        final Drawable upArrow = ResourcesCompat.getDrawable(getResources(), R.drawable.abc_ic_ab_back_material, null);
         upArrow.setColorFilter(Color.parseColor("#212121"), PorterDuff.Mode.SRC_ATOP);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
 
@@ -105,6 +110,7 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
         mDisplayName = findViewById(R.id.user_profile_displayName);
         mUserName = findViewById(R.id.user_profile_username);
         mUserLocation = findViewById(R.id.user_profile_location);
+        mChipGroup = findViewById(R.id.user_profile_chipGroup);
         mFollowBtn = findViewById(R.id.user_profile_followBtn);
         mFollowBtnToolBar = findViewById(R.id.user_profile_toolbar_followBtn);
         mScrollView = findViewById(R.id.user_profile_scrollView);
@@ -138,20 +144,39 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
                 AdapterUser currUser = snapshot.getValue(AdapterUser.class);
                 mDisplayName.setText(currUser.getName());
                 currPageUserDisplayName = mDisplayName.getText().toString();
-                mUserName.setText("@"+currUser.getUsername());
+                mUserName.setText("@" + currUser.getUsername());
+
+                mProfileImage.setImageResource(R.drawable.avatar);
                 try {
                     mUserLocation.setText(currUser.getLocation());
                     DataSnapshot profileSnapshot = snapshot.child(getResources().getString(R.string.db_profile_image));
                     if (profileSnapshot.exists()) {
                         String url = profileSnapshot.getValue(String.class);
-                        RequestOptions requestoptions = new RequestOptions();
-                        Glide.with(getApplicationContext())
-                                .load(url)
-                                .apply(requestoptions.fitCenter())
-                                .into(mProfileImage);
+                        if (url != null && !url.isEmpty()) {
+                            RequestOptions requestoptions = new RequestOptions();
+                            Glide.with(getApplicationContext())
+                                    .load(url)
+                                    .apply(requestoptions.fitCenter())
+                                    .into(mProfileImage);
+                        }
                     }
                 } catch (Exception e) {
 
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        mUsers.child(intentUID).child(getResources().getString(R.string.db_tags)).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    Tags tags = snapshot.getValue(Tags.class);
+                    addChipToGroup(tags);
                 }
             }
 
@@ -250,6 +275,9 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
                         if (myProfile[0] != null) {
                             otherFollowerRef.child(mAuth.getUid()).setValue(myProfile[0]);
                         }
+                        // send notification to intent user
+                        FirebaseUtil.sendSingleNotification(getApplicationContext(), intentUID, getResources().getString(R.string.msg_tile),
+                                getResources().getString(R.string.msg_body_follow, myProfile[0].getName()), TAG);
                     } else if (mb.getText().toString().equalsIgnoreCase(getResources().getString(R.string.following))) {
                         mFollowBtnToolBar.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.outline_add_24));
 
@@ -297,6 +325,18 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
     public void finish() {
         super.finish();
         overridePendingTransition(R.anim.user_profile_enter, R.anim.user_profile_exit);
+    }
+
+    private void addChipToGroup(Tags tags) {
+        mChipGroup.removeAllViews();
+        for (String tag : tags.allTrue()) {
+            final Chip chip = new Chip(this);
+            chip.setText("#" + tag);
+            chip.setClickable(false);
+            chip.setCloseIconVisible(false);
+            chip.setTextColor(Color.parseColor(helperClass.getRandomColor()));
+            mChipGroup.addView(chip);
+        }
     }
 
     /**

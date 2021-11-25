@@ -178,7 +178,7 @@ public class NewsFeed extends Fragment {
         viewPagerAdapter.addFragment(mTravelFragment, getResources().getString(R.string.hash_travel));
 
         mViewPager.setAdapter(viewPagerAdapter);
-        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+//        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 //        mNestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
 //            @Override
 //            public void onScrollChange(NestedScrollView nestedScrollView, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -207,13 +207,6 @@ public class NewsFeed extends Fragment {
         }
 
         public void addFragment(Fragment fragment, String title) {
-            FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-            fragmentTransaction.setCustomAnimations(
-                    R.anim.fade_in,  // enter
-                    R.anim.slide_out_left,  // exit
-                    R.anim.fade_in,   // popEnter
-                    R.anim.slide_out_left  // popExit
-            ).commit();
             fragments.add(fragment);
             fragmentsTitle.add(title);
         }

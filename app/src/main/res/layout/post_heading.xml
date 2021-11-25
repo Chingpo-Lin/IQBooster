@@ -5,7 +5,6 @@
     android:orientation="horizontal"
     android:background="@color/white"
     android:layout_height="72sp"
-    android:transitionName="post_transition"
     >
 <!--TODO rename transition name-->
     <de.hdodenhof.circleimageview.CircleImageView
@@ -32,7 +31,6 @@
             android:layout_marginTop="16sp"
             android:layout_gravity="center_vertical"
             android:textAppearance="?attr/textAppearanceHeadline6"
-            android:transitionName="testT"
             />
 
         <TextView

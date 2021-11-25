@@ -45,7 +45,7 @@ public class SignupActivity extends AppCompatActivity {
     private TextView mHaveAccountAlready;
     private ProgressBar mProgressBar;
     private MaterialButton mSignupBtn;
-    final String transitionToRight = "NEXT";
+    final String transitionToRight = "GO TO SETUP";
     // Firebase stuff
     private FirebaseAuth mAuth;
 
@@ -93,11 +93,11 @@ public class SignupActivity extends AppCompatActivity {
                                     goToSetUpAccountActivityHelper();
                                 } else {
                                     String errormsg = task.getException().getMessage();
-                                    Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Error: " + errormsg, Snackbar.LENGTH_LONG);
+                                    Snackbar sn = Snackbar.make(findViewById(android.R.id.content), "Error: " + errormsg, Snackbar.LENGTH_LONG);
                                     View view = sn.getView();
                                     TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
                                     tv.setTextColor(Color.parseColor("#FFD700"));
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                         tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                                     } else {
                                         tv.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -113,11 +113,11 @@ public class SignupActivity extends AppCompatActivity {
                         });
 
                     } else {
-                        Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Passwords don't match", Snackbar.LENGTH_LONG);
+                        Snackbar sn = Snackbar.make(findViewById(android.R.id.content), "Passwords don't match", Snackbar.LENGTH_LONG);
                         View view = sn.getView();
                         TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
                         tv.setTextColor(Color.parseColor("#FFD700"));
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                         } else {
                             tv.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -130,11 +130,11 @@ public class SignupActivity extends AppCompatActivity {
                         mLoginTextView.setVisibility(View.VISIBLE);
                     }
                 } else {
-                    Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Please fill all fields", Snackbar.LENGTH_LONG);
+                    Snackbar sn = Snackbar.make(findViewById(android.R.id.content), "Please fill all fields", Snackbar.LENGTH_LONG);
                     View view = sn.getView();
                     TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
                     tv.setTextColor(Color.parseColor("#FFD700"));
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                     } else {
                         tv.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -146,7 +146,7 @@ public class SignupActivity extends AppCompatActivity {
                     mHaveAccountAlready.setVisibility(View.VISIBLE);
                     mLoginTextView.setVisibility(View.VISIBLE);
                 }
-           }
+            }
         });
 
         // when the login text is clicked, go back to login in
@@ -184,10 +184,10 @@ public class SignupActivity extends AppCompatActivity {
         mConfirmPasswordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((actionId == EditorInfo.IME_NULL && event.getAction() == KeyEvent.ACTION_DOWN)|| (actionId == EditorInfo.IME_ACTION_DONE)){
+                if ((actionId == EditorInfo.IME_NULL && event.getAction() == KeyEvent.ACTION_DOWN) || (actionId == EditorInfo.IME_ACTION_DONE)) {
                     View view = getCurrentFocus();
                     if (view != null) {
-                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     }
                     mSignupBtn.performClick();
@@ -244,7 +244,6 @@ public class SignupActivity extends AppCompatActivity {
      */
     private void goToSetUpAccountActivityHelper() {
         startActivity(new Intent(getApplicationContext(), SetUpAccountActivity.class));
-
         finish(transitionToRight);
     }
 }

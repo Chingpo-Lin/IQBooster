@@ -20,7 +20,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +44,7 @@ import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;
 import com.example.iqbooster.helperClass;
 import com.google.android.material.card.MaterialCardView;
+import com.example.iqbooster.notification.FirebaseUtil;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.transition.MaterialContainerTransform;
@@ -59,7 +62,6 @@ import com.like.OnLikeListener;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.net.URI;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -70,6 +72,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
     FirebaseAuth mAuth;
     boolean hideTag;
     Screen location;
+    private static final String TAG = "NewsFeedAdapter";
 
     private ActivityInterface activityInterface;
 
@@ -79,7 +82,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
         public CircleImageView mCircleImageView; // post_heading_circleImageView
         public TextView mTitle; // post_heading_title
         public TextView mInfo; // post_heading_info
-        public MaterialCardView cardView;
+        public MaterialCardView mMaterialCardView;
 
         public ImageView mThumbnail;  // card_textwithimg_thumbnail
         public TextView mSubtitle; // card_textwithimg_subtitle
@@ -99,7 +102,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             mCircleImageView = itemView.findViewById(R.id.post_heading_circleImageView);
             mTitle = itemView.findViewById(R.id.post_heading_title);
             mInfo = itemView.findViewById(R.id.post_heading_info);
-            cardView = itemView.findViewById(R.id.card);
+            mMaterialCardView = itemView.findViewById(R.id.card);
 
             mThumbnail = itemView.findViewById(R.id.card_textwithimg_thumbnail);
             mSubtitle = itemView.findViewById(R.id.card_textwithimg_subtitle);
@@ -131,6 +134,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                 .inflate(R.layout.card_textwithimg, parent, false);
         return new ViewHolder(view);
     }
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Log.d("NewsFeedAdapter: ", mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID());
@@ -139,6 +143,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
         DatabaseReference currPostRef = FirebaseDatabase.getInstance().getReference().child(mContext.getResources().getString(R.string.db_posts)).child(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID());
         DatabaseReference tagRef = currPostRef.child(mContext.getResources().getString(R.string.db_tags));
 
+        holder.mCircleImageView.setImageResource(R.drawable.avatar);
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference
                 .child(mContext.getResources().getString(R.string.db_users))
@@ -149,11 +154,13 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()) {
                             String url = snapshot.getValue(String.class);
-                            RequestOptions requestoptions = new RequestOptions();
-                            Glide.with(mContext)
-                                    .load(url)
-                                    .apply(requestoptions.fitCenter())
-                                    .into(holder.mCircleImageView);
+                            if (url != null && !url.isEmpty()) {
+                                RequestOptions requestoptions = new RequestOptions();
+                                Glide.with(mContext)
+                                        .load(url)
+                                        .apply(requestoptions.fitCenter())
+                                        .into(holder.mCircleImageView);
+                            }
                         }
                     }
 
@@ -205,7 +212,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 try {
                     AdapterUser postUser = snapshot.getValue(AdapterUser.class);
-                    String info = postUser.getName()  + " \u22C5 " + mValue.get(holder.getAbsoluteAdapterPosition()).getDate();
+                    String info = postUser.getName() + " \u22C5 " + mValue.get(holder.getAbsoluteAdapterPosition()).getDate();
                     holder.mInfo.setText(info);
                 } catch (Exception e) {
 
@@ -247,8 +254,6 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                     case PROFILE_PAGE:
                         container_id = R.id.user_profile_container;
                 }
-                View view = holder.mView;
-                Log.i("msubtitle", "onClick: msubtitle");
 //                NavHostFragment navHostFragment = (NavHostFragment) activityInterface.getActivityFragmentManger().findFragmentById(view.getId());
 //                NavController navController = navHostFragment.getNavController();
 //                FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
@@ -339,7 +344,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             });
         }
 
-        holder.mLikeCount.setText(String.valueOf(mValue.get(holder.getAbsoluteAdapterPosition()).getLike_counts()));
+        holder.mLikeCount.setText(helperClass.formatLikeCount(mValue.get(holder.getAbsoluteAdapterPosition()).getLike_counts()));
         currPostRef.child(mContext.getResources().getString(R.string.db_like_counts)).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -392,7 +397,9 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             long likeCount = snapshot.getValue(Long.class) + 1;
+                            // send notification to intent user
                             if (mContext != null) {
+                                FirebaseUtil.sendSingleNotification(mContext, mValue.get(holder.getAbsoluteAdapterPosition()).getAuthor(), mContext.getResources().getString(R.string.msg_tile), mContext.getResources().getString(R.string.msg_body_like, likeCount), TAG);
                                 currPostRef.child(mContext.getResources().getString(R.string.db_like_counts)).setValue(likeCount);
                                 if (holder.getAbsoluteAdapterPosition() != -1) {
                                     AdapterPost adapterPost = new AdapterPost(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID(), mValue.get(holder.getAbsoluteAdapterPosition()).getAuthor());
@@ -482,7 +489,16 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                             notifyItemRemoved(currPosition);
 
                             Activity activity = (Activity) mContext;
-                            Snackbar snackbar = Snackbar.make(activity.findViewById(android.R.id.content),  "\"" + titleName + "\" has removed from your Collect", Snackbar.LENGTH_LONG);
+                            Snackbar snackbar = Snackbar.make(activity.findViewById(android.R.id.content), "\"" + titleName + "\" has removed from your Collect", Snackbar.LENGTH_LONG);
+                            View view = snackbar.getView();
+                            TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
+                            tv.setTextColor(Color.parseColor("#FFD700"));
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                            } else {
+                                tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                            }
+                            snackbar.show();
                             snackbar.setAction("UNDO", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -522,7 +538,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
         holder.mShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bitmap bitmap = getBitMapFromView(holder.cardView);
+                Bitmap bitmap = getBitMapFromView(holder.mMaterialCardView);
                 try {
                     File file = new File(mContext.getApplicationContext().getExternalCacheDir(), File.separator + "office.jpg");
                     FileOutputStream fOut = new FileOutputStream(file);
@@ -570,7 +586,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             }
         }
         this.mValue.add(post);
-        notifyItemInserted(mValue.size()-1);
+        notifyItemInserted(mValue.size() - 1);
     }
 
     public void removeChild(String RID) {
@@ -604,11 +620,11 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
     }
 
     @SuppressLint("ResourceAsColor")
-    private Bitmap getBitMapFromView(View view){
+    private Bitmap getBitMapFromView(View view) {
         Bitmap returnBitMap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(returnBitMap);
         Drawable bgDrawable = view.getBackground();
-        if(bgDrawable != null){
+        if (bgDrawable != null) {
             bgDrawable.draw(canvas);
         } else {
             canvas.drawColor(android.R.color.white);

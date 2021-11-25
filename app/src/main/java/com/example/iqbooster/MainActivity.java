@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.ActivityOptionsCompat;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -44,7 +45,9 @@ import com.example.iqbooster.login.LoginActivity;
 import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.chip.Chip;
+import com.example.iqbooster.notification.FirebaseUtil;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -65,10 +68,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ActivityInterface, SensorEventListener {
 
-    private static final String TAG = "MainActivity: ";
-    private static final String BUILD_VERSION = "Current Build Version: 1.2.124";
+    private static final String TAG = "MainActivity";
+    private static final String BUILD_VERSION = "Current Build Version: 1.3.200";
 
-    private Toolbar mToolbar;
+    private MaterialToolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -107,9 +110,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer_layout);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         mAuth = FirebaseAuth.getInstance();
 
-        mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        mToolbar = (MaterialToolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(mToolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
@@ -142,12 +146,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mNewsFeedItem.setChecked(true);
         getSupportActionBar().setTitle("News Feed");
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        FragmentTransaction.setCustomAnimations();
         mNewsFeedFragment = new NewsFeed();
         mNewsFeedFragment.setActivityInterface(this);
         setFragment(mNewsFeedFragment);
+
+        // Update database with device id for FCM
+        if (mAuth.getCurrentUser() != null) {
+            FirebaseUtil.updateDeviceId(this, TAG);
+        }
     }
 
     private void initShakeSensor() {
@@ -213,11 +219,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
                         String url = snapshot.getValue(String.class);
-                        RequestOptions requestoptions = new RequestOptions();
-                        Glide.with(getApplicationContext())
-                                .load(url)
-                                .apply(requestoptions.fitCenter())
-                                .into(mProfilePic);
+                        if (url != null && !url.isEmpty()) {
+                            RequestOptions requestoptions = new RequestOptions();
+                            Glide.with(getApplicationContext())
+                                    .load(url)
+                                    .apply(requestoptions.fitCenter())
+                                    .into(mProfilePic);
+                        }
                     }
                 }
 
@@ -348,6 +356,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     TextView mLikeCount = dialogView.findViewById(R.id.like_collect_share_likeCount);
                     ImageView mShare = dialogView.findViewById(R.id.like_collect_share_share);
 
+                    mCircleImageView.setImageResource(R.drawable.avatar);
                     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
                     databaseReference
                             .child(getResources().getString(R.string.db_users))
@@ -358,11 +367,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     if (snapshot.exists()) {
                                         String url = snapshot.getValue(String.class);
-                                        RequestOptions requestoptions = new RequestOptions();
-                                        Glide.with(MainActivity.this)
-                                                .load(url)
-                                                .apply(requestoptions.fitCenter())
-                                                .into(mCircleImageView);
+                                        if (url != null && !url.isEmpty()) {
+                                            RequestOptions requestoptions = new RequestOptions();
+                                            Glide.with(MainActivity.this)
+                                                    .load(url)
+                                                    .apply(requestoptions.fitCenter())
+                                                    .into(mCircleImageView);
+                                        }
                                     }
                                 }
 
@@ -568,12 +579,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (item.getItemId() == R.id.action_search) {
             Intent SearchPage = new Intent(getApplicationContext(), SearchActivity.class);
-//            Bundle options = ActivityOptionsCompat.makeScaleUpAnimation(
-//                    mheaderView, mheaderView.getWidth()*12, 0,0,0
-//            ).toBundle();
-//            Log.d(TAG, "Going into Search Page"+mheaderView.getWidth());
+            Log.d(TAG, "Going into Search Page");
             startActivity(SearchPage);
-//            ActivityCompat.startActivity(this, SearchPage, options);
         }
 
         return super.onOptionsItemSelected(item);
@@ -602,15 +609,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     private void setFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.main_container, fragment).commit();
-//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.setCustomAnimations(
-//                R.anim.fade_in,  // enter
-//                R.anim.slide_out,  // exit
-//                R.anim.fade_in,   // popEnter
-//                R.anim.slide_out  // popExit
-//        )
-//                .commit();
+        fragmentTransaction.replace(R.id.main_container, fragment);
+        fragmentTransaction.commit();
     }
 
     @Override

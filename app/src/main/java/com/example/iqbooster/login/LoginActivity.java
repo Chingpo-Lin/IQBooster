@@ -114,10 +114,10 @@ public class LoginActivity extends AppCompatActivity {
         mEditPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((actionId == EditorInfo.IME_NULL && event.getAction() == KeyEvent.ACTION_DOWN)|| (actionId == EditorInfo.IME_ACTION_DONE)){
+                if ((actionId == EditorInfo.IME_NULL && event.getAction() == KeyEvent.ACTION_DOWN) || (actionId == EditorInfo.IME_ACTION_DONE)) {
                     View view = getCurrentFocus();
                     if (view != null) {
-                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     }
                     mLoginBtn.performClick();
@@ -147,11 +147,11 @@ public class LoginActivity extends AppCompatActivity {
                                 goToMainActivityHelper();
                             } else {
                                 String loginError = task.getException().getMessage();
-                                Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Error: " + loginError, Snackbar.LENGTH_LONG);
+                                Snackbar sn = Snackbar.make(findViewById(android.R.id.content), "Error: " + loginError, Snackbar.LENGTH_LONG);
                                 View view = sn.getView();
                                 TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
                                 tv.setTextColor(Color.parseColor("#FFD700"));
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                     tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                                 } else {
                                     tv.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -167,11 +167,11 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
                 } else {
-                    Snackbar sn = Snackbar.make(findViewById(android.R.id.content),  "Please enter an Email or Password", Snackbar.LENGTH_LONG);
+                    Snackbar sn = Snackbar.make(findViewById(android.R.id.content), "Please enter an Email or Password", Snackbar.LENGTH_LONG);
                     View view = sn.getView();
                     TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
                     tv.setTextColor(Color.parseColor("#FFD700"));
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                     } else {
                         tv.setGravity(Gravity.CENTER_HORIZONTAL);

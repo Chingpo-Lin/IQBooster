@@ -45,6 +45,7 @@ import com.example.iqbooster.model.AdapterPost;
 import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;
+import com.example.iqbooster.notification.FirebaseUtil;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.button.MaterialButton;
@@ -100,10 +101,17 @@ public class SearchActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        Log.i("TAG", "onBackPressed: ");
-        finish();
+        Log.i(TAG, "back stack count: " + getSupportFragmentManager().getBackStackEntryCount());
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            Log.i(TAG, "onBackPressed count > 0: ");
+            super.onBackPressed();
+        } else {
+            Log.i(TAG, "onBackPressed: ");
+            super.onBackPressed();
+            finish();
+        }
     }
+
     @Override
     public void finish() {
         super.finish();
@@ -203,11 +211,11 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
-        mTagSearch4UsersAdapter = new firebaseTagSearchRecyclerAdapter4Users(getApplicationContext(), tagSearchPotentialUsers);
-        mTagSearch4PostsAdapter = new firebaseTagSearchRecyclerAdapter4Posts(getApplicationContext(), tagSearchPotentialPosts);
+        mTagSearch4UsersAdapter = new firebaseTagSearchRecyclerAdapter4Users(SearchActivity.this, tagSearchPotentialUsers);
+        mTagSearch4PostsAdapter = new firebaseTagSearchRecyclerAdapter4Posts(SearchActivity.this, tagSearchPotentialPosts);
         setUpFirebaseTagSearch();
 
-        final String [] testing = getApplicationContext().getResources().getStringArray(R.array.all_tags_with_hash);
+        final String[] testing = getApplicationContext().getResources().getStringArray(R.array.all_tags_with_hash);
         final ArrayAdapter<String> autoFillAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, testing);
         mAutoComplete.setAdapter(autoFillAdapter);
         mAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -283,54 +291,56 @@ public class SearchActivity extends AppCompatActivity {
         firebaseRecyclerAdapter4Users = new FirebaseRecyclerAdapter<AdapterUser, UserSuggestionAdapter.ViewHolder>(searchOption4Users) {
             @Override
             protected void onBindViewHolder(@NonNull UserSuggestionAdapter.ViewHolder holder, int position, @NonNull AdapterUser model) {
+                holder.mCircleImageView.setImageResource(R.drawable.avatar);
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
                 databaseReference
                         .child(getResources().getString(R.string.db_users))
                         .child(model.getUid())
                         .child(getResources().getString(R.string.db_profile_image))
                         .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()) {
-                            String url = snapshot.getValue(String.class);
-                            RequestOptions requestoptions = new RequestOptions();
-                            Glide.with(getApplicationContext())
-                                    .load(url)
-                                    .apply(requestoptions.fitCenter())
-                                    .into(holder.mCircleImageView);
-                        }
-                    }
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists()) {
+                                    String url = snapshot.getValue(String.class);
+                                    if (url != null && !url.isEmpty()) {
+                                        RequestOptions requestoptions = new RequestOptions();
+                                        Glide.with(getApplicationContext())
+                                                .load(url)
+                                                .apply(requestoptions.fitCenter())
+                                                .into(holder.mCircleImageView);
+                                    }
+                                }
+                            }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
 
-                    }
-                });
+                            }
+                        });
                 holder.mCircleImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent profilePageIntent = new Intent(SearchActivity.this, UserProfilePage.class);
-                        Log.i(TAG, "onClick-0: "+ViewCompat.getTransitionName(holder.mCircleImageView));
+                        Log.i(TAG, "onClick firebaseTextSearch: " + ViewCompat.getTransitionName(holder.mCircleImageView));
                         profilePageIntent.putExtra(UserProfilePage.EXTRA, model.getUid());
                         profilePageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(SearchActivity.this, holder.mCircleImageView, ViewCompat.getTransitionName(holder.mCircleImageView));
-                        SearchActivity.this.startActivity(profilePageIntent, options.toBundle());
-//                        SearchActivity.this.startActivity(profilePageIntent);
+                        startActivity(profilePageIntent, options.toBundle());
                     }
                 });
                 holder.mNameTextView.setText(model.getName());
-                holder.mUsernameTextView.setText(model.getUsername());
+                holder.mUsernameTextView.setText("@" + model.getUsername());
 
                 DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child(getApplicationContext().getResources().getString(R.string.db_users));
 
                 if (mAuth.getCurrentUser() != null) {
                     DatabaseReference currUserFollowingRef = userRef.child(mAuth.getUid()).child(getApplicationContext().getResources().getString(R.string.db_following_users));
                     DatabaseReference otherFollowerRef = userRef.child(model.getUid()).child(getApplicationContext().getResources().getString(R.string.db_followers_users));
-                    final AdapterUser[] adapteruser = new AdapterUser[1];
+                    final AdapterUser[] myProfile = new AdapterUser[1];
                     userRef.child(mAuth.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            adapteruser[0] = snapshot.getValue(AdapterUser.class);
+                            myProfile[0] = snapshot.getValue(AdapterUser.class);
                         }
 
                         @Override
@@ -342,6 +352,7 @@ public class SearchActivity extends AppCompatActivity {
                     if (model.getUid().equals(mAuth.getUid())) {
                         holder.mFollowBtn.setVisibility(View.INVISIBLE);
                     }
+                    holder.mFollowBtn.setText(getApplicationContext().getResources().getString(R.string.follow));
                     currUserFollowingRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -368,8 +379,8 @@ public class SearchActivity extends AppCompatActivity {
                             if (mb.getText().toString().equalsIgnoreCase(getApplicationContext().getResources().getString(R.string.follow))) {
                                 mb.setText(getApplicationContext().getResources().getString(R.string.following));
                                 currUserFollowingRef.child(model.getUid()).setValue(model);
-                                otherFollowerRef.child(mAuth.getUid()).setValue(adapteruser[0]);
-
+                                otherFollowerRef.child(mAuth.getUid()).setValue(myProfile[0]);
+                                FirebaseUtil.sendSingleNotification(getApplicationContext(), model.getUid(), getResources().getString(R.string.msg_tile), getResources().getString(R.string.msg_body_follow, myProfile[0].getName()), TAG);
                             } else if (mb.getText().toString().equalsIgnoreCase(getApplicationContext().getResources().getString(R.string.following))) {
                                 mb.setText(getApplicationContext().getResources().getString(R.string.follow));
                                 currUserFollowingRef.child(model.getUid()).removeValue();
@@ -403,6 +414,7 @@ public class SearchActivity extends AppCompatActivity {
                 DatabaseReference currPostRef = FirebaseDatabase.getInstance().getReference().child(getApplicationContext().getResources().getString(R.string.db_posts)).child(model.getRandomID());
                 DatabaseReference tagRef = currPostRef.child(getApplicationContext().getResources().getString(R.string.db_tags));
 
+                holder.mCircleImageView.setImageResource(R.drawable.avatar);
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
                 databaseReference
                         .child(getResources().getString(R.string.db_users))
@@ -413,11 +425,13 @@ public class SearchActivity extends AppCompatActivity {
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if (snapshot.exists()) {
                                     String url = snapshot.getValue(String.class);
-                                    RequestOptions requestoptions = new RequestOptions();
-                                    Glide.with(getApplicationContext())
-                                            .load(url)
-                                            .apply(requestoptions.fitCenter())
-                                            .into(holder.mCircleImageView);
+                                    if (url != null && !url.isEmpty()) {
+                                        RequestOptions requestoptions = new RequestOptions();
+                                        Glide.with(getApplicationContext())
+                                                .load(url)
+                                                .apply(requestoptions.fitCenter())
+                                                .into(holder.mCircleImageView);
+                                    }
                                 }
                             }
 
@@ -430,11 +444,11 @@ public class SearchActivity extends AppCompatActivity {
                 holder.mCircleImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.i(TAG, "onClick-1: "+ViewCompat.getTransitionName(holder.mCircleImageView));
+                        Log.i(TAG, "onClick firebaseTextSearch: " + ViewCompat.getTransitionName(holder.mCircleImageView));
                         Intent profilePageIntent = new Intent(SearchActivity.this, UserProfilePage.class);
                         profilePageIntent.putExtra(UserProfilePage.EXTRA, model.getAuthor());
                         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(SearchActivity.this, holder.mCircleImageView, ViewCompat.getTransitionName(holder.mCircleImageView));
-                        SearchActivity.this.startActivity(profilePageIntent, options.toBundle());
+                        startActivity(profilePageIntent, options.toBundle());
                     }
                 });
 
@@ -470,7 +484,7 @@ public class SearchActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         try {
                             AdapterUser postUser = snapshot.getValue(AdapterUser.class);
-                            String info = postUser.getName()  + " \u22C5 " + model.getDate();
+                            String info = postUser.getName() + " \u22C5 " + model.getDate();
                             holder.mInfo.setText(info);
                         } catch (Exception e) {
 
@@ -569,8 +583,7 @@ public class SearchActivity extends AppCompatActivity {
                     }
                 });
 
-
-                holder.mLikeCount.setText(String.valueOf(model.getLike_counts()));
+                holder.mLikeCount.setText(helperClass.formatLikeCount(model.getLike_counts()));
                 currPostRef.child(getApplicationContext().getResources().getString(R.string.db_like_counts)).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -624,6 +637,7 @@ public class SearchActivity extends AppCompatActivity {
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     long likeCount = snapshot.getValue(Long.class) + 1;
                                     if (getApplicationContext() != null) {
+                                        FirebaseUtil.sendSingleNotification(getApplicationContext(), model.getAuthor(), getResources().getString(R.string.msg_tile), getResources().getString(R.string.msg_body_like, likeCount), TAG);
                                         currPostRef.child(getApplicationContext().getResources().getString(R.string.db_like_counts)).setValue(likeCount);
                                         if (holder.getAbsoluteAdapterPosition() != -1) {
                                             AdapterPost adapterPost = new AdapterPost(model.getRandomID(), model.getAuthor());
@@ -726,7 +740,7 @@ public class SearchActivity extends AppCompatActivity {
                 holder.mShare.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Bitmap bitmap = getBitMapFromView(holder.cardView);
+                        Bitmap bitmap = getBitMapFromView(holder.mMaterialCardView);
                         try {
                             File file = new File(getApplicationContext().getExternalCacheDir(), File.separator + "office.jpg");
                             FileOutputStream fOut = new FileOutputStream(file);
@@ -880,6 +894,7 @@ public class SearchActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull UserSuggestionAdapter.ViewHolder holder, int position) {
+            holder.mCircleImageView.setImageResource(R.drawable.avatar);
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
             databaseReference
                     .child(getResources().getString(R.string.db_users))
@@ -890,11 +905,13 @@ public class SearchActivity extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (snapshot.exists()) {
                                 String url = snapshot.getValue(String.class);
-                                RequestOptions requestoptions = new RequestOptions();
-                                Glide.with(getApplicationContext())
-                                        .load(url)
-                                        .apply(requestoptions.fitCenter())
-                                        .into(holder.mCircleImageView);
+                                if (url != null && !url.isEmpty()) {
+                                    RequestOptions requestoptions = new RequestOptions();
+                                    Glide.with(getApplicationContext())
+                                            .load(url)
+                                            .apply(requestoptions.fitCenter())
+                                            .into(holder.mCircleImageView);
+                                }
                             }
                         }
 
@@ -906,7 +923,7 @@ public class SearchActivity extends AppCompatActivity {
             holder.mCircleImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.i(TAG, "onClick-2: "+ViewCompat.getTransitionName(holder.mCircleImageView));
+                    Log.i(TAG, "onClick firebaseTagSearchRecyclerAdapter4Users: " + ViewCompat.getTransitionName(holder.mCircleImageView));
                     Intent profilePageIntent = new Intent(mContext, UserProfilePage.class);
                     profilePageIntent.putExtra(UserProfilePage.EXTRA, mValue.get(holder.getAbsoluteAdapterPosition()).getUid());
                     profilePageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -938,6 +955,7 @@ public class SearchActivity extends AppCompatActivity {
                 if (mValue.get(holder.getAbsoluteAdapterPosition()).getUid().equals(mAuth.getUid())) {
                     holder.mFollowBtn.setVisibility(View.INVISIBLE);
                 }
+                holder.mFollowBtn.setText(getApplicationContext().getResources().getString(R.string.follow));
                 currUserFollowingRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -965,7 +983,7 @@ public class SearchActivity extends AppCompatActivity {
                             mb.setText(getApplicationContext().getResources().getString(R.string.following));
                             currUserFollowingRef.child(mValue.get(holder.getAbsoluteAdapterPosition()).getUid()).setValue(mValue.get(holder.getAbsoluteAdapterPosition()));
                             otherFollowerRef.child(mAuth.getUid()).setValue(adapteruser[0]);
-
+                            FirebaseUtil.sendSingleNotification(getApplicationContext(), mValue.get(holder.getAbsoluteAdapterPosition()).getUid(), getApplicationContext().getResources().getString(R.string.msg_tile), getApplicationContext().getResources().getString(R.string.msg_body_follow), TAG);
                         } else if (mb.getText().toString().equalsIgnoreCase(getApplicationContext().getResources().getString(R.string.following))) {
                             mb.setText(getApplicationContext().getResources().getString(R.string.follow));
                             currUserFollowingRef.child(mValue.get(holder.getAbsoluteAdapterPosition()).getUid()).removeValue();
@@ -1012,6 +1030,7 @@ public class SearchActivity extends AppCompatActivity {
             DatabaseReference currPostRef = FirebaseDatabase.getInstance().getReference().child(getApplicationContext().getResources().getString(R.string.db_posts)).child(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID());
             DatabaseReference tagRef = currPostRef.child(getApplicationContext().getResources().getString(R.string.db_tags));
 
+            holder.mCircleImageView.setImageResource(R.drawable.avatar);
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
             databaseReference
                     .child(getResources().getString(R.string.db_users))
@@ -1022,11 +1041,13 @@ public class SearchActivity extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (snapshot.exists()) {
                                 String url = snapshot.getValue(String.class);
-                                RequestOptions requestoptions = new RequestOptions();
-                                Glide.with(getApplicationContext())
-                                        .load(url)
-                                        .apply(requestoptions.fitCenter())
-                                        .into(holder.mCircleImageView);
+                                if (url != null && !url.isEmpty()) {
+                                    RequestOptions requestoptions = new RequestOptions();
+                                    Glide.with(getApplicationContext())
+                                            .load(url)
+                                            .apply(requestoptions.fitCenter())
+                                            .into(holder.mCircleImageView);
+                                }
                             }
                         }
 
@@ -1039,7 +1060,7 @@ public class SearchActivity extends AppCompatActivity {
             holder.mCircleImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.i(TAG, "onClick-3: "+ViewCompat.getTransitionName(holder.mCircleImageView));
+                    Log.i(TAG, "onClick-3: " + ViewCompat.getTransitionName(holder.mCircleImageView));
                     Intent profilePageIntent = new Intent(mContext, UserProfilePage.class);
                     profilePageIntent.putExtra(UserProfilePage.EXTRA, mValue.get(holder.getAbsoluteAdapterPosition()).getAuthor());
                     profilePageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -1080,7 +1101,7 @@ public class SearchActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     try {
                         AdapterUser postUser = snapshot.getValue(AdapterUser.class);
-                        String info = postUser.getName()  + " \u22C5 " + mValue.get(holder.getAbsoluteAdapterPosition()).getDate();
+                        String info = postUser.getName() + " \u22C5 " + mValue.get(holder.getAbsoluteAdapterPosition()).getDate();
                         holder.mInfo.setText(info);
                     } catch (Exception e) {
 
@@ -1120,7 +1141,7 @@ public class SearchActivity extends AppCompatActivity {
                     newFrag.setEnterTransition(new MaterialElevationScale(true));
                     getSupportFragmentManager()
                             .beginTransaction()
-                            .add(R.id.search_activity_container, newFrag)
+                            .replace(R.id.search_activity_container, newFrag)
                             .addToBackStack(null)
                             .commit();
                 }
@@ -1178,8 +1199,7 @@ public class SearchActivity extends AppCompatActivity {
                 }
             });
 
-
-            holder.mLikeCount.setText(String.valueOf(mValue.get(holder.getAbsoluteAdapterPosition()).getLike_counts()));
+            holder.mLikeCount.setText(helperClass.formatLikeCount(mValue.get(holder.getAbsoluteAdapterPosition()).getLike_counts()));
             currPostRef.child(getApplicationContext().getResources().getString(R.string.db_like_counts)).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -1233,6 +1253,7 @@ public class SearchActivity extends AppCompatActivity {
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 long likeCount = snapshot.getValue(Long.class) + 1;
                                 if (getApplicationContext() != null) {
+                                    FirebaseUtil.sendSingleNotification(getApplicationContext(), mValue.get(holder.getAbsoluteAdapterPosition()).getAuthor(), getResources().getString(R.string.msg_tile), getResources().getString(R.string.msg_body_like, likeCount), TAG);
                                     currPostRef.child(getApplicationContext().getResources().getString(R.string.db_like_counts)).setValue(likeCount);
                                     if (holder.getAbsoluteAdapterPosition() != -1) {
                                         AdapterPost adapterPost = new AdapterPost(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID(), mValue.get(holder.getAbsoluteAdapterPosition()).getAuthor());
@@ -1335,7 +1356,7 @@ public class SearchActivity extends AppCompatActivity {
             holder.mShare.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Bitmap bitmap = getBitMapFromView(holder.cardView);
+                    Bitmap bitmap = getBitMapFromView(holder.mMaterialCardView);
                     try {
                         File file = new File(mContext.getApplicationContext().getExternalCacheDir(), File.separator + "office.jpg");
                         FileOutputStream fOut = new FileOutputStream(file);
@@ -1379,11 +1400,11 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     @SuppressLint("ResourceAsColor")
-    private Bitmap getBitMapFromView(View view){
+    private Bitmap getBitMapFromView(View view) {
         Bitmap returnBitMap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(returnBitMap);
         Drawable bgDrawable = view.getBackground();
-        if(bgDrawable != null){
+        if (bgDrawable != null) {
             bgDrawable.draw(canvas);
         } else {
             canvas.drawColor(android.R.color.white);

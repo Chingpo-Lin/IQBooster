@@ -12,18 +12,13 @@ import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.content.FileProvider;
-import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.text.Layout;
-import android.transition.Transition;
-import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -48,12 +43,11 @@ import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.Comment;
 import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;
+import com.example.iqbooster.notification.FirebaseUtil;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.transition.MaterialContainerTransform;
 import com.google.android.material.transition.MaterialElevationScale;
-import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -149,35 +143,26 @@ public class PostDetail extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
 //            mParam2 = getArguments().getString(ARG_PARAM2);
         }
-////        MaterialContainerTransform
         setExitTransition(new MaterialElevationScale(false));
         setReenterTransition(new MaterialElevationScale(true));
-//
-////        Transition t = TransitionInflater.from(getContext()).inflateTransition(R.transition.shared);
-//        this.getActivity().setEnterSharedElementCallback(new MaterialContainerTransformSharedElementCallback());
-//        MaterialContainerTransform t = new MaterialContainerTransform();
-//        t.addTarget(R.id.post_detail);
-//        t.setDuration(2000);
-
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
         try {
-            ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+            ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
         } catch (Exception e) {
 
         }
-        
+
     }
 
     @Override
     public void onStop() {
         super.onStop();
         try {
-            ((AppCompatActivity)getActivity()).getSupportActionBar().show();
+            ((AppCompatActivity) getActivity()).getSupportActionBar().show();
         } catch (Exception e) {
 
         }
@@ -196,7 +181,6 @@ public class PostDetail extends Fragment {
         if (!mParam1.equalsIgnoreCase(ARG_PARAM1)) {
             DatabaseReference currPostRef = mDataReference.child(getContext().getResources().getString(R.string.db_posts)).child(mParam1);
             mHeading = v.findViewById(R.id.post_heading);
-            ViewCompat.setTransitionName(mHeading, "testT");
             mThumbnail = v.findViewById(R.id.postdetail_imageView);
             mProfileImage = v.findViewById(R.id.post_heading_circleImageView);
             mHeadingTitle = v.findViewById(R.id.post_heading_title);
@@ -233,7 +217,7 @@ public class PostDetail extends Fragment {
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             try {
                                 AdapterUser postUser = snapshot.getValue(AdapterUser.class);
-                                String info = postUser.getName()  + " \u22C5 " + currPost.getDate();
+                                String info = postUser.getName() + " \u22C5 " + currPost.getDate();
                                 mInfo.setText(info);
                             } catch (Exception e) {
 
@@ -276,11 +260,13 @@ public class PostDetail extends Fragment {
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     if (snapshot.exists()) {
                                         String url = snapshot.getValue(String.class);
-                                        RequestOptions requestoptions = new RequestOptions();
-                                        Glide.with(getContext())
-                                                .load(url)
-                                                .apply(requestoptions.fitCenter())
-                                                .into(mProfileImage);
+                                        if (url != null && !url.isEmpty()) {
+                                            RequestOptions requestoptions = new RequestOptions();
+                                            Glide.with(getContext())
+                                                    .load(url)
+                                                    .apply(requestoptions.fitCenter())
+                                                    .into(mProfileImage);
+                                        }
                                     }
                                 }
 
@@ -395,6 +381,8 @@ public class PostDetail extends Fragment {
                                 if (getContext() != null) {
                                     currPostRef.child(getContext().getResources().getString(R.string.db_like_counts)).setValue(likeCount);
                                     currUserRef.child(getContext().getResources().getString(R.string.db_like_posts)).child(mParam1).setValue(new AdapterPost(mParam1, postAuthor));
+                                    // send notification to intent user
+                                    FirebaseUtil.sendSingleNotification(getContext(), postAuthor, getContext().getResources().getString(R.string.msg_tile), getContext().getResources().getString(R.string.msg_body_like, likeCount), TAG);
                                 }
                             }
 
@@ -440,7 +428,7 @@ public class PostDetail extends Fragment {
                 mCommentEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                     @Override
                     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        if ((actionId == EditorInfo.IME_NULL && event.getAction() == KeyEvent.ACTION_DOWN)|| (actionId == EditorInfo.IME_ACTION_DONE)){
+                        if ((actionId == EditorInfo.IME_NULL && event.getAction() == KeyEvent.ACTION_DOWN) || (actionId == EditorInfo.IME_ACTION_DONE)) {
                             hideKeyboard();
                             if (mCommentEditText.getHint().charAt(0) == 'R') {
                                 Log.d(TAG, "replying to.,,");
@@ -570,6 +558,7 @@ public class PostDetail extends Fragment {
 
             @Override
             protected void onBindViewHolder(@NonNull CommentsViewHolder holder, int position, @NonNull Comment model) {
+                holder.mCircleImage.setImageResource(R.drawable.avatar);
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
                 databaseReference
                         .child(getContext().getResources().getString(R.string.db_users))
@@ -580,11 +569,13 @@ public class PostDetail extends Fragment {
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if (snapshot.exists()) {
                                     String url = snapshot.getValue(String.class);
-                                    RequestOptions requestoptions = new RequestOptions();
-                                    Glide.with(getContext())
-                                            .load(url)
-                                            .apply(requestoptions.fitCenter())
-                                            .into(holder.mCircleImage);
+                                    if (url != null && !url.isEmpty()) {
+                                        RequestOptions requestoptions = new RequestOptions();
+                                        Glide.with(getContext())
+                                                .load(url)
+                                                .apply(requestoptions.fitCenter())
+                                                .into(holder.mCircleImage);
+                                    }
                                 }
                             }
 
@@ -623,6 +614,7 @@ public class PostDetail extends Fragment {
                 replyAdapter = new FirebaseRecyclerAdapter<Comment, CommentsViewHolder>(replyOption) {
                     @Override
                     protected void onBindViewHolder(@NonNull CommentsViewHolder holder, int position, @NonNull Comment model) {
+                        holder.mCircleImage.setImageResource(R.drawable.avatar);
                         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
                         databaseReference
                                 .child(getContext().getResources().getString(R.string.db_users))
@@ -703,11 +695,11 @@ public class PostDetail extends Fragment {
     }
 
     @SuppressLint("ResourceAsColor")
-    private Bitmap getBitMapFromView(View view){
+    private Bitmap getBitMapFromView(View view) {
         Bitmap returnBitMap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(returnBitMap);
         Drawable bgDrawable = view.getBackground();
-        if(bgDrawable != null){
+        if (bgDrawable != null) {
             bgDrawable.draw(canvas);
         } else {
             canvas.drawColor(android.R.color.white);

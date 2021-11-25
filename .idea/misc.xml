@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../../layout/custom_preview.xml" value="0.11574074074074074" />
+        <entry key="../../../../../../layout/custom_preview.xml" value="0.24114583333333334" />
         <entry key="../../../../layout/custom_preview.xml" value="0.3125" />
         <entry key="../../Library/Android/sdk/platforms/android-30/data/res/layout/simple_list_item_1.xml" value="0.2765625" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.14074074074074075" />
@@ -79,6 +80,7 @@
         <entry key="app/src/main/res/layout/login_edittext_shape.xml" value="0.14814814814814814" />
         <entry key="app/src/main/res/layout/map_activity.xml" value="0.1" />
         <entry key="app/src/main/res/layout/nav_header.xml" value="0.36041666666666666" />
+        <entry key="app/src/main/res/layout/notification.xml" value="0.24365942028985507" />
         <entry key="app/src/main/res/layout/post_heading.xml" value="0.5" />
         <entry key="app/src/main/res/menu/drawer_menu.xml" value="0.335" />
         <entry key="app/src/main/res/menu/edit_menu.xml" value="0.23958333333333334" />
@@ -86,6 +88,8 @@
         <entry key="app/src/main/res/menu/search_menu.xml" value="0.22870370370370371" />
         <entry key="app/src/main/res/menu/suggestion_menu.xml" value="0.20092592592592592" />
         <entry key="app/src/main/res/menu/user_profile_page_threedot_menu.xml" value="0.3118279569892473" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.3421940928270042" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.3421940928270042" />
       </map>
     </option>
   </component>

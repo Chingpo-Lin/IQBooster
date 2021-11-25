@@ -116,13 +116,13 @@ public class PostCreation extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        ((AppCompatActivity)getActivity()).getSupportActionBar().show();
+        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
     }
 
     /**
@@ -191,9 +191,9 @@ public class PostCreation extends Fragment {
             @Override
             public void onClick(View v) {
                 ImagePicker.with((Activity) getContext())
-                        .crop()	    			//Crop image(Optional), Check Customization for more option
-                        .compress(1024)			//Final image size will be less than 1 MB(Optional)
-                        .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
+                        .crop()                    //Crop image(Optional), Check Customization for more option
+                        .compress(1024)            //Final image size will be less than 1 MB(Optional)
+                        .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
                         .createIntent(new Function1<Intent, Unit>() {
                             @Override
                             public Unit invoke(Intent intent) {
@@ -247,7 +247,7 @@ public class PostCreation extends Fragment {
                     View view = snackbar.getView();
                     TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
                     tv.setTextColor(Color.parseColor("#FFD700"));
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                     } else {
                         tv.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -261,7 +261,7 @@ public class PostCreation extends Fragment {
                     View view = snackbar.getView();
                     TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
                     tv.setTextColor(Color.parseColor("#FFD700"));
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                     } else {
                         tv.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -275,7 +275,7 @@ public class PostCreation extends Fragment {
                     View view = snackbar.getView();
                     TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
                     tv.setTextColor(Color.parseColor("#FFD700"));
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                     } else {
                         tv.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -285,11 +285,11 @@ public class PostCreation extends Fragment {
                 }
                 if (checkCount == 0) {
                     //Toast.makeText(getApplicationContext(), "Please Select At Least One Tag.", Toast.LENGTH_LONG).show();
-                    Snackbar sn = Snackbar.make(getActivity().findViewById(android.R.id.content),  "Please Select At Least One Tag", Snackbar.LENGTH_LONG);
+                    Snackbar sn = Snackbar.make(getActivity().findViewById(android.R.id.content), "Please Select At Least One Tag", Snackbar.LENGTH_LONG);
                     View view = sn.getView();
                     TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
                     tv.setTextColor(Color.parseColor("#FFD700"));
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                     } else {
                         tv.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -297,8 +297,9 @@ public class PostCreation extends Fragment {
                     sn.show();
                     return;
                 }
+                mCancelBtn.setVisibility(View.INVISIBLE);
+                mPostTextView.setVisibility(View.INVISIBLE);
                 createPost();
-
                 hideKeyboard();
             }
         });
@@ -311,7 +312,7 @@ public class PostCreation extends Fragment {
                     public void onActivityResult(ActivityResult result) {
                         Log.d(TAG, "getting a pic");
                         Intent data = result.getData();
-                        if (data != null) {
+                        if (data != null && data.getData() != null && !data.getData().toString().isEmpty()) {
                             mAddPicBtn.setVisibility(View.INVISIBLE);
                             mAddPicText.setVisibility(View.INVISIBLE);
                             thumbnailUri = data.getData();
@@ -362,6 +363,8 @@ public class PostCreation extends Fragment {
                             @Override
                             public Object then(@NonNull Task task) throws Exception {
                                 if (!task.isSuccessful()) {
+                                    mCancelBtn.setVisibility(View.VISIBLE);
+                                    mPostTextView.setVisibility(View.VISIBLE);
                                     throw task.getException();
                                 }
                                 return fileRef.getDownloadUrl();
@@ -380,17 +383,20 @@ public class PostCreation extends Fragment {
                                             activityInterface.getActivityFragmentManger().popBackStack();
                                             activityInterface.getActivityFragmentManger()
                                                     .beginTransaction()
-                                                    .setCustomAnimations(
-                                                            R.anim.hyperspace_out,  // enter
-                                                            R.anim.fade_out,  // exit
-                                                            R.anim.fade_in,   // popEnter
-                                                            R.anim.hyperspace_in  // back
-                                                    )
+//                                                    .setCustomAnimations(
+//                                                            R.anim.hyperspace_out,  // enter
+//                                                            R.anim.fade_out,  // exit
+//                                                            R.anim.fade_in,   // popEnter
+//                                                            R.anim.hyperspace_in  // back
+//                                                    )
                                                     .replace(R.id.main_container, postDetail.newInstance(newPostID))
                                                     .addToBackStack(null)
                                                     .commit();
                                         }
                                     });
+                                } else {
+                                    mCancelBtn.setVisibility(View.VISIBLE);
+                                    mPostTextView.setVisibility(View.VISIBLE);
                                 }
                             }
                         });
@@ -398,16 +404,19 @@ public class PostCreation extends Fragment {
                         activityInterface.getActivityFragmentManger().popBackStack();
                         activityInterface.getActivityFragmentManger()
                                 .beginTransaction()
-                                .setCustomAnimations(
-                                        R.anim.hyperspace_out,  // enter
-                                        R.anim.fade_out,  // exit
-                                        R.anim.fade_in,   // popEnter
-                                        R.anim.hyperspace_in  // back
-                                )
+//                                .setCustomAnimations(
+//                                        R.anim.hyperspace_out,  // enter
+//                                        R.anim.fade_out,  // exit
+//                                        R.anim.fade_in,   // popEnter
+//                                        R.anim.hyperspace_in  // back
+//                                )
                                 .replace(R.id.main_container, postDetail.newInstance(newPostID))
                                 .addToBackStack(null)
                                 .commit();
                     }
+                } else {
+                    mCancelBtn.setVisibility(View.VISIBLE);
+                    mPostTextView.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -427,7 +436,7 @@ public class PostCreation extends Fragment {
                         View view = snackbar.getView();
                         TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
                         tv.setTextColor(Color.parseColor("#FFD700"));
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                         } else {
                             tv.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -490,7 +499,7 @@ public class PostCreation extends Fragment {
                     case "health":
                         if (isChecked) {
                             userTags.setHealth(true);
-                            postTags.setHealth(false);
+                            postTags.setHealth(true);
                             ++checkCount;
                         } else {
                             userTags.setHealth(false);

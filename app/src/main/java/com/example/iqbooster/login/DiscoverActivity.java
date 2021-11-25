@@ -22,7 +22,6 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.snackbar.Snackbar;
 
 
-
 public class DiscoverActivity extends AppCompatActivity {
 
     private static final String TAG = "DiscoverActivity";
@@ -103,7 +102,7 @@ public class DiscoverActivity extends AppCompatActivity {
         mSport_card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectTag(1,mSport_image, mSport_select);
+                selectTag(1, mSport_image, mSport_select);
             }
         });
 
@@ -155,6 +154,14 @@ public class DiscoverActivity extends AppCompatActivity {
                 if (mNumber == 0) {
                     String error = "please select at least one tag";
                     Snackbar sn = Snackbar.make(findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
+                    View view = sn.getView();
+                    TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
+                    tv.setTextColor(Color.parseColor("#FFD700"));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                    } else {
+                        tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                    }
                     sn.show();
                 } else {
                     String selectedTags = "";
@@ -171,6 +178,7 @@ public class DiscoverActivity extends AppCompatActivity {
                     Intent goToSuggestionList = new Intent(getApplicationContext(), SuggestionActivity.class);
                     goToSuggestionList.putExtra(SuggestionActivity.EXTRA, selectedTags);
                     startActivity(goToSuggestionList);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                     finish();
                 }
             }
@@ -187,7 +195,7 @@ public class DiscoverActivity extends AppCompatActivity {
                     View view = sn.getView();
                     TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
                     tv.setTextColor(Color.parseColor("#FFD700"));
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                     } else {
                         tv.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -211,7 +219,7 @@ public class DiscoverActivity extends AppCompatActivity {
             View view = sn.getView();
             TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
             tv.setTextColor(Color.parseColor("#FFD700"));
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             } else {
                 tv.setGravity(Gravity.CENTER_HORIZONTAL);
