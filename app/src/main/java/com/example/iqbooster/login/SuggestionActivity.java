@@ -1,6 +1,7 @@
 package com.example.iqbooster.login;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -18,6 +19,7 @@ import com.example.iqbooster.adapter.UserSuggestionAdapter;
 import com.example.iqbooster.model.AdapterUser;
 import com.example.iqbooster.model.Tags;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -50,7 +52,6 @@ public class SuggestionActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance();
         mUsersRef = mDatabase.getReference().child(getResources().getString(R.string.db_users));
         tagsHashSet = new HashSet<String>();
-        potentialUsers = new ArrayList<AdapterUser>();
 
         final String selectedTags = getIntent().getStringExtra(EXTRA);
         Log.d(TAG, "selectedTags has " + selectedTags);
@@ -66,12 +67,15 @@ public class SuggestionActivity extends AppCompatActivity {
         }
 
         Toolbar toolbar = findViewById(R.id.suggestion_toolbar);
+        mRecyclerView = findViewById(R.id.suggestion_recyclerView);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
 
+        potentialUsers = new ArrayList<AdapterUser>();
         mAdapter = new UserSuggestionAdapter(getApplicationContext(), potentialUsers, mAuth);
+        mRecyclerView.setAdapter(mAdapter);
 
-        mUsersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        mUsersRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 potentialUsers.clear();
@@ -103,7 +107,61 @@ public class SuggestionActivity extends AppCompatActivity {
             }
         });
 
-        mRecyclerView = findViewById(R.id.suggestion_recyclerView);
+//        mUsersRef.addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+//                AdapterUser currUser = snapshot.getValue(AdapterUser.class);
+//                if (snapshot.hasChild(getApplicationContext().getResources().getString(R.string.db_tags))) {
+//                    Tags currTags = snapshot.child(getApplicationContext().getResources().getString(R.string.db_tags)).getValue(Tags.class);
+//                    boolean found = false;
+//                    for (String t : currTags.allTrue()) {
+//                        Log.d(TAG, "checking: " + t);
+//                        if (found) break;
+//                        if (tagsHashSet.contains(t)) {
+//                            Log.d(TAG, "adding tags");
+//                            mAdapter.push_back(currUser);
+//                            Log.d(TAG, "adding to potential users current size: " + potentialUsers.size());
+//                            found = true;
+//                        }
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+//                AdapterUser currUser = snapshot.getValue(AdapterUser.class);
+//                if (snapshot.hasChild(getApplicationContext().getResources().getString(R.string.db_tags))) {
+//                    Tags currTags = snapshot.child(getApplicationContext().getResources().getString(R.string.db_tags)).getValue(Tags.class);
+//                    boolean found = false;
+//                    for (String t : currTags.allTrue()) {
+//                        Log.d(TAG, "checking: " + t);
+//                        if (found) break;
+//                        if (tagsHashSet.contains(t)) {
+//                            Log.d(TAG, "adding tags");
+//                            mAdapter.changeChild();
+//                            Log.d(TAG, "adding to potential users current size: " + potentialUsers.size());
+//                            found = true;
+//                        }
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+
         mRecyclerView.hasFixedSize();
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
     }

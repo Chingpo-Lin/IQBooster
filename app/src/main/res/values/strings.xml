@@ -38,8 +38,8 @@
     <string name="login">Log In</string>
     <string name="setup_instruction">Create your account to continue!</string>
     <string name="start">Sign up</string>
-    <string name="setup_name">Name</string>
-    <string name="setup_username">Username</string>
+    <string name="setup_name">Display Name</string>
+    <string name="setup_username">username</string>
     <string name="location">Location</string>
     <string name="create_your_profile">CREATE YOUR PROFILE</string>
     <string name="select_one_as_your_avatar_or">Select one as your avatar or</string>

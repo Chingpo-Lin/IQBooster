@@ -11,7 +11,10 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.Selection;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
@@ -104,6 +107,27 @@ public class SetUpAccountActivity extends AppCompatActivity {
         mSecondRecommend.setPadding(mnpl, mnpl, mnpl, mnpl);
         mThirdRecommend.setPadding(mnpl, mnpl, mnpl, mnpl);
 
+        mUsername.setText("@");
+        mUsername.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().startsWith("@")) {
+                    mUsername.setText("@");
+                    Selection.setSelection(mUsername.getText(), mUsername.getText().length());
+                }
+            }
+        });
+
         LocationResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
@@ -134,7 +158,7 @@ public class SetUpAccountActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String useriput_prefreame = mPreferName.getText().toString().trim();
-                String userinput_username = mUsername.getText().toString().trim().toLowerCase();
+                String userinput_username = mUsername.getText().toString().trim().toLowerCase().substring(1);
                 String userinput_location = mLocation.getText().toString();
                 if (!TextUtils.isEmpty(userinput_username.trim()) && !TextUtils.isEmpty(useriput_prefreame.trim())
                         && !TextUtils.isEmpty(userinput_location.trim())) {
