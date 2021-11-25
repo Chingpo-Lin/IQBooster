@@ -72,7 +72,7 @@ public class SuggestionActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         potentialUsers = new ArrayList<AdapterUser>();
-        mAdapter = new UserSuggestionAdapter(getApplicationContext(), potentialUsers, mAuth);
+        mAdapter = new UserSuggestionAdapter(SuggestionActivity.this, potentialUsers, mAuth);
         mRecyclerView.setAdapter(mAdapter);
 
         mUsersRef.addValueEventListener(new ValueEventListener() {

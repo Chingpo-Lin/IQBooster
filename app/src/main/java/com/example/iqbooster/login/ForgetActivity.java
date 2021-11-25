@@ -53,6 +53,7 @@ public class ForgetActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
 
@@ -135,6 +136,7 @@ public class ForgetActivity extends AppCompatActivity {
         Intent goToLoginInActivity = new Intent(getApplicationContext(), LoginActivity.class);
         goToLoginInActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(goToLoginInActivity);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         finish();
     }
 }

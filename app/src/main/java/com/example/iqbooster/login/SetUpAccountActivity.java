@@ -313,7 +313,7 @@ public class SetUpAccountActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // NO GO BACK
+        // NO GO BACK IS ALLOWED
     }
 
     /**
@@ -322,6 +322,7 @@ public class SetUpAccountActivity extends AppCompatActivity {
     private void goToTagPickerActivity() {
         Intent goToDiscoverActivity = new Intent(this, DiscoverActivity.class);
         startActivity(goToDiscoverActivity);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         finish();
     }
 

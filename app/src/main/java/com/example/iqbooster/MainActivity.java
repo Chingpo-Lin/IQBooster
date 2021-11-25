@@ -4,6 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -66,7 +69,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ActivityInterface, SensorEventListener {
 
     private static final String TAG = "MainActivity";
-    private static final String BUILD_VERSION = "Current Build Version: 1.3.100";
+    private static final String BUILD_VERSION = "Current Build Version: 1.3.200";
 
     private MaterialToolbar mToolbar;
     private DrawerLayout mDrawerLayout;
@@ -143,7 +146,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mNewsFeedItem.setChecked(true);
         getSupportActionBar().setTitle("News Feed");
-
         mNewsFeedFragment = new NewsFeed();
         mNewsFeedFragment.setActivityInterface(this);
         setFragment(mNewsFeedFragment);

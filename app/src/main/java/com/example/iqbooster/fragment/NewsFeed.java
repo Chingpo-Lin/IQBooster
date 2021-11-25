@@ -8,6 +8,7 @@ import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
@@ -27,6 +28,7 @@ import com.example.iqbooster.fragment.tabs.technologyFragment;
 import com.example.iqbooster.fragment.tabs.travelFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.transition.MaterialElevationScale;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -68,6 +70,7 @@ public class NewsFeed extends Fragment {
 
     public NewsFeed() {
         // Required empty public constructor
+
     }
 
     /**
@@ -94,6 +97,8 @@ public class NewsFeed extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        setExitTransition(new MaterialElevationScale(false));
+        setReenterTransition(new MaterialElevationScale(true));
     }
 
     @Override
@@ -111,7 +116,6 @@ public class NewsFeed extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_newsfeed, container, false);
-
         mAuth = FirebaseAuth.getInstance();
 
         mTabLayout = v.findViewById(R.id.newsfeed_tabLayout);
@@ -119,14 +123,22 @@ public class NewsFeed extends Fragment {
         mFloatingBtn = v.findViewById(R.id.newsfeed_make_post_btn);
         mNestedScrollView = v.findViewById(R.id.newsfeed_nestedScrollView);
 
-
         mFloatingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mComposeFragment = new PostCreation();
                 mComposeFragment.setActivityInterface(activityInterface);
                 FragmentManager fragmentManager = activityInterface.getActivityFragmentManger();
-                fragmentManager.beginTransaction().add(R.id.main_container, mComposeFragment).addToBackStack(null).commit();
+                fragmentManager.beginTransaction()
+                        .setCustomAnimations(
+                                R.anim.new_post_enter,  // enter
+                                R.anim.fade_out,  // exit
+                                R.anim.fade_in,   // popEnter
+                                R.anim.new_post_exit  // back
+                        )
+                        .add(R.id.main_container, mComposeFragment)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
 
@@ -166,7 +178,7 @@ public class NewsFeed extends Fragment {
         viewPagerAdapter.addFragment(mTravelFragment, getResources().getString(R.string.hash_travel));
 
         mViewPager.setAdapter(viewPagerAdapter);
-
+//        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 //        mNestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
 //            @Override
 //            public void onScrollChange(NestedScrollView nestedScrollView, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -188,7 +200,7 @@ public class NewsFeed extends Fragment {
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private List<Fragment> fragments = new ArrayList<>();
         private List<String> fragmentsTitle = new ArrayList<>();
-
+//
 
         public ViewPagerAdapter(@NonNull FragmentManager fm, int behavior) {
             super(fm, behavior);

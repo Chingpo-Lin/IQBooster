@@ -76,14 +76,13 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
     private MyPost myPost;
     private com.example.iqbooster.fragment.tabs.userPageFollowersFragment userPageFollowersFragment;
     private com.example.iqbooster.fragment.tabs.userPageFollowingFragment userPageFollowingFragment;
-
     private static final String TAG = "UserProfilePage";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile_page);
-
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         mToolbar = findViewById(R.id.user_profile_toolbar);
         setSupportActionBar(mToolbar);
 
@@ -100,7 +99,6 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
         final String intentUID = getIntent().getStringExtra(EXTRA);
         currPageUID = intentUID;
 
@@ -315,6 +313,18 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
                 }
             });
         }
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        Log.i("TAG", "onBackPressed: ");
+        finish();
+    }
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.user_profile_enter, R.anim.user_profile_exit);
     }
 
     private void addChipToGroup(Tags tags) {

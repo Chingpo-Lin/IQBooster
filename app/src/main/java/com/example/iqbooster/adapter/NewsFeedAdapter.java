@@ -1,11 +1,18 @@
 package com.example.iqbooster.adapter;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.view.ViewCompat;
 import androidx.core.content.FileProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.FragmentNavigator;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -40,6 +47,9 @@ import com.google.android.material.card.MaterialCardView;
 import com.example.iqbooster.notification.FirebaseUtil;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.transition.MaterialContainerTransform;
+import com.google.android.material.transition.MaterialElevationScale;
+import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -68,6 +78,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public View mView;
+        public View mHeading;
         public CircleImageView mCircleImageView; // post_heading_circleImageView
         public TextView mTitle; // post_heading_title
         public TextView mInfo; // post_heading_info
@@ -87,6 +98,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             mView = itemView;
+            mHeading = itemView.findViewById(R.id.post_heading);
             mCircleImageView = itemView.findViewById(R.id.post_heading_circleImageView);
             mTitle = itemView.findViewById(R.id.post_heading_title);
             mInfo = itemView.findViewById(R.id.post_heading_info);
@@ -102,6 +114,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             mLikeCount = itemView.findViewById(R.id.like_collect_share_likeCount);
             mCollectBtn = itemView.findViewById(R.id.like_collect_share_collect);
             mShare = itemView.findViewById(R.id.like_collect_share_share);
+
         }
     }
 
@@ -116,6 +129,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_textwithimg, parent, false);
         return new ViewHolder(view);
@@ -162,7 +176,8 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                 Intent profilePageIntent = new Intent(mContext, UserProfilePage.class);
                 profilePageIntent.putExtra(UserProfilePage.EXTRA, mValue.get(holder.getBindingAdapterPosition()).getAuthor());
                 profilePageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                mContext.startActivity(profilePageIntent);
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext, holder.mCircleImageView, ViewCompat.getTransitionName(holder.mCircleImageView));
+                mContext.startActivity(profilePageIntent, options.toBundle());
             }
         });
 
@@ -226,7 +241,6 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
         } catch (Exception e) {
 
         }
-
         holder.mSubtitle.setText(mValue.get(holder.getAbsoluteAdapterPosition()).getSubTitle());
         holder.mSubtitle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -240,8 +254,39 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                     case PROFILE_PAGE:
                         container_id = R.id.user_profile_container;
                 }
+//                NavHostFragment navHostFragment = (NavHostFragment) activityInterface.getActivityFragmentManger().findFragmentById(view.getId());
+//                NavController navController = navHostFragment.getNavController();
+//                FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
+//                        .addSharedElement(view, "post_transition")
+//                        .build();
+//                Navigation.findNavController(v).navigate(R.id.post_detail,
+//                        null,
+//                        null,
+//                        extras);
+
+                PostDetail newFrag = postDetail.newInstance(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID());
+//                MaterialContainerTransformSharedElementCallback b = new MaterialContainerTransformSharedElementCallback();
+//                newFrag.getActivity().setEnterSharedElementCallback(b);
+//                MaterialContainerTransform t = new MaterialContainerTransform();
+//                t.addTarget(R.id.post_detail);
+//                t.setDuration(3000);
+//                newFrag.setSharedElementEnterTransition(t);
+                newFrag.setExitTransition(new MaterialElevationScale(true));
+                newFrag.setEnterTransition(new MaterialElevationScale(true));
+
+//                newFrag.setEnterSharedElementCallback(t);
                 activityInterface.getActivityFragmentManger()
-                        .beginTransaction().add(container_id, postDetail.newInstance(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID())).addToBackStack(null).commit();
+                        .beginTransaction()
+//                        .setCustomAnimations(
+//                                R.anim.slide_in_right,  // enter
+//                                R.anim.slide_out_left,  // exit
+//                                R.anim.slide_in_right,   // popEnter
+//                                R.anim.slide_out_right  // back
+//                        )
+//                        .addSharedElement(view, "post_transition")
+                        .add(container_id, newFrag)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
         // TODO: update subtitle if editable

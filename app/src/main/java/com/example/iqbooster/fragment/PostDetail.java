@@ -1,6 +1,7 @@
 package com.example.iqbooster.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -45,6 +47,7 @@ import com.example.iqbooster.notification.FirebaseUtil;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.transition.MaterialElevationScale;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -76,6 +79,7 @@ public class PostDetail extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     final String TAG = "PostDetail";
 
+    private View mHeading;
     private ImageView mThumbnail;
     private CircleImageView mProfileImage;
     private TextView mHeadingTitle;
@@ -139,6 +143,8 @@ public class PostDetail extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
 //            mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        setExitTransition(new MaterialElevationScale(false));
+        setReenterTransition(new MaterialElevationScale(true));
     }
 
     @Override
@@ -174,7 +180,7 @@ public class PostDetail extends Fragment {
 
         if (!mParam1.equalsIgnoreCase(ARG_PARAM1)) {
             DatabaseReference currPostRef = mDataReference.child(getContext().getResources().getString(R.string.db_posts)).child(mParam1);
-
+            mHeading = v.findViewById(R.id.post_heading);
             mThumbnail = v.findViewById(R.id.postdetail_imageView);
             mProfileImage = v.findViewById(R.id.post_heading_circleImageView);
             mHeadingTitle = v.findViewById(R.id.post_heading_title);
@@ -276,7 +282,8 @@ public class PostDetail extends Fragment {
                             Intent profilePageIntent = new Intent(getContext(), UserProfilePage.class);
                             profilePageIntent.putExtra(UserProfilePage.EXTRA, currPost.getAuthor());
                             profilePageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            getContext().startActivity(profilePageIntent);
+                            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) getContext(), mProfileImage, "circleImageTransition");
+                            getContext().startActivity(profilePageIntent, options.toBundle());
                         }
                     });
 

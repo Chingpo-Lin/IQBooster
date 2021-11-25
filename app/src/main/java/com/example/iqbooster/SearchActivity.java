@@ -3,12 +3,15 @@ package com.example.iqbooster;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.view.ViewCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -49,6 +52,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.transition.MaterialElevationScale;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -96,9 +100,29 @@ public class SearchActivity extends AppCompatActivity {
     firebaseTagSearchRecyclerAdapter4Posts mTagSearch4PostsAdapter;
 
     @Override
+    public void onBackPressed() {
+        Log.i(TAG, "back stack count: " + getSupportFragmentManager().getBackStackEntryCount());
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            Log.i(TAG, "onBackPressed count > 0: ");
+            super.onBackPressed();
+        } else {
+            Log.i(TAG, "onBackPressed: ");
+            super.onBackPressed();
+            finish();
+        }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.fade_in, R.anim.search_exit);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        overridePendingTransition(R.anim.search_enter, R.anim.fade_out);
 
         mMarquee = (TextView) findViewById(R.id.search_activity_marquee);
         mAutoComplete = (AppCompatAutoCompleteTextView) findViewById(R.id.search_activity_autoCompleteTextView);
@@ -187,8 +211,8 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
-        mTagSearch4UsersAdapter = new firebaseTagSearchRecyclerAdapter4Users(getApplicationContext(), tagSearchPotentialUsers);
-        mTagSearch4PostsAdapter = new firebaseTagSearchRecyclerAdapter4Posts(getApplicationContext(), tagSearchPotentialPosts);
+        mTagSearch4UsersAdapter = new firebaseTagSearchRecyclerAdapter4Users(SearchActivity.this, tagSearchPotentialUsers);
+        mTagSearch4PostsAdapter = new firebaseTagSearchRecyclerAdapter4Posts(SearchActivity.this, tagSearchPotentialPosts);
         setUpFirebaseTagSearch();
 
         final String[] testing = getApplicationContext().getResources().getStringArray(R.array.all_tags_with_hash);
@@ -296,10 +320,12 @@ public class SearchActivity extends AppCompatActivity {
                 holder.mCircleImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent profilePageIntent = new Intent(getApplicationContext(), UserProfilePage.class);
+                        Intent profilePageIntent = new Intent(SearchActivity.this, UserProfilePage.class);
+                        Log.i(TAG, "onClick firebaseTextSearch: " + ViewCompat.getTransitionName(holder.mCircleImageView));
                         profilePageIntent.putExtra(UserProfilePage.EXTRA, model.getUid());
                         profilePageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        getApplicationContext().startActivity(profilePageIntent);
+                        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(SearchActivity.this, holder.mCircleImageView, ViewCompat.getTransitionName(holder.mCircleImageView));
+                        startActivity(profilePageIntent, options.toBundle());
                     }
                 });
                 holder.mNameTextView.setText(model.getName());
@@ -418,10 +444,11 @@ public class SearchActivity extends AppCompatActivity {
                 holder.mCircleImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent profilePageIntent = new Intent(getApplicationContext(), UserProfilePage.class);
+                        Log.i(TAG, "onClick firebaseTextSearch: " + ViewCompat.getTransitionName(holder.mCircleImageView));
+                        Intent profilePageIntent = new Intent(SearchActivity.this, UserProfilePage.class);
                         profilePageIntent.putExtra(UserProfilePage.EXTRA, model.getAuthor());
-                        profilePageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        getApplicationContext().startActivity(profilePageIntent);
+                        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(SearchActivity.this, holder.mCircleImageView, ViewCompat.getTransitionName(holder.mCircleImageView));
+                        startActivity(profilePageIntent, options.toBundle());
                     }
                 });
 
@@ -489,11 +516,18 @@ public class SearchActivity extends AppCompatActivity {
 
                 holder.mSubtitle.setText(model.getSubTitle());
                 holder.mSubtitle.setOnClickListener(new View.OnClickListener() {
+
                     @Override
                     public void onClick(View v) {
                         PostDetail postDetail = new PostDetail();
-                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.search_activity_container, postDetail.newInstance(model.getRandomID())).addToBackStack(null).commit();
+                        PostDetail newFrag = postDetail.newInstance(model.getRandomID());
+                        newFrag.setExitTransition(new MaterialElevationScale(true));
+                        newFrag.setEnterTransition(new MaterialElevationScale(true));
+                        getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.search_activity_container, newFrag)
+                                .addToBackStack(null)
+                                .commit();
                     }
                 });
                 // TODO: update subtitle if editable
@@ -889,10 +923,12 @@ public class SearchActivity extends AppCompatActivity {
             holder.mCircleImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent profilePageIntent = new Intent(getApplicationContext(), UserProfilePage.class);
+                    Log.i(TAG, "onClick firebaseTagSearchRecyclerAdapter4Users: " + ViewCompat.getTransitionName(holder.mCircleImageView));
+                    Intent profilePageIntent = new Intent(mContext, UserProfilePage.class);
                     profilePageIntent.putExtra(UserProfilePage.EXTRA, mValue.get(holder.getAbsoluteAdapterPosition()).getUid());
                     profilePageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    getApplicationContext().startActivity(profilePageIntent);
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext, holder.mCircleImageView, ViewCompat.getTransitionName(holder.mCircleImageView));
+                    mContext.startActivity(profilePageIntent, options.toBundle());
                 }
             });
             holder.mNameTextView.setText(mValue.get(holder.getAbsoluteAdapterPosition()).getName());
@@ -1024,10 +1060,12 @@ public class SearchActivity extends AppCompatActivity {
             holder.mCircleImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent profilePageIntent = new Intent(getApplicationContext(), UserProfilePage.class);
+                    Log.i(TAG, "onClick-3: " + ViewCompat.getTransitionName(holder.mCircleImageView));
+                    Intent profilePageIntent = new Intent(mContext, UserProfilePage.class);
                     profilePageIntent.putExtra(UserProfilePage.EXTRA, mValue.get(holder.getAbsoluteAdapterPosition()).getAuthor());
                     profilePageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    getApplicationContext().startActivity(profilePageIntent);
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext, holder.mCircleImageView, ViewCompat.getTransitionName(holder.mCircleImageView));
+                    mContext.startActivity(profilePageIntent, options.toBundle());
                 }
             });
 
@@ -1098,8 +1136,14 @@ public class SearchActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     PostDetail postDetail = new PostDetail();
-                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.search_activity_container, postDetail.newInstance(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID())).addToBackStack(null).commit();
+                    PostDetail newFrag = postDetail.newInstance(mValue.get(holder.getAbsoluteAdapterPosition()).getRandomID());
+                    newFrag.setExitTransition(new MaterialElevationScale(true));
+                    newFrag.setEnterTransition(new MaterialElevationScale(true));
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.search_activity_container, newFrag)
+                            .addToBackStack(null)
+                            .commit();
                 }
             });
             // TODO: update subtitle if editable

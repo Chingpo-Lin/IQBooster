@@ -178,6 +178,7 @@ public class DiscoverActivity extends AppCompatActivity {
                     Intent goToSuggestionList = new Intent(getApplicationContext(), SuggestionActivity.class);
                     goToSuggestionList.putExtra(SuggestionActivity.EXTRA, selectedTags);
                     startActivity(goToSuggestionList);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                     finish();
                 }
             }

@@ -382,7 +382,16 @@ public class PostCreation extends Fragment {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             activityInterface.getActivityFragmentManger().popBackStack();
                                             activityInterface.getActivityFragmentManger()
-                                                    .beginTransaction().replace(R.id.main_container, postDetail.newInstance(newPostID)).addToBackStack(null).commit();
+                                                    .beginTransaction()
+//                                                    .setCustomAnimations(
+//                                                            R.anim.hyperspace_out,  // enter
+//                                                            R.anim.fade_out,  // exit
+//                                                            R.anim.fade_in,   // popEnter
+//                                                            R.anim.hyperspace_in  // back
+//                                                    )
+                                                    .replace(R.id.main_container, postDetail.newInstance(newPostID))
+                                                    .addToBackStack(null)
+                                                    .commit();
                                         }
                                     });
                                 } else {
@@ -394,7 +403,16 @@ public class PostCreation extends Fragment {
                     } else {
                         activityInterface.getActivityFragmentManger().popBackStack();
                         activityInterface.getActivityFragmentManger()
-                                .beginTransaction().replace(R.id.main_container, postDetail.newInstance(newPostID)).addToBackStack(null).commit();
+                                .beginTransaction()
+//                                .setCustomAnimations(
+//                                        R.anim.hyperspace_out,  // enter
+//                                        R.anim.fade_out,  // exit
+//                                        R.anim.fade_in,   // popEnter
+//                                        R.anim.hyperspace_in  // back
+//                                )
+                                .replace(R.id.main_container, postDetail.newInstance(newPostID))
+                                .addToBackStack(null)
+                                .commit();
                     }
                 } else {
                     mCancelBtn.setVisibility(View.VISIBLE);

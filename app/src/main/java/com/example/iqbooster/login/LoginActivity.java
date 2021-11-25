@@ -50,7 +50,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         mAuth = FirebaseAuth.getInstance();
 
         mEditEmail = findViewById(R.id.login_edit_email);
@@ -90,6 +89,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), SignupActivity.class));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 finish();
             }
         });
@@ -99,6 +99,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), ForgetActivity.class));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 finish();
             }
         });
@@ -191,6 +192,7 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void goToMainActivityHelper() {
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         finish();
     }
 }
