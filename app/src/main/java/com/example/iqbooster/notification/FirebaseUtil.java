@@ -45,6 +45,11 @@ public class FirebaseUtil {
                 });
     }
 
+    public static void removeDeviceId(Context context, String UID, String TAG) {
+        DatabaseReference mUsers = FirebaseDatabase.getInstance().getReference().child(context.getResources().getString(R.string.db_users));
+        mUsers.child(UID).child(context.getString(R.string.db_device_id)).removeValue();
+    }
+
     private static void sendSingleNotification(String device_id, String title, String body, String TAG) {
         Log.d(TAG, device_id);
 
@@ -67,8 +72,6 @@ public class FirebaseUtil {
 
     public static void sendSingleNotification(Context context, String destUID, String title, String body, String TAG) {
         Log.d(TAG, "sending notification");
-        Log.d(TAG, context.getResources().getString(R.string.db_users));
-        Log.d(TAG, context.getResources().getString(R.string.db_device_id));
 
         DatabaseReference mUsers = FirebaseDatabase.getInstance().getReference().child(context.getResources().getString(R.string.db_users));
         mUsers.child(destUID).child(context.getString(R.string.db_device_id)).addListenerForSingleValueEvent(new ValueEventListener() {

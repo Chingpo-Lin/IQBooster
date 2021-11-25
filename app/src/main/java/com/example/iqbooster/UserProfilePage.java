@@ -359,6 +359,7 @@ public class UserProfilePage extends AppCompatActivity implements ActivityInterf
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.threedots_logout:
+                FirebaseUtil.removeDeviceId(getApplicationContext(), mAuth.getUid(), TAG);
                 mAuth.signOut();
                 recreate();
             default:
