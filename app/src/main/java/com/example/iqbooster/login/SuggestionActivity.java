@@ -75,7 +75,7 @@ public class SuggestionActivity extends AppCompatActivity {
         mAdapter = new UserSuggestionAdapter(SuggestionActivity.this, potentialUsers, mAuth);
         mRecyclerView.setAdapter(mAdapter);
 
-        mUsersRef.addValueEventListener(new ValueEventListener() {
+        mUsersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 potentialUsers.clear();
@@ -107,60 +107,38 @@ public class SuggestionActivity extends AppCompatActivity {
             }
         });
 
-//        mUsersRef.addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-//                AdapterUser currUser = snapshot.getValue(AdapterUser.class);
-//                if (snapshot.hasChild(getApplicationContext().getResources().getString(R.string.db_tags))) {
-//                    Tags currTags = snapshot.child(getApplicationContext().getResources().getString(R.string.db_tags)).getValue(Tags.class);
-//                    boolean found = false;
-//                    for (String t : currTags.allTrue()) {
-//                        Log.d(TAG, "checking: " + t);
-//                        if (found) break;
-//                        if (tagsHashSet.contains(t)) {
-//                            Log.d(TAG, "adding tags");
-//                            mAdapter.push_back(currUser);
-//                            Log.d(TAG, "adding to potential users current size: " + potentialUsers.size());
-//                            found = true;
-//                        }
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-//                AdapterUser currUser = snapshot.getValue(AdapterUser.class);
-//                if (snapshot.hasChild(getApplicationContext().getResources().getString(R.string.db_tags))) {
-//                    Tags currTags = snapshot.child(getApplicationContext().getResources().getString(R.string.db_tags)).getValue(Tags.class);
-//                    boolean found = false;
-//                    for (String t : currTags.allTrue()) {
-//                        Log.d(TAG, "checking: " + t);
-//                        if (found) break;
-//                        if (tagsHashSet.contains(t)) {
-//                            Log.d(TAG, "adding tags");
-//                            mAdapter.changeChild();
-//                            Log.d(TAG, "adding to potential users current size: " + potentialUsers.size());
-//                            found = true;
-//                        }
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-//
-//            }
-//
-//            @Override
-//            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
+        DatabaseReference mUsersFollowingRef = mDatabase.getReference()
+                .child(getResources().getString(R.string.db_users))
+                .child(mAuth.getCurrentUser().getUid())
+                .child(getResources().getString(R.string.db_following_users));
+        mUsersFollowingRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                AdapterUser currUser = snapshot.getValue(AdapterUser.class);
+                mAdapter.changeToFollowing(currUser.getUid());
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                AdapterUser currUser = snapshot.getValue(AdapterUser.class);
+                mAdapter.changeToFollow(currUser.getUid());
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         mRecyclerView.hasFixedSize();
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));

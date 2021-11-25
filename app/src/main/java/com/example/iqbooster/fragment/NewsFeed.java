@@ -97,8 +97,8 @@ public class NewsFeed extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        setExitTransition(new MaterialElevationScale(false));
-        setReenterTransition(new MaterialElevationScale(true));
+//        setExitTransition(new MaterialElevationScale(false));
+//        setReenterTransition(new MaterialElevationScale(true));
     }
 
     @Override

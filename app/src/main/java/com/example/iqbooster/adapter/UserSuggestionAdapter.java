@@ -3,6 +3,7 @@ package com.example.iqbooster.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -217,6 +218,34 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
         }
         if (idx == this.mValue.size()) return;
         this.mValue.set(idx, changedUser);
+        notifyItemChanged(idx);
+    }
+
+    public void changeToFollowing(String UID) {
+        int idx = 0;
+        for (AdapterUser user : mValue) {
+            if (user.getUid().equalsIgnoreCase(UID)) {
+                break;
+            }
+            ++idx;
+        }
+        if (idx == mValue.size()) return;
+        this.mValue.get(idx).customCTF(true);
+        Log.d(TAG, "???ZerongTrue " + String.valueOf(this.mValue.get(idx).customCTF()));
+        notifyItemChanged(idx);
+    }
+
+    public void changeToFollow(String UID) {
+        int idx = 0;
+        for (AdapterUser user : mValue) {
+            if (user.getUid().equalsIgnoreCase(UID)) {
+                break;
+            }
+            ++idx;
+        }
+        if (idx == mValue.size()) return;
+        this.mValue.get(idx).customCTF(false);
+        Log.d(TAG, "???ZerongFalse " + String.valueOf(this.mValue.get(idx).customCTF()));
         notifyItemChanged(idx);
     }
 }
