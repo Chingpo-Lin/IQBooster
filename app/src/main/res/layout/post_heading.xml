@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:orientation="horizontal"
     android:background="@color/white"
-    android:layout_height="72sp"
+    android:layout_height="wrap_content"
     >
 <!--TODO rename transition name-->
     <de.hdodenhof.circleimageview.CircleImageView
@@ -19,8 +19,9 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="12sp"
+        android:layout_marginVertical="16sp"
         android:orientation="vertical">
 
         <TextView
@@ -28,7 +29,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="title"
-            android:layout_marginTop="16sp"
             android:layout_gravity="center_vertical"
             android:textAppearance="?attr/textAppearanceHeadline6"
             />
