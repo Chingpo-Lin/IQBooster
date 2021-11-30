@@ -130,6 +130,7 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
                 }
             });
 
+            holder.mFollowBtn.setVisibility(View.VISIBLE);
             if (mValue.get(holder.getAbsoluteAdapterPosition()).getUid().equals(mAuth.getUid())) {
                 holder.mFollowBtn.setVisibility(View.INVISIBLE);
             }

@@ -43,6 +43,7 @@ import com.example.iqbooster.fragment.NewsFeed;
 import com.example.iqbooster.fragment.PostDetail;
 import com.example.iqbooster.login.LoginActivity;
 import com.example.iqbooster.model.AdapterUser;
+import com.example.iqbooster.model.MyPostModel;
 import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -69,7 +70,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ActivityInterface, SensorEventListener {
 
     private static final String TAG = "MainActivity";
-    private static final String BUILD_VERSION = "Current Build Version: 1.3.30";
+    private static final String BUILD_VERSION = "Current Build Version: 1.3.35";
 
     private MaterialToolbar mToolbar;
     private DrawerLayout mDrawerLayout;

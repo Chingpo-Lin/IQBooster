@@ -30,6 +30,7 @@ import android.widget.TextView;
 
 import com.example.iqbooster.ActivityInterface;
 import com.example.iqbooster.R;
+import com.example.iqbooster.model.MyPostModel;
 import com.example.iqbooster.model.Post;
 import com.example.iqbooster.model.Tags;
 import com.github.dhaval2404.imagepicker.ImagePicker;
@@ -340,6 +341,7 @@ public class PostCreation extends Fragment {
         Post currPost = new Post(
                 randomKey,
                 mTitleTextView.getText().toString(),
+                mTitleTextView.getText().toString().toLowerCase(),
                 mSubTitleTextView.getText().toString(),
                 mBodyTextView.getText().toString(),
                 currUserUID,
@@ -353,67 +355,77 @@ public class PostCreation extends Fragment {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     PostDetail postDetail = new PostDetail();
-                    mUsersRef.child(currUserUID).child(getContext().getResources().getString(R.string.db_my_posts)).child(randomKey).setValue(randomKey);
-                    mUsersRef.child(currUserUID).child(getContext().getResources().getString(R.string.db_tags)).setValue(userTags);
-                    if (thumbnailUri != null) {
-                        final StorageReference fileRef = firebaseStorageThumbnailRef
-                                .child(randomKey + ".jpg");
-                        uploadTask = fileRef.putFile(thumbnailUri);
-                        uploadTask.continueWithTask(new Continuation() {
-                            @Override
-                            public Object then(@NonNull Task task) throws Exception {
-                                if (!task.isSuccessful()) {
-                                    mCancelBtn.setVisibility(View.VISIBLE);
-                                    mPostTextView.setVisibility(View.VISIBLE);
-                                    throw task.getException();
-                                }
-                                return fileRef.getDownloadUrl();
-                            }
-                        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Uri> task) {
-                                if (task.isSuccessful()) {
-                                    Uri downloadUrl = task.getResult();
-                                    thumbnailLink = downloadUrl.toString();
-                                    HashMap<String, Object> thumbnailMap = new HashMap<>();
-                                    thumbnailMap.put(getContext().getResources().getString(R.string.db_thumbnail_image), thumbnailLink);
-                                    mPostsRef.child(randomKey).updateChildren(thumbnailMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    MyPostModel myPostModel = new MyPostModel(randomKey, timestamp.getTime());
+                    mUsersRef.child(currUserUID).child(getContext().getResources().getString(R.string.db_my_posts)).child(randomKey).setValue(myPostModel).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                mUsersRef.child(currUserUID).child(getContext().getResources().getString(R.string.db_tags)).setValue(userTags);
+                                if (thumbnailUri != null) {
+                                    final StorageReference fileRef = firebaseStorageThumbnailRef
+                                            .child(randomKey + ".jpg");
+                                    uploadTask = fileRef.putFile(thumbnailUri);
+                                    uploadTask.continueWithTask(new Continuation() {
                                         @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            activityInterface.getActivityFragmentManger().popBackStack();
-                                            activityInterface.getActivityFragmentManger()
-                                                    .beginTransaction()
+                                        public Object then(@NonNull Task task) throws Exception {
+                                            if (!task.isSuccessful()) {
+                                                mCancelBtn.setVisibility(View.VISIBLE);
+                                                mPostTextView.setVisibility(View.VISIBLE);
+                                                throw task.getException();
+                                            }
+                                            return fileRef.getDownloadUrl();
+                                        }
+                                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Uri> task) {
+                                            if (task.isSuccessful()) {
+                                                Uri downloadUrl = task.getResult();
+                                                thumbnailLink = downloadUrl.toString();
+                                                HashMap<String, Object> thumbnailMap = new HashMap<>();
+                                                thumbnailMap.put(getContext().getResources().getString(R.string.db_thumbnail_image), thumbnailLink);
+                                                mPostsRef.child(randomKey).updateChildren(thumbnailMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        activityInterface.getActivityFragmentManger().popBackStack();
+                                                        activityInterface.getActivityFragmentManger()
+                                                                .beginTransaction()
 //                                                    .setCustomAnimations(
 //                                                            R.anim.hyperspace_out,  // enter
 //                                                            R.anim.fade_out,  // exit
 //                                                            R.anim.fade_in,   // popEnter
 //                                                            R.anim.hyperspace_in  // back
 //                                                    )
-                                                    .replace(R.id.main_container, postDetail.newInstance(newPostID))
-                                                    .addToBackStack(null)
-                                                    .commit();
+                                                                .replace(R.id.main_container, postDetail.newInstance(newPostID))
+                                                                .addToBackStack(null)
+                                                                .commit();
+                                                    }
+                                                });
+                                            } else {
+                                                mCancelBtn.setVisibility(View.VISIBLE);
+                                                mPostTextView.setVisibility(View.VISIBLE);
+                                            }
                                         }
                                     });
                                 } else {
-                                    mCancelBtn.setVisibility(View.VISIBLE);
-                                    mPostTextView.setVisibility(View.VISIBLE);
-                                }
-                            }
-                        });
-                    } else {
-                        activityInterface.getActivityFragmentManger().popBackStack();
-                        activityInterface.getActivityFragmentManger()
-                                .beginTransaction()
+                                    activityInterface.getActivityFragmentManger().popBackStack();
+                                    activityInterface.getActivityFragmentManger()
+                                            .beginTransaction()
 //                                .setCustomAnimations(
 //                                        R.anim.hyperspace_out,  // enter
 //                                        R.anim.fade_out,  // exit
 //                                        R.anim.fade_in,   // popEnter
 //                                        R.anim.hyperspace_in  // back
 //                                )
-                                .replace(R.id.main_container, postDetail.newInstance(newPostID))
-                                .addToBackStack(null)
-                                .commit();
-                    }
+                                            .replace(R.id.main_container, postDetail.newInstance(newPostID))
+                                            .addToBackStack(null)
+                                            .commit();
+                                }
+                            } else {
+                                mCancelBtn.setVisibility(View.VISIBLE);
+                                mPostTextView.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    });
                 } else {
                     mCancelBtn.setVisibility(View.VISIBLE);
                     mPostTextView.setVisibility(View.VISIBLE);

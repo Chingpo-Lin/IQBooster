@@ -62,6 +62,7 @@
     <string name="db_my_posts">my_posts</string>
     <string name="db_like_counts">like_counts</string>
     <string name="db_title">title</string>
+    <string name="db_lower_case_title">lower_case_title</string>
     <string name="db_subTitle">subTitle</string>
     <string name="db_like_posts">like_posts</string>
     <string name="db_collect_posts">collect_posts</string>

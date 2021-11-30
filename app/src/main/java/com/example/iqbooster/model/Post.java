@@ -3,6 +3,7 @@ package com.example.iqbooster.model;
 public class Post {
     private String randomID;
     private String title;
+    private String lower_case_title;
     private String subTitle;
     private String body;
     private String author;
@@ -17,9 +18,10 @@ public class Post {
     public Post() {
     }
 
-    public Post(String randomID, String title, String subTitle, String body, String author, String date, long timestamp, Tags tags, String thumbnail_image) {
+    public Post(String randomID, String title, String lower_case_title, String subTitle, String body, String author, String date, long timestamp, Tags tags, String thumbnail_image) {
         this.randomID = randomID;
         this.title = title;
+        this.lower_case_title = lower_case_title;
         this.subTitle = subTitle;
         this.body = body;
         this.author = author;
@@ -126,5 +128,13 @@ public class Post {
 
     public void setCollected(boolean collected) {
         isCollected = collected;
+    }
+
+    public String getLower_case_title() {
+        return lower_case_title;
+    }
+
+    public void setLower_case_title(String lower_case_title) {
+        this.lower_case_title = lower_case_title;
     }
 }

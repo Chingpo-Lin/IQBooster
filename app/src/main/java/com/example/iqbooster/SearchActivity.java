@@ -68,6 +68,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -281,7 +282,7 @@ public class SearchActivity extends AppCompatActivity {
 
     void firebaseTextSearch(String search) {
         Query firebaseQuery4Users = mUsersRef.orderByChild(getResources().getString(R.string.db_username)).startAt(search).endAt(search + "\uf88f");
-        Query firebaseQuery4Posts = mPostsRef.orderByChild(getResources().getString(R.string.db_title)).startAt(search.toLowerCase()).endAt(search.toLowerCase() + "\uf88f");
+        Query firebaseQuery4Posts = mPostsRef.orderByChild(getResources().getString(R.string.db_lower_case_title)).startAt(search.toLowerCase()).endAt(search.toLowerCase() + "\uf88f");
 
         FirebaseRecyclerOptions searchOption4Users = new FirebaseRecyclerOptions.Builder<AdapterUser>()
                 .setQuery(firebaseQuery4Users, AdapterUser.class).build();
@@ -349,6 +350,7 @@ public class SearchActivity extends AppCompatActivity {
                         }
                     });
 
+                    holder.mFollowBtn.setVisibility(View.VISIBLE);
                     if (model.getUid().equals(mAuth.getUid())) {
                         holder.mFollowBtn.setVisibility(View.INVISIBLE);
                     }
@@ -951,6 +953,7 @@ public class SearchActivity extends AppCompatActivity {
                     }
                 });
 
+                holder.mFollowBtn.setVisibility(View.VISIBLE);
                 if (mValue.get(holder.getAbsoluteAdapterPosition()).getUid().equals(mAuth.getUid())) {
                     holder.mFollowBtn.setVisibility(View.INVISIBLE);
                 }

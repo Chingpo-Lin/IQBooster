@@ -16,6 +16,7 @@ import com.example.iqbooster.ActivityInterface;
 import com.example.iqbooster.R;
 import com.example.iqbooster.Screen;
 import com.example.iqbooster.adapter.NewsFeedAdapter;
+import com.example.iqbooster.model.MyPostModel;
 import com.example.iqbooster.model.Post;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -141,10 +142,10 @@ public class MyPost extends Fragment {
 //            }
 //        });
 
-        myPostRef.addChildEventListener(new ChildEventListener() {
+        myPostRef.orderByChild(getResources().getString(R.string.db_timestamp)).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                String currPostID = snapshot.getValue(String.class);
+                String currPostID = snapshot.getKey();
 
                 postRef.child(currPostID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
@@ -157,7 +158,7 @@ public class MyPost extends Fragment {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                String currPostID = snapshot.getValue(String.class);
+                String currPostID = snapshot.getKey();
 
                 postRef.child(currPostID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
@@ -170,7 +171,7 @@ public class MyPost extends Fragment {
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-                String currPostID = snapshot.getValue(String.class);
+                String currPostID = snapshot.getKey();
 
                 postRef.child(currPostID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
