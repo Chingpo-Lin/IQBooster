@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
@@ -50,6 +51,7 @@ public class NewsFeed extends Fragment {
     View v;
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
+    private ViewPagerAdapter viewPagerAdapter;
     private NestedScrollView mNestedScrollView;
     private FloatingActionButton mFloatingBtn;
 
@@ -111,29 +113,33 @@ public class NewsFeed extends Fragment {
 
     @Override
     public void onStart() {
-        ((ViewGroup) mTabLayout.getChildAt(0)).getChildAt(1).setVisibility(View.GONE);
+//        ((ViewGroup) mTabLayout.getChildAt(0)).getChildAt(1).setVisibility(View.GONE);
         if (mAuth.getCurrentUser() == null) {
             mFloatingBtn.setVisibility(View.GONE);
         } else {
             mFloatingBtn.setVisibility(View.VISIBLE);
-            mDatabaseRef.child(getResources().getString(R.string.db_users)).child(mAuth.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.hasChild(getResources().getString(R.string.db_following_users))) {
-                        ((ViewGroup) mTabLayout.getChildAt(0)).getChildAt(1).setVisibility(View.VISIBLE);
-                    } else {
-                        if (mTabLayout.getSelectedTabPosition() == 1) {
-                            selectHomeTab();
-                        }
-                        ((ViewGroup) mTabLayout.getChildAt(0)).getChildAt(1).setVisibility(View.GONE);
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
+//            mDatabaseRef.child(getResources().getString(R.string.db_users)).child(mAuth.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                    if (snapshot.hasChild(getResources().getString(R.string.db_following_users))) {
+////                        ((ViewGroup) mTabLayout.getChildAt(0)).getChildAt(1).setVisibility(View.VISIBLE);
+//                    } else {
+//                        if (mTabLayout.getSelectedTabPosition() == 1) {
+//                            selectHomeTab();
+//                        }
+//                        if (viewPagerAdapter.getPageTitle(1).toString().equalsIgnoreCase(getResources().getString(R.string.following_tab))) {
+//                            viewPagerAdapter.notifyChangeInPosition(1);
+//                            viewPagerAdapter.removeFragment(0);
+//                        }
+////                        ((ViewGroup) mTabLayout.getChildAt(0)).getChildAt(1).setVisibility(View.GONE);
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError error) {
+//
+//                }
+//            });
         }
         super.onStart();
     }
@@ -203,10 +209,10 @@ public class NewsFeed extends Fragment {
 
         mTabLayout.setupWithViewPager(mViewPager);
 
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), 0);
+        viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), 0);
 
         viewPagerAdapter.addFragment(mHomeFragment, getResources().getString(R.string.home));
-        viewPagerAdapter.addFragment(mFollowingUsersPostsFragment, getResources().getString(R.string.following));
+//        viewPagerAdapter.addFragment(mFollowingUsersPostsFragment, getResources().getString(R.string.following_tab));
         viewPagerAdapter.addFragment(mTechnologyFragment, getResources().getString(R.string.hash_technology));
         viewPagerAdapter.addFragment(mBusinessFragment, getResources().getString(R.string.hash_business));
         viewPagerAdapter.addFragment(mEntertainmentFragment, getResources().getString(R.string.hash_entertainment));
@@ -217,7 +223,7 @@ public class NewsFeed extends Fragment {
         viewPagerAdapter.addFragment(mTravelFragment, getResources().getString(R.string.hash_travel));
 
         mViewPager.setAdapter(viewPagerAdapter);
-        ((ViewGroup) mTabLayout.getChildAt(0)).getChildAt(1).setVisibility(View.GONE);
+//        ((ViewGroup) mTabLayout.getChildAt(0)).getChildAt(1).setVisibility(View.GONE);
 //        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 //        mNestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
 //            @Override
@@ -240,10 +246,16 @@ public class NewsFeed extends Fragment {
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private List<Fragment> fragments = new ArrayList<>();
         private List<String> fragmentsTitle = new ArrayList<>();
-//
+        private long baseId = 0;
 
         public ViewPagerAdapter(@NonNull FragmentManager fm, int behavior) {
             super(fm, behavior);
+        }
+
+        public void addFragment(Fragment fragment, String title, int position) {
+            fragments.add(position, fragment);
+            fragmentsTitle.add(position, title);
+            notifyDataSetChanged();
         }
 
         public void addFragment(Fragment fragment, String title) {
@@ -266,6 +278,35 @@ public class NewsFeed extends Fragment {
         @Override
         public CharSequence getPageTitle(int position) {
             return fragmentsTitle.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            // give an ID different from position when position has been changed
+            return baseId + position;
+        }
+
+        //this is called when notifyDataSetChanged() is called
+        @Override
+        public int getItemPosition(Object object) {
+            // refresh all fragments when data set changed
+            return PagerAdapter.POSITION_NONE;
+        }
+
+        public void removeFragment(int position) {
+            fragments.remove(position);
+            fragmentsTitle.remove(position);
+            notifyDataSetChanged();
+        }
+
+        /**
+         * Notify that the position of a fragment has been changed.
+         * Create a new ID for each position to force recreation of the fragment
+         * @param n number of items which have been changed
+         */
+        public void notifyChangeInPosition(int n) {
+            // shift the ID returned by getItemId outside the range of all previous fragments
+            baseId += getCount() + n;
         }
     }
 }
