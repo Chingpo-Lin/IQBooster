@@ -1,6 +1,7 @@
 package com.example.iqbooster;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.core.app.ActivityOptionsCompat;
@@ -55,6 +56,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.transition.MaterialElevationScale;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -275,7 +277,6 @@ public class SearchActivity extends AppCompatActivity {
                     tv.setGravity(Gravity.CENTER_HORIZONTAL);
                 }
                 sn.show();
-                continue;
             }
         }
     }
@@ -851,6 +852,41 @@ public class SearchActivity extends AppCompatActivity {
                 }
             });
 
+            if (mAuth.getCurrentUser() != null) {
+                DatabaseReference mUsersFollowingRef = mDatabaseRef
+                    .child(getResources().getString(R.string.db_users))
+                    .child(mAuth.getCurrentUser().getUid())
+                    .child(getResources().getString(R.string.db_following_users));
+                mUsersFollowingRef.addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                        AdapterUser currUser = snapshot.getValue(AdapterUser.class);
+                        mTagSearch4UsersAdapter.changeToFollowing(currUser.getUid());
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                        AdapterUser currUser = snapshot.getValue(AdapterUser.class);
+                        mTagSearch4UsersAdapter.changeToFollow(currUser.getUid());
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+
             mPostsRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -958,7 +994,7 @@ public class SearchActivity extends AppCompatActivity {
                     holder.mFollowBtn.setVisibility(View.INVISIBLE);
                 }
                 holder.mFollowBtn.setText(getApplicationContext().getResources().getString(R.string.follow));
-                currUserFollowingRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                currUserFollowingRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for (DataSnapshot ds : snapshot.getChildren()) {
@@ -1014,6 +1050,32 @@ public class SearchActivity extends AppCompatActivity {
         public void updateList(ArrayList<AdapterUser> users) {
             this.mValue = users;
             notifyDataSetChanged();
+        }
+
+        public void changeToFollowing(String UID) {
+            int idx = 0;
+            for (AdapterUser user : mValue) {
+                if (user.getUid().equalsIgnoreCase(UID)) {
+                    break;
+                }
+                ++idx;
+            }
+            if (idx == mValue.size()) return;
+            this.mValue.get(idx).customCTF(true);
+            notifyItemChanged(idx);
+        }
+
+        public void changeToFollow(String UID) {
+            int idx = 0;
+            for (AdapterUser user : mValue) {
+                if (user.getUid().equalsIgnoreCase(UID)) {
+                    break;
+                }
+                ++idx;
+            }
+            if (idx == mValue.size()) return;
+            this.mValue.get(idx).customCTF(false);
+            notifyItemChanged(idx);
         }
     }
 

@@ -232,7 +232,6 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
         }
         if (idx == mValue.size()) return;
         this.mValue.get(idx).customCTF(true);
-        Log.d(TAG, "???ZerongTrue " + String.valueOf(this.mValue.get(idx).customCTF()));
         notifyItemChanged(idx);
     }
 
@@ -246,7 +245,6 @@ public class UserSuggestionAdapter extends RecyclerView.Adapter<UserSuggestionAd
         }
         if (idx == mValue.size()) return;
         this.mValue.get(idx).customCTF(false);
-        Log.d(TAG, "???ZerongFalse " + String.valueOf(this.mValue.get(idx).customCTF()));
         notifyItemChanged(idx);
     }
 }
