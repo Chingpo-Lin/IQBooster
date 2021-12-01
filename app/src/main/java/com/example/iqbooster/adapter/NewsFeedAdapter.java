@@ -602,6 +602,17 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
         notifyItemRemoved(idx);
     }
 
+    public void removeChildByUID(String UID) {
+        int idx = 0;
+        for (Post post : mValue) {
+            if (post.getAuthor().equalsIgnoreCase(UID)) {
+                mValue.remove(idx);
+                notifyItemRemoved(idx);
+            }
+            ++idx;
+        }
+    }
+
     public void changeChild(String RID, Post changedPost) {
         int idx = 0;
         for (Post post : mValue) {

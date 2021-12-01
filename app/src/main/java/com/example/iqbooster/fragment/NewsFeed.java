@@ -19,6 +19,7 @@ import com.example.iqbooster.ActivityInterface;
 import com.example.iqbooster.R;
 import com.example.iqbooster.fragment.tabs.businessFragment;
 import com.example.iqbooster.fragment.tabs.entertainmentFragment;
+import com.example.iqbooster.fragment.tabs.followingUsersPostsFragment;
 import com.example.iqbooster.fragment.tabs.foodFragment;
 import com.example.iqbooster.fragment.tabs.healthFragment;
 import com.example.iqbooster.fragment.tabs.homeFragment;
@@ -30,6 +31,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.transition.MaterialElevationScale;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +55,7 @@ public class NewsFeed extends Fragment {
 
     private PostCreation mComposeFragment;
     private homeFragment mHomeFragment;
+    private followingUsersPostsFragment mFollowingUsersPostsFragment;
     private technologyFragment mTechnologyFragment;
     private businessFragment mBusinessFragment;
     private entertainmentFragment mEntertainmentFragment;
@@ -59,6 +66,7 @@ public class NewsFeed extends Fragment {
     private travelFragment mTravelFragment;
 
     private FirebaseAuth mAuth;
+    private DatabaseReference mDatabaseRef;
     private ActivityInterface activityInterface;
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -103,12 +111,39 @@ public class NewsFeed extends Fragment {
 
     @Override
     public void onStart() {
+        ((ViewGroup) mTabLayout.getChildAt(0)).getChildAt(1).setVisibility(View.GONE);
         if (mAuth.getCurrentUser() == null) {
             mFloatingBtn.setVisibility(View.GONE);
         } else {
             mFloatingBtn.setVisibility(View.VISIBLE);
+            mDatabaseRef.child(getResources().getString(R.string.db_users)).child(mAuth.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.hasChild(getResources().getString(R.string.db_following_users))) {
+                        ((ViewGroup) mTabLayout.getChildAt(0)).getChildAt(1).setVisibility(View.VISIBLE);
+                    } else {
+                        if (mTabLayout.getSelectedTabPosition() == 1) {
+                            selectHomeTab();
+                        }
+                        ((ViewGroup) mTabLayout.getChildAt(0)).getChildAt(1).setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
         }
         super.onStart();
+    }
+
+    private void selectHomeTab() {
+        try {
+            mTabLayout.getTabAt(0).select();
+        } catch (Exception e) {
+
+        }
     }
 
     @Override
@@ -117,6 +152,7 @@ public class NewsFeed extends Fragment {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_newsfeed, container, false);
         mAuth = FirebaseAuth.getInstance();
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference();
 
         mTabLayout = v.findViewById(R.id.newsfeed_tabLayout);
         mViewPager = v.findViewById(R.id.newsfeed_viewpager);
@@ -144,6 +180,7 @@ public class NewsFeed extends Fragment {
 
         // create instance of all tabs here
         mHomeFragment = new homeFragment();
+        mFollowingUsersPostsFragment = new followingUsersPostsFragment();
         mTechnologyFragment = new technologyFragment();
         mBusinessFragment = new businessFragment();
         mEntertainmentFragment = new entertainmentFragment();
@@ -154,6 +191,7 @@ public class NewsFeed extends Fragment {
         mTravelFragment = new travelFragment();
 
         mHomeFragment.setActivityInterface(activityInterface);
+        mFollowingUsersPostsFragment.setActivityInterface(activityInterface);
         mTechnologyFragment.setActivityInterface(activityInterface);
         mBusinessFragment.setActivityInterface(activityInterface);
         mEntertainmentFragment.setActivityInterface(activityInterface);
@@ -168,6 +206,7 @@ public class NewsFeed extends Fragment {
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), 0);
 
         viewPagerAdapter.addFragment(mHomeFragment, getResources().getString(R.string.home));
+        viewPagerAdapter.addFragment(mFollowingUsersPostsFragment, getResources().getString(R.string.following));
         viewPagerAdapter.addFragment(mTechnologyFragment, getResources().getString(R.string.hash_technology));
         viewPagerAdapter.addFragment(mBusinessFragment, getResources().getString(R.string.hash_business));
         viewPagerAdapter.addFragment(mEntertainmentFragment, getResources().getString(R.string.hash_entertainment));
@@ -178,6 +217,7 @@ public class NewsFeed extends Fragment {
         viewPagerAdapter.addFragment(mTravelFragment, getResources().getString(R.string.hash_travel));
 
         mViewPager.setAdapter(viewPagerAdapter);
+        ((ViewGroup) mTabLayout.getChildAt(0)).getChildAt(1).setVisibility(View.GONE);
 //        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 //        mNestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
 //            @Override
