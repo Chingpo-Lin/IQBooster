@@ -810,7 +810,6 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     void FirebaseTagSearchHelper() {
-        hideKeyboard();
         Log.d(TAG, "new child added...");
         String selectedTag = "";
         if (mTagsChipGroup.getChildCount() > 0) {
