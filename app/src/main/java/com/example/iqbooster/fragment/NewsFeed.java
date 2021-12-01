@@ -279,34 +279,5 @@ public class NewsFeed extends Fragment {
         public CharSequence getPageTitle(int position) {
             return fragmentsTitle.get(position);
         }
-
-        @Override
-        public long getItemId(int position) {
-            // give an ID different from position when position has been changed
-            return baseId + position;
-        }
-
-        //this is called when notifyDataSetChanged() is called
-        @Override
-        public int getItemPosition(Object object) {
-            // refresh all fragments when data set changed
-            return PagerAdapter.POSITION_NONE;
-        }
-
-        public void removeFragment(int position) {
-            fragments.remove(position);
-            fragmentsTitle.remove(position);
-            notifyDataSetChanged();
-        }
-
-        /**
-         * Notify that the position of a fragment has been changed.
-         * Create a new ID for each position to force recreation of the fragment
-         * @param n number of items which have been changed
-         */
-        public void notifyChangeInPosition(int n) {
-            // shift the ID returned by getItemId outside the range of all previous fragments
-            baseId += getCount() + n;
-        }
     }
 }
