@@ -24,6 +24,11 @@
     <string name="drawer_email">Click Avatar to Login / Sign Up</string>
     <string name="name">name</string>
 
+    <!-- dialog -->
+    <string name="shake_title">&#127808; Felling Lucky &#127922;</string>
+    <string name="shake_pos">YAY!</string>
+    <string name="shake_neg">No, Thanks</string>
+
     <!-- login -->
     <string name="email_hint">Email</string>
     <string name="password_hint">Password</string>

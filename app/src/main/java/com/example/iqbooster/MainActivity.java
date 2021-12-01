@@ -326,22 +326,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         break;
                     }
 
+                    TextView title = new TextView(MainActivity.this);
+                    title.setText(getResources().getString(R.string.shake_title));
+                    title.setPadding(10, 30, 10, 10);
+                    title.setGravity(Gravity.CENTER);
+                    title.setTextColor(Color.BLACK);
+                    title.setTextSize(20);
+
                     final AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this)
-                            .setTitle("Felling Lucky")
+                            .setTitle(getResources().getString(R.string.shake_title))
                             .setView(dialogView)
-                            .setPositiveButton("YAY!", new DialogInterface.OnClickListener() {
+                            .setPositiveButton(getResources().getString(R.string.shake_pos), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     PostDetail postDetail = new PostDetail();
                                     getSupportFragmentManager().beginTransaction().add(R.id.main_container, postDetail.newInstance(retPost[0].getRandomID())).addToBackStack(null).commit();
                                     dialog.dismiss();
                                 }
-                            }).setNegativeButton("No, Thanks", new DialogInterface.OnClickListener() {
+                            }).setNegativeButton(getResources().getString(R.string.shake_neg), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.cancel();
                                 }
                             });
+                    alertDialog.setCustomTitle(title);
                     // fill details about the post
                     CircleImageView mCircleImageView = dialogView.findViewById(R.id.post_heading_circleImageView);
                     TextView mTitle = dialogView.findViewById(R.id.post_heading_title);
