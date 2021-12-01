@@ -32,6 +32,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
@@ -322,6 +323,7 @@ public class SearchActivity extends AppCompatActivity {
                 holder.mCircleImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        hideKeyboard();
                         Intent profilePageIntent = new Intent(SearchActivity.this, UserProfilePage.class);
                         Log.i(TAG, "onClick firebaseTextSearch: " + ViewCompat.getTransitionName(holder.mCircleImageView));
                         profilePageIntent.putExtra(UserProfilePage.EXTRA, model.getUid());
@@ -447,6 +449,7 @@ public class SearchActivity extends AppCompatActivity {
                 holder.mCircleImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        hideKeyboard();
                         Log.i(TAG, "onClick firebaseTextSearch: " + ViewCompat.getTransitionName(holder.mCircleImageView));
                         Intent profilePageIntent = new Intent(SearchActivity.this, UserProfilePage.class);
                         profilePageIntent.putExtra(UserProfilePage.EXTRA, model.getAuthor());
@@ -796,6 +799,7 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onChildViewRemoved(View parent, View child) {
                 if (mTagsChipGroup.getChildCount() == 0) {
+                    hideKeyboard();
                     String search = mAutoComplete.getText().toString().trim();
                     firebaseTextSearch(search);
                 } else {
@@ -806,6 +810,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     void FirebaseTagSearchHelper() {
+        hideKeyboard();
         Log.d(TAG, "new child added...");
         String selectedTag = "";
         if (mTagsChipGroup.getChildCount() > 0) {
@@ -960,6 +965,7 @@ public class SearchActivity extends AppCompatActivity {
             holder.mCircleImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    hideKeyboard();
                     Log.i(TAG, "onClick firebaseTagSearchRecyclerAdapter4Users: " + ViewCompat.getTransitionName(holder.mCircleImageView));
                     Intent profilePageIntent = new Intent(mContext, UserProfilePage.class);
                     profilePageIntent.putExtra(UserProfilePage.EXTRA, mValue.get(holder.getAbsoluteAdapterPosition()).getUid());
@@ -1125,6 +1131,7 @@ public class SearchActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Log.i(TAG, "onClick-3: " + ViewCompat.getTransitionName(holder.mCircleImageView));
+                    hideKeyboard();
                     Intent profilePageIntent = new Intent(mContext, UserProfilePage.class);
                     profilePageIntent.putExtra(UserProfilePage.EXTRA, mValue.get(holder.getAbsoluteAdapterPosition()).getAuthor());
                     profilePageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -1474,6 +1481,13 @@ public class SearchActivity extends AppCompatActivity {
         }
         view.draw(canvas);
         return returnBitMap;
+    }
+
+    private void hideKeyboard() {
+        if (getCurrentFocus() != null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
     }
 
     @Override
