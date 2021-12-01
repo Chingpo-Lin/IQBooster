@@ -799,7 +799,6 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onChildViewRemoved(View parent, View child) {
                 if (mTagsChipGroup.getChildCount() == 0) {
-                    hideKeyboard();
                     String search = mAutoComplete.getText().toString().trim();
                     firebaseTextSearch(search);
                 } else {
