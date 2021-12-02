@@ -148,7 +148,9 @@ public class followingUsersPostsFragment extends Fragment {
                         mFollowingUsers.add(uid);
                     }
                     postRef.removeEventListener(mEventListener);
-                    postRef.orderByChild(getContext().getResources().getString(R.string.db_timestamp)).addChildEventListener(mEventListener);
+                    if (getContext() != null) {
+                        postRef.orderByChild(getContext().getResources().getString(R.string.db_timestamp)).addChildEventListener(mEventListener);
+                    }
                 }
 
                 @Override
